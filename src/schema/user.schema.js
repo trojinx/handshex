@@ -20,6 +20,10 @@ const userSchema = new mongoose.Schema(
       default: 100,
       required: true,
     },
+    contracts: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Contract",
+    },
   },
   { timestamps: true }
 );
