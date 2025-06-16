@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { User } from "./user.schema.js";
 const contractSchema = new mongoose.Schema(
   {
-    contractname: {
+    contractName: {
       type: String,
       required: true,
       unique: true,
