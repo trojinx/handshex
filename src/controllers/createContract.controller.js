@@ -1,14 +1,22 @@
+import mongoose from "mongoose";
 import { User } from "../schema/user.schema.js";
 import { Contract } from "../schema/contract.schema.js";
 async function createContract(req, res) {
   try {
     const { contractName, contractRecieverEmail, expiryDate, contractBody } =
       req.body;
+
+    //this is to get id of contract creator from headers
+    //note for myself: bcoz req.user.id returns just a string, and becoz of schema, only objectID is expected
+    // ObjectID is not a plain string!!!
+    //so to convert string to ObjectID, mongoose.Types.ObjectID() is used....
+    //lol now depricated
     const contractMaker = req.user.id;
+
     let contractReciever;
     const existingUser = await User.findOne({ email: contractRecieverEmail });
     if (existingUser) {
-      const contractReciever = existingUser._id;
+      contractReciever = existingUser._id;
     } else {
       res.status(400).send("reciever user is not registered");
     }

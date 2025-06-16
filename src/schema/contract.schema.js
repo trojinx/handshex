@@ -7,11 +7,6 @@ const contractSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
-    contractID: {
-      type: String,
-      required: true,
-      unique: true,
-    },
     contractBody: {
       type: String,
       required: true,
