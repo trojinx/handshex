@@ -1,4 +1,6 @@
 import { User } from "../schema/user.schema.js";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
 import bcrypt from "bcrypt";
 async function signIn(req, res) {
   try {
@@ -10,7 +12,15 @@ async function signIn(req, res) {
       const hashedPassword = existingUser.password;
       const isMatch = await bcrypt.compare(enteredPassword, hashedPassword);
       if (isMatch) {
-        res.status(200).send("Login Successful");
+        //issue a JWT
+        const token = jwt.sign(
+          { id: existingUser._id, username: existingUser.username },
+          process.env.JWT_SECRET
+        );
+        res.status(200).json({
+          message: "Login successfull",
+          token: token,
+        });
       } else {
         res.status(404).send("Invalid Credentials");
       }

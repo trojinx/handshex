@@ -4,11 +4,15 @@ import app from "./src/config/express.config.js";
 import dotenv from "dotenv";
 import signUp from "./src/controllers/signUp.controller.js";
 import signIn from "./src/controllers/signIn.controller.js";
+import createContract from "./src/controllers/createContract.controller.js";
+import verifyJWT from "./src/middlewares/verifyJWT.middleware.js";
 
 dotenv.config();
 app.post("/signup", signUp);
 
 app.post("/signIn", signIn);
+
+app.post("/createContract", verifyJWT, createContract);
 connectDB();
 
 app.listen(process.env.PORT, () => {
