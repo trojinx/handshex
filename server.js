@@ -8,11 +8,11 @@ import createContract from "./src/controllers/createContract.controller.js";
 import verifyJWT from "./src/middlewares/verifyJWT.middleware.js";
 
 dotenv.config();
+app.post("/createContract", verifyJWT, createContract);
 app.post("/signup", signUp);
 
 app.post("/signIn", signIn);
 
-app.post("/createContract", verifyJWT, createContract);
 connectDB();
 
 app.listen(process.env.PORT, () => {
