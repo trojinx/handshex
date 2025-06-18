@@ -21,7 +21,7 @@ async function searchContract(req, res) {
         foundContracts,
         message: "contracts found..",
       });
-    } else {
+    } else if (foundContracts.length == 0) {
       return res.status(400).send("Oops! No contracts found");
     }
   } catch (error) {
