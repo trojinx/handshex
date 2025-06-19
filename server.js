@@ -8,6 +8,7 @@ import verifyJWT from "./src/middlewares/verifyJWT.middleware.js";
 import showContract from "./src/controllers/showContract.controller.js";
 import searchContract from "./src/controllers/searchContract.controller.js";
 import searchUser from "./src/controllers/searchUser.controller.js";
+import checkIfContractExpires from "./src/controllers/checkContractExpires.controller.js";
 
 dotenv.config();
 app.post("/createContract", verifyJWT, createContract);
@@ -20,6 +21,8 @@ app.get("/showContract", verifyJWT, showContract);
 app.get("/searchContract", verifyJWT, searchContract);
 
 app.get("/searchUser", verifyJWT, searchUser);
+
+app.get("/contractExpiry", verifyJWT, checkIfContractExpires);
 
 connectDB();
 

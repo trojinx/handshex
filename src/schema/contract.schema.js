@@ -12,7 +12,7 @@ const contractSchema = new mongoose.Schema(
       required: true,
     },
     expiryDate: {
-      type: String,
+      type: Date,
       required: true,
     },
     contractMaker: {
