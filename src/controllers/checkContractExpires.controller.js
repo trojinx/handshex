@@ -2,7 +2,10 @@ import { Contract } from "../schema/contract.schema.js";
 async function checkIfContractExpires(req, res) {
   const id = req.user.id;
   const dateToady = new Date();
-  console.log(typeof dateToady);
+
+  const expiringContracts = Contract.find({
+    expiryDate: dateToady,
+  });
 }
 
 export default checkIfContractExpires;

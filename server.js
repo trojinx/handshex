@@ -9,6 +9,7 @@ import showContract from "./src/controllers/showContract.controller.js";
 import searchContract from "./src/controllers/searchContract.controller.js";
 import searchUser from "./src/controllers/searchUser.controller.js";
 import checkIfContractExpires from "./src/controllers/checkContractExpires.controller.js";
+import myContracts from "./src/controllers/myContracts.controller.js";
 
 dotenv.config();
 app.post("/createContract", verifyJWT, createContract);
@@ -23,7 +24,7 @@ app.get("/searchContract", verifyJWT, searchContract);
 app.get("/searchUser", verifyJWT, searchUser);
 
 app.get("/contractExpiry", verifyJWT, checkIfContractExpires);
-
+app.get("/myContracts", verifyJWT, myContracts);
 connectDB();
 
 app.listen(process.env.PORT, () => {
