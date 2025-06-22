@@ -10,7 +10,7 @@ import searchContract from "./src/controllers/searchContract.controller.js";
 import searchUser from "./src/controllers/searchUser.controller.js";
 import checkIfContractExpires from "./src/controllers/checkContractExpires.controller.js";
 import myContracts from "./src/controllers/myContracts.controller.js";
-// import checkIfContractExpires from "./src/controllers/checkContractExpires.controller.js";
+import showProfile from "./src/controllers/myProfile.controller.js";
 dotenv.config();
 app.post("/createContract", verifyJWT, createContract); // TODO: make a middleware for verifying if the reciever user has agreed to the contract
 app.post("/signup", signUp);
@@ -27,6 +27,8 @@ app.get("/searchUser", verifyJWT, searchUser);
 app.get("/myContracts", verifyJWT, myContracts);
 
 app.get("/checkContractExpiry", verifyJWT, checkIfContractExpires);
+
+app.get("/myProfile", verifyJWT, showProfile);
 connectDB();
 
 app.listen(process.env.PORT, () => {
