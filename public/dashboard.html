@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Handshex | Dashboard</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+    <!-- font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* ===== TOKENS (copied from landing page palette) ===== */
+      :root {
+        /* page gradient & overlay */
+        --bg-from: #181818;
+        --bg-to: #232526;
+        /* surface glass */
+        --glass: rgba(255, 255, 255, 0.1);
+        --glass-border: rgba(255, 255, 255, 0.18);
+        /* text */
+        --txt: #fff;
+        --muted: #e0e0e0;
+        /* accent gold from landing page */
+        --accent: #bfa14a;
+        /* other */
+        --radius: 1.2rem;
+        --tr: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        --header-h: 72px;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: linear-gradient(90deg, #232526 0%, #414345 40%, #111 100%);
+        color: var(--txt);
+        font-family: Inter, system-ui, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      button {
+        font-family: inherit;
+        border: none;
+        background: none;
+        color: inherit;
+        cursor: pointer;
+      }
+
+      /* ===== HEADER ===== */
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        height: var(--header-h);
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0 2.2rem;
+        background: rgba(0, 0, 0, 0.35);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--glass-border);
+      }
+      .brand {
+        font-size: 2rem;
+        font-weight: 900;
+        color: #fff;
+        letter-spacing: -1.5px;
+        margin-right: 1.7rem;
+        line-height: 1;
+        user-select: none;
+        display: flex;
+        align-items: center;
+        height: 40px;
+      }
+      .brand span {
+        color: #fff;
+        background: transparent;
+        font-family: inherit;
+      }
+      .btn-ico {
+        width: 44px;
+        height: 44px;
+        border-radius: 1rem;
+        display: grid;
+        place-items: center;
+        font-size: 1.35rem;
+        background: var(--glass);
+        border: 1px solid var(--glass-border);
+        transition: background var(--tr);
+      }
+      .btn-ico:hover {
+        background: rgba(255, 255, 255, 0.15);
+      }
+      .search {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+      }
+      .search input {
+        width: 100%;
+        max-width: 480px;
+        padding: 0.7rem 1.1rem;
+        font-size: 0.95rem;
+        border: none;
+        border-radius: 2em;
+        outline: none;
+        background: #f8fafc;
+        color: #111;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        transition: box-shadow var(--tr);
+      }
+      .search input:focus {
+        box-shadow: 0 0 0 2px var(--accent);
+      }
+      /* profile */
+      .profile {
+        position: relative;
+      }
+      .avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        font-weight: 700;
+        display: grid;
+        place-items: center;
+        color: #111;
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+      }
+      .dropdown {
+        position: absolute;
+        right: 0;
+        top: calc(100% + 0.6rem);
+        min-width: 220px;
+        background: #fff;
+        color: #111;
+        border-radius: var(--radius);
+        box-shadow: 0 2px 14px rgba(0, 0, 0, 0.25);
+        padding: 1rem 1.2rem;
+        display: none;
+      }
+      .profile.open .dropdown {
+        display: block;
+      }
+
+      /* ===== SIDEBAR ===== */
+      aside {
+        position: fixed;
+        inset: 0 0 0 -320px;
+        width: 320px;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.55);
+        backdrop-filter: blur(12px);
+        padding: 2rem 1.6rem;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        border-right: 1px solid var(--glass-border);
+        transition: transform var(--tr);
+        z-index: 30;
+      }
+      aside.open {
+        transform: translateX(320px);
+      }
+      .btn-close {
+        align-self: flex-end;
+        font-size: 1.5rem;
+        color: var(--txt);
+      }
+      .btn-primary {
+        padding: 1rem 0;
+        border-radius: 2em;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+        background: linear-gradient(90deg, #232526 0%, #414345 40%, #111 100%);
+        color: #fff;
+        box-shadow: 0 2px 8px rgba(191, 161, 74, 0.12);
+        transition: transform var(--tr), box-shadow var(--tr);
+      }
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 14px rgba(191, 161, 74, 0.18);
+      }
+
+      /* ===== MAIN / TIMELINE ===== */
+      main {
+        max-width: 900px;
+        margin: calc(var(--header-h)+2rem) auto 4rem auto;
+        padding: 0 1.2rem;
+        position: relative;
+        border-radius: 1.5rem;
+        box-shadow: 0 2px 24px 0 rgba(0,0,0,0.10);
+      }
+      h1 {
+        margin: 0 0 2rem;
+        font-size: 1.8rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+      }
+      .timeline {
+        position: relative;
+        padding-left: 44px;
+      }
+      .timeline::before {
+        content: "";
+        position: absolute;
+        left: 18px;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: #bfa14a;
+        border-radius: 2px;
+      }
+      .entry {
+        position: relative;
+        margin-bottom: 2rem;
+        padding: 1.6rem 1.8rem;
+        background: var(--glass);
+        border: 1px solid var(--glass-border);
+        backdrop-filter: blur(8px);
+        border-radius: var(--radius);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        transition: box-shadow var(--tr), transform var(--tr);
+      }
+      .entry:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+      }
+      .entry::before {
+        content: "";
+        position: absolute;
+        left: -30px;
+        top: 1.2rem;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: var(--accent);
+        box-shadow: 0 0 0 4px var(--bg-from);
+      }
+      .entry h2 {
+        margin: 0;
+        font-size: 1.05rem;
+        font-weight: 700;
+      }
+      .meta {
+        font-size: 0.85rem;
+        color: var(--muted);
+        margin: 0.5rem 0 1rem;
+      }
+      .status {
+        font-size: 0.76rem;
+        font-weight: 700;
+        color: var(--accent);
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+      }
+
+      /* skeleton for loading */
+      .skeleton {
+        height: 140px;
+        border-radius: var(--radius);
+        margin-bottom: 2rem;
+        background: linear-gradient(
+          90deg,
+          #202020 25%,
+          #2b2b2b 37%,
+          #202020 63%
+        );
+        background-size: 400% 100%;
+        animation: skeleton 1.2s infinite;
+        position: relative;
+      }
+      .skeleton::before {
+        content: "";
+        position: absolute;
+        left: -30px;
+        top: 1.2rem;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: #2b2b2b;
+        box-shadow: 0 0 0 4px var(--bg-from);
+      }
+      @keyframes skeleton {
+        0% {
+          background-position: 100% 0;
+        }
+        to {
+          background-position: -100% 0;
+        }
+      }
+
+      /* ===== MEDIA ===== */
+      @media (max-width: 700px) {
+        aside {
+          width: 85vw;
+          transform: translateX(-85vw);
+        }
+        aside.open {
+          transform: translateX(0);
+        }
+        .btn-ico {
+          width: 40px;
+          height: 40px;
+        }
+        .timeline {
+          padding-left: 34px;
+        }
+        .timeline::before {
+          left: 12px;
+        }
+        .entry::before {
+          left: -24px;
+        }
+      }
+
+      .cred-score {
+        position: relative;
+        width: 54px;
+        height: 54px;
+        margin-left: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .cred-svg {
+        width: 54px;
+        height: 54px;
+        transform: rotate(-90deg);
+      }
+      .cred-bg {
+        stroke: #444;
+        stroke-width: 6;
+        fill: none;
+      }
+      .cred-fg {
+        stroke: var(--accent);
+        stroke-width: 6;
+        fill: none;
+        transition: stroke-dasharray 0.5s;
+      }
+      .cred-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: var(--accent);
+        pointer-events: none;
+        user-select: none;
+      }
+
+      .main-cred-wrap {
+        position: fixed;
+        top: 50%;
+        right: 120px;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        z-index: 50;
+        background: none;
+        pointer-events: none;
+        min-width: 160px;
+      }
+      .main-cred-label {
+        color: var(--accent);
+        font-size: 1.08rem;
+        font-weight: 700;
+        margin-bottom: 0.7rem;
+        letter-spacing: 0.2px;
+        text-align: center;
+        user-select: none;
+        position: relative;
+        cursor: pointer;
+      }
+      .main-cred-label .tooltip {
+        display: none;
+        position: absolute;
+        left: 50%;
+        top: -2.2rem;
+        transform: translateX(-50%);
+        background: #222;
+        color: #fff;
+        font-size: 0.98rem;
+        padding: 0.7rem 1.1rem;
+        border-radius: 0.7rem;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+        white-space: nowrap;
+        z-index: 100;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.18s;
+      }
+      .main-cred-label:hover .tooltip,
+      .main-cred-label:focus .tooltip {
+        display: block;
+        opacity: 1;
+      }
+      .cred-score-lg {
+        position: relative;
+        width: 110px;
+        height: 110px;
+        margin-bottom: 1.2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--glass);
+        border-radius: 50%;
+        box-shadow: 0 4px 24px 0 rgba(0,0,0,0.10);
+        border: 1.5px solid var(--glass-border);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+      }
+      .cred-svg-lg {
+        width: 110px;
+        height: 110px;
+        transform: rotate(-90deg);
+      }
+      .cred-bg-lg {
+        stroke: #444;
+        stroke-width: 10;
+        fill: none;
+      }
+      .cred-fg-lg {
+        stroke: var(--accent);
+        stroke-width: 10;
+        fill: none;
+        transition: stroke-dasharray 0.5s;
+      }
+      .cred-text-lg {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 2.1rem;
+        font-weight: 800;
+        color: var(--accent);
+        pointer-events: none;
+        user-select: none;
+        letter-spacing: 1px;
+        text-shadow: 0 2px 8px rgba(0,0,0,0.18);
+      }
+
+      .view-btn {
+        background: linear-gradient(90deg, #232526 0%, #414345 40%, #111 100%);
+        color: #fff;
+        border: none;
+        border-radius: 2em;
+        padding: 0.5rem 1.3rem;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 2px 8px 0 rgba(191, 161, 74, 0.10);
+        transition: background 0.18s, box-shadow 0.18s;
+        z-index: 2;
+      }
+      .view-btn:hover {
+        background: linear-gradient(90deg, #111 0%, #232526 60%, #414345 100%);
+        box-shadow: 0 4px 16px 0 rgba(30, 42, 120, 0.18);
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- ===== Sidebar ===== -->
+    <aside id="sidebar">
+      <button class="btn-close" id="closeSidebar" aria-label="Close sidebar">
+        &times;
+      </button>
+      <button class="btn-primary" id="createContractBtn">
+        + Create New Contract
+      </button>
+    </aside>
+
+    <!-- ===== Header ===== -->
+    <header>
+      <button class="btn-ico" id="sidebarToggle" aria-label="Open sidebar">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block">
+          <rect y="6" width="28" height="3.2" rx="1.6" fill="#fff"/>
+          <rect y="12.4" width="28" height="3.2" rx="1.6" fill="#fff"/>
+          <rect y="18.8" width="28" height="3.2" rx="1.6" fill="#fff"/>
+        </svg>
+      </button>
+      <div class="brand">Handshex</div>
+      <form class="search" role="search">
+        <label class="sr-only" for="searchInput" style="position:absolute;left:-9999px;">Search contracts</label>
+        <input id="searchInput" type="search" placeholder="Search contracts…" />
+      </form>
+      <div class="profile" id="profile">
+        <div class="avatar" id="profileAvatar">U</div>
+        <div class="dropdown" id="profileDropdown">
+          <p>
+            <strong>Username:</strong>
+            <span id="profileUsername">username</span>
+          </p>
+          <p>
+            <strong>Email:</strong>
+            <span id="profileEmail">user@email.com</span>
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <!-- ===== Main ===== -->
+    <div class="main-cred-wrap">
+      <div class="main-cred-label" tabindex="0">
+        Credibility Score
+        <span class="tooltip">A higher credibility score means you are a more trusted and reliable user on Handshex, based on your contract history and activity.</span>
+      </div>
+      <div class="cred-score-lg" id="mainCredScoreWrap">
+        <svg class="cred-svg-lg">
+          <circle class="cred-bg-lg" cx="55" cy="55" r="44" />
+          <circle class="cred-fg-lg" cx="55" cy="55" r="44" stroke-dasharray="0 276.46" />
+        </svg>
+        <span class="cred-text-lg" id="mainCredScoreText">0</span>
+      </div>
+    </div>
+    <main>
+      <div style="height: 2.5rem;"></div>
+      <h1>Your Contracts</h1>
+      <div class="timeline" id="contractsList" aria-live="polite">
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+      </div>
+    </main>
+
+    <!-- ===== JS ===== -->
+    <script type="module">
+      const $ = (s) => document.querySelector(s);
+      const token = localStorage.getItem("token");
+      if (!token) location.replace("signIn.html");
+
+      /* ---------- profile ---------- */
+      (async () => {
+        try {
+          const r = await fetch("/myProfile", {
+            headers: { Authorization: "Bearer " + token },
+          });
+          if (!r.ok) throw new Error();
+          const { foundProfile: u } = await r.json();
+          $("#profileUsername").textContent = u.username;
+          $("#profileEmail").textContent = u.email;
+          $("#profileAvatar").textContent = u.username[0].toUpperCase();
+          // Credibility Score (main only)
+          const score = typeof u.credibilityScore === 'number' ? u.credibilityScore : 0;
+          const percent = Math.max(0, Math.min(100, score));
+          const mainCircle = document.querySelector('.cred-fg-lg');
+          const mainText = document.getElementById('mainCredScoreText');
+          const mainRads = 44;
+          const mainCirc = 2 * Math.PI * mainRads;
+          const mainFilled = (percent / 100) * mainCirc;
+          mainCircle.setAttribute('stroke-dasharray', `${mainFilled} ${mainCirc}`);
+          mainText.textContent = percent;
+        } catch {
+          location.replace("signIn.html");
+        }
+      })();
+      const profile = $("#profile");
+      profile.addEventListener("click", (e) => {
+        e.stopPropagation();
+        profile.classList.toggle("open");
+      });
+      addEventListener("click", () => profile.classList.remove("open"));
+
+      /* ---------- sidebar ---------- */
+      const sidebar = $("#sidebar");
+      $("#sidebarToggle").addEventListener("click", (e) => {
+        e.stopPropagation();
+        sidebar.classList.add("open");
+      });
+      $("#closeSidebar").addEventListener("click", () =>
+        sidebar.classList.remove("open")
+      );
+      addEventListener("mousedown", (e) => {
+        if (
+          sidebar.classList.contains("open") &&
+          !sidebar.contains(e.target) &&
+          !e.target.closest("#sidebarToggle")
+        ) {
+          sidebar.classList.remove("open");
+        }
+      });
+
+      /* ---------- contracts ---------- */
+      let contracts = [];
+      const renderContracts = (list) => {
+        const wrap = $("#contractsList");
+        wrap.innerHTML = "";
+        if (!list.length) {
+          wrap.innerHTML =
+            '<p style="color:var(--muted);text-align:center;">No contracts found.</p>';
+          return;
+        }
+        list.forEach((c) => {
+          const d = (k) => (c[k] ? new Date(c[k]).toLocaleDateString() : "");
+          wrap.insertAdjacentHTML(
+            "beforeend",
+            `
+          <article class="entry" tabindex="0" style="position:relative;">
+            <h2>${c.contractName || c.title}</h2>
+            <p class="meta">Created ${d("createdAt")} • Expires ${d(
+              "expiryDate"
+            )}</p>
+            <p class="status">${c.status || "Active"}</p>
+            <button class="view-btn" data-id="${c._id || ''}" style="position:absolute;right:1.5rem;top:1.5rem;">View</button>
+          </article>`
+          );
+        });
+      };
+      (async () => {
+        try {
+          const r = await fetch("/myContracts", {
+            headers: { Authorization: "Bearer " + token },
+          });
+          if (!r.ok) throw new Error();
+          const { foundContracts = [] } = await r.json();
+          contracts = foundContracts;
+          renderContracts(contracts);
+        } catch {
+          renderContracts([]);
+        }
+      })();
+
+      /* ---------- search ---------- */
+      $("#searchInput").addEventListener("input", (e) => {
+        const q = e.target.value.trim().toLowerCase();
+        renderContracts(
+          contracts.filter(
+            (c) =>
+              (c.contractName ?? "").toLowerCase().includes(q) ||
+              (c.title ?? "").toLowerCase().includes(q)
+          )
+        );
+      });
+
+      /* ---------- create (placeholder) ---------- */
+      $("#createContractBtn").addEventListener("click", () =>
+        alert("Create Contract modal here")
+      );
+    </script>
+  </body>
+</html>

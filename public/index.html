@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Handshex Landing Page</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Inter:400,700,900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        width: 100vw;
+        box-sizing: border-box;
+        font-family: "Inter", Arial, sans-serif;
+        background: url("./assets/handshex_background.png") no-repeat center
+          center/cover;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+      .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.2);
+        z-index: 1;
+      }
+      .container {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100vw;
+        height: 100vh;
+        text-align: center;
+        font-family: "Inter", Arial, sans-serif;
+        animation: fadeIn 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.2s both;
+      }
+      .quote {
+        color: #111;
+        font-size: 1.7rem;
+        font-weight: 700;
+        margin-bottom: 2rem;
+        text-shadow: none;
+        position: absolute;
+        top: 40px;
+        left: 0;
+        width: 100vw;
+        text-align: center;
+        z-index: 3;
+      }
+      .brand {
+        font-size: 6rem;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 1rem;
+        letter-spacing: -2px;
+        text-shadow: 0 2px 16px rgba(0, 0, 0, 0.4);
+        font-family: "Inter", Arial, sans-serif;
+        animation: slideInBrand 1.1s cubic-bezier(0.4, 0, 0.2, 1) 0.5s both;
+      }
+      .brand span {
+        color: #111;
+        background: transparent;
+        font-family: "Inter", Arial, sans-serif;
+      }
+      .desc {
+        color: #fff;
+        font-size: 1.35rem;
+        font-weight: 700;
+        margin-top: 2.5rem;
+        margin-bottom: 3.5rem;
+        max-width: 500px;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+        opacity: 0;
+        transform: scale(0.96);
+        transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+          transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        font-family: "Inter", Arial, sans-serif;
+        animation: scaleSlogan 1.1s cubic-bezier(0.4, 0, 0.2, 1) 1.1s both;
+      }
+      .desc.animated {
+        opacity: 1;
+        transform: scale(1.04);
+        transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+          transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .desc.animated-done {
+        transform: scale(1);
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .btn-corner {
+        position: fixed;
+        bottom: 40px;
+        z-index: 10;
+        width: 220px;
+        padding: 0.9rem 0;
+        font-size: 1.4rem;
+        font-weight: 700;
+        border: none;
+        border-radius: 2em;
+        cursor: pointer;
+        transition: background 0.2s, color 0.2s;
+        font-family: "Inter", Arial, sans-serif;
+      }
+      .btn-corner.primary {
+        right: 40px;
+        background: #fff;
+        color: #111;
+      }
+      .btn-corner.primary:hover {
+        background: #f0f0f0;
+      }
+      .btn-corner.secondary {
+        left: 40px;
+        background: #111;
+        color: #fff;
+      }
+      .btn-corner.secondary:hover {
+        background: #222;
+      }
+      @media (max-width: 600px) {
+        .brand {
+          font-size: 3rem;
+        }
+        .desc {
+          font-size: 1rem;
+        }
+        .btn-corner {
+          font-size: 1rem;
+          width: 44vw;
+          left: 4vw;
+          right: 4vw;
+          min-width: 120px;
+          max-width: 90vw;
+        }
+        .btn-corner.primary {
+          right: 4vw;
+        }
+        .btn-corner.secondary {
+          left: 4vw;
+        }
+      }
+      /* Animations */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      @keyframes slideInBrand {
+        from {
+          opacity: 0;
+          transform: translateY(60px) scale(0.95);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+      @keyframes scaleSlogan {
+        0% {
+          opacity: 0;
+          transform: scale(0.95);
+        }
+        60% {
+          opacity: 1;
+          transform: scale(1.05);
+        }
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+      .typing-cursor {
+        display: inline-block;
+        width: 1ch;
+        color: #111;
+        animation: blink 0.8s steps(1) infinite;
+        font-weight: 900;
+      }
+      @keyframes blink {
+        0%,
+        50% {
+          opacity: 1;
+        }
+        51%,
+        100% {
+          opacity: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="quote" id="quote-typing"></div>
+      <div class="brand" id="brand-typing"></div>
+      <div class="desc">
+        a simple, trustworthy way to confirm and<br />track informal agreements
+      </div>
+      <button class="btn-corner secondary" onclick="window.location.href='signIn.html'">
+        Sign In
+      </button>
+      <button
+        class="btn-corner primary"
+        onclick="window.location.href='/signup'"
+      >
+        Get started
+      </button>
+    </div>
+    <script>
+      // Typing animation for 'Handshex' with blinking cursor
+      const brandText = "Handshex";
+      const brandEl = document.getElementById("brand-typing");
+      let i = 0;
+      function typeBrand() {
+        let html = "";
+        if (i <= 4) {
+          html = brandText.slice(0, i);
+        } else {
+          html =
+            brandText.slice(0, 4) +
+            '<span style="color:#111; background:transparent;">' +
+            brandText.slice(4, i) +
+            "</span>";
+        }
+        // Add blinking cursor if not finished
+        if (i < brandText.length) {
+          html += '<span class="typing-cursor">|</span>';
+        }
+        brandEl.innerHTML = html;
+        if (i < brandText.length) {
+          i++;
+          setTimeout(typeBrand, 140);
+        }
+      }
+      typeBrand();
+
+      // Typing animation for tagline
+      const quoteFull = "“Pinkies are for promises. We do handshex.”";
+      const quoteEl = document.getElementById("quote-typing");
+      let k = 0;
+      function typeQuote() {
+        let displayText = quoteFull.slice(0, k);
+        // Only color 'shex' when fully typed
+        if (displayText.endsWith("shex")) {
+          displayText =
+            displayText.slice(0, -4) +
+            '<span style="color:#111; background:transparent;">shex</span>';
+        }
+        // Add blinking cursor if not finished
+        if (k < quoteFull.length) {
+          displayText += '<span class="typing-cursor">|</span>';
+        }
+        quoteEl.innerHTML = displayText;
+        if (k < quoteFull.length) {
+          k++;
+          setTimeout(typeQuote, 38);
+        }
+      }
+      typeQuote();
+    </script>
+  </body>
+</html>
