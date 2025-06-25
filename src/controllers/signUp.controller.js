@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import { User } from "../schema/user.schema.js";
+import jwt from "jsonwebtoken";
 async function signUp(req, res) {
   try {
     const { username, email, enteredPassword } = req.body;
@@ -14,11 +15,16 @@ async function signUp(req, res) {
       const password = await bcrypt.hash(enteredPassword, 10);
       const newUser = new User({ username, email, password });
       await newUser.save();
-      res
-        .status(200)
-        .send(
-          "Welcome to handshex! Your account has been created successfully..."
-        );
+      const token = jwt.sign(
+        { id: newUser._id.toString(), username: newUser.username },
+        process.env.JWT_SECRET
+      );
+
+      res.status(200).json({
+        token,
+        message:
+          "Welcome to handshex! Your account has been created successfully...",
+      });
     }
   } catch (error) {
     console.log(error);
