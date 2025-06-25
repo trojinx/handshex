@@ -595,8 +595,17 @@
         const wrap = $("#contractsList");
         wrap.innerHTML = "";
         if (!list.length) {
-          wrap.innerHTML =
-            '<p style="color:var(--muted);text-align:center;">No contracts found.</p>';
+          wrap.innerHTML = `
+            <div style="text-align: center; padding: 3rem 1rem;">
+              <p style="color: var(--muted); margin-bottom: 2rem; font-size: 1.1rem;">No contracts found.</p>
+              <button class="btn-primary" id="createContractBtnEmpty" style="padding: 1.2rem 2rem; font-size: 1.1rem; min-width: 200px;">
+                + Create New Contract
+              </button>
+            </div>`;
+          // Add event listener to the new button
+          $("#createContractBtnEmpty").addEventListener("click", () =>
+            alert("Create Contract modal here")
+          );
           return;
         }
         list.forEach((c) => {

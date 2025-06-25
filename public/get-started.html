@@ -270,12 +270,16 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, email, enteredPassword: password })
           });
-          const text = await res.text();
           if (res.ok) {
-            messageEl.textContent = text;
+            const data = await res.json();
+            messageEl.textContent = data.message;
             messageEl.className = 'message success';
             signupForm.reset();
+            // Store token and redirect to dashboard
+            localStorage.setItem('token', data.token);
+            window.location.href = 'dashboard.html';
           } else {
+            const text = await res.text();
             messageEl.textContent = text;
             messageEl.className = 'message error';
             if (text.trim() === 'Username already registered') {
