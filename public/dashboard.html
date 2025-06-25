@@ -120,6 +120,68 @@
       /* profile */
       .profile {
         position: relative;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      .cred-score {
+        position: relative;
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+      .cred-svg {
+        width: 44px;
+        height: 44px;
+        transform: rotate(-90deg);
+      }
+      .cred-bg {
+        stroke: #444;
+        stroke-width: 4;
+        fill: none;
+      }
+      .cred-fg {
+        stroke: var(--accent);
+        stroke-width: 4;
+        fill: none;
+        transition: stroke-dasharray 0.5s;
+      }
+      .cred-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--accent);
+        pointer-events: none;
+        user-select: none;
+      }
+      .cred-score .tooltip {
+        display: none;
+        position: absolute;
+        left: 50%;
+        top: -2.5rem;
+        transform: translateX(-50%);
+        background: #222;
+        color: #fff;
+        font-size: 0.85rem;
+        padding: 0.5rem 0.8rem;
+        border-radius: 0.6rem;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+        white-space: nowrap;
+        z-index: 100;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.18s;
+      }
+      .cred-score:hover .tooltip,
+      .cred-score:focus .tooltip {
+        display: block;
+        opacity: 1;
       }
       .avatar {
         width: 44px;
@@ -143,6 +205,7 @@
         box-shadow: 0 2px 14px rgba(0, 0, 0, 0.25);
         padding: 1rem 1.2rem;
         display: none;
+        z-index: 1001;
       }
       .profile.open .dropdown {
         display: block;
@@ -319,43 +382,6 @@
         }
       }
 
-      .cred-score {
-        position: relative;
-        width: 54px;
-        height: 54px;
-        margin-left: 1.5rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .cred-svg {
-        width: 54px;
-        height: 54px;
-        transform: rotate(-90deg);
-      }
-      .cred-bg {
-        stroke: #444;
-        stroke-width: 6;
-        fill: none;
-      }
-      .cred-fg {
-        stroke: var(--accent);
-        stroke-width: 6;
-        fill: none;
-        transition: stroke-dasharray 0.5s;
-      }
-      .cred-text {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 1.05rem;
-        font-weight: 700;
-        color: var(--accent);
-        pointer-events: none;
-        user-select: none;
-      }
-
       .main-cred-wrap {
         position: fixed;
         top: 50%;
@@ -465,6 +491,176 @@
         background: linear-gradient(90deg, #111 0%, #232526 60%, #414345 100%);
         box-shadow: 0 4px 16px 0 rgba(30, 42, 120, 0.18);
       }
+
+      .notes-section {
+        position: fixed;
+        top: 100px;
+        right: 120px;
+        width: 280px;
+        max-height: 400px;
+        background: var(--glass);
+        border: 1px solid var(--glass-border);
+        backdrop-filter: blur(12px);
+        border-radius: var(--radius);
+        padding: 1.5rem;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+        z-index: 50;
+      }
+      .notes-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+        color: var(--accent);
+        font-weight: 700;
+        font-size: 1.1rem;
+      }
+      .notes-textarea {
+        width: 100%;
+        min-height: 120px;
+        max-height: 200px;
+        padding: 0.8rem;
+        border: 1px solid var(--glass-border);
+        border-radius: 0.8rem;
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--txt);
+        font-family: inherit;
+        font-size: 0.9rem;
+        resize: vertical;
+        outline: none;
+        transition: border-color var(--tr);
+      }
+      .notes-textarea:focus {
+        border-color: var(--accent);
+      }
+      .notes-textarea::placeholder {
+        color: var(--muted);
+      }
+      .notes-save-btn {
+        margin-top: 0.8rem;
+        padding: 0.6rem 1.2rem;
+        background: var(--accent);
+        color: #111;
+        border: none;
+        border-radius: 1.5rem;
+        font-weight: 700;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: transform var(--tr), box-shadow var(--tr);
+      }
+      .notes-save-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(191, 161, 74, 0.3);
+      }
+      .notes-save-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      /* ===== CALENDAR ===== */
+      .calendar-section {
+        position: fixed;
+        top: calc(50% - 20px);
+        right: 120px;
+        width: 280px;
+        background: var(--glass);
+        border: 1px solid var(--glass-border);
+        backdrop-filter: blur(12px);
+        border-radius: var(--radius);
+        padding: 1.5rem;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+        z-index: 50;
+      }
+      .calendar-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+        color: var(--accent);
+        font-weight: 700;
+        font-size: 1.1rem;
+      }
+      .calendar-nav {
+        display: flex;
+        gap: 0.5rem;
+      }
+      .calendar-nav-btn {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid var(--glass-border);
+        color: var(--txt);
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all var(--tr);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .calendar-nav-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: scale(1.05);
+      }
+      .calendar-weekdays {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 0.5rem;
+        margin-bottom: 0.8rem;
+      }
+      .calendar-weekday {
+        text-align: center;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--accent);
+        padding: 0.5rem 0;
+      }
+      .calendar-days {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 0.3rem;
+      }
+      .calendar-day {
+        aspect-ratio: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all var(--tr);
+        position: relative;
+      }
+      .calendar-day:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+      .calendar-day.other-month {
+        color: var(--muted);
+        opacity: 0.5;
+      }
+      .calendar-day.today {
+        background: var(--accent);
+        color: #111;
+        font-weight: 700;
+      }
+      .calendar-day.selected {
+        background: rgba(191, 161, 74, 0.3);
+        color: var(--accent);
+        border: 2px solid var(--accent);
+      }
+      .calendar-day.has-event::after {
+        content: "";
+        position: absolute;
+        bottom: 2px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 4px;
+        height: 4px;
+        background: var(--accent);
+        border-radius: 50%;
+      }
     </style>
   </head>
 
@@ -494,6 +690,14 @@
         <input id="searchInput" type="search" placeholder="Search contracts…" />
       </form>
       <div class="profile" id="profile">
+        <div class="cred-score" id="headerCredScore">
+          <svg class="cred-svg">
+            <circle class="cred-bg" cx="22" cy="22" r="18" />
+            <circle class="cred-fg" cx="22" cy="22" r="18" stroke-dasharray="0 113.1" />
+          </svg>
+          <span class="cred-text" id="headerCredText">0</span>
+          <span class="tooltip" id="credTooltip">Credibility Score: 0</span>
+        </div>
         <div class="avatar" id="profileAvatar">U</div>
         <div class="dropdown" id="profileDropdown">
           <p>
@@ -509,17 +713,38 @@
     </header>
 
     <!-- ===== Main ===== -->
-    <div class="main-cred-wrap">
-      <div class="main-cred-label" tabindex="0">
-        Credibility Score
-        <span class="tooltip">A higher credibility score means you are a more trusted and reliable user on Handshex, based on your contract history and activity.</span>
+    <div class="notes-section">
+      <div class="notes-header">
+        <span>Contract Notes</span>
+        <span id="notesStatus" style="font-size: 0.8rem; opacity: 0.8;"></span>
       </div>
-      <div class="cred-score-lg" id="mainCredScoreWrap">
-        <svg class="cred-svg-lg">
-          <circle class="cred-bg-lg" cx="55" cy="55" r="44" />
-          <circle class="cred-fg-lg" cx="55" cy="55" r="44" stroke-dasharray="0 276.46" />
-        </svg>
-        <span class="cred-text-lg" id="mainCredScoreText">0</span>
+      <textarea 
+        class="notes-textarea" 
+        id="notesTextarea" 
+        placeholder="add your notes here"
+      ></textarea>
+      <button class="notes-save-btn" id="notesSaveBtn">Save Notes</button>
+    </div>
+
+    <div class="calendar-section">
+      <div class="calendar-header">
+        <span id="calendarMonthYear">December 2024</span>
+        <div class="calendar-nav">
+          <button class="calendar-nav-btn" id="prevMonth" aria-label="Previous month">‹</button>
+          <button class="calendar-nav-btn" id="nextMonth" aria-label="Next month">›</button>
+        </div>
+      </div>
+      <div class="calendar-weekdays">
+        <div class="calendar-weekday">S</div>
+        <div class="calendar-weekday">M</div>
+        <div class="calendar-weekday">T</div>
+        <div class="calendar-weekday">W</div>
+        <div class="calendar-weekday">T</div>
+        <div class="calendar-weekday">F</div>
+        <div class="calendar-weekday">S</div>
+      </div>
+      <div class="calendar-days" id="calendarDays">
+        <!-- Calendar days will be populated by JavaScript -->
       </div>
     </div>
     <main>
@@ -549,16 +774,18 @@
           $("#profileUsername").textContent = u.username;
           $("#profileEmail").textContent = u.email;
           $("#profileAvatar").textContent = u.username[0].toUpperCase();
-          // Credibility Score (main only)
+          // Credibility Score (header only)
           const score = typeof u.credibilityScore === 'number' ? u.credibilityScore : 0;
           const percent = Math.max(0, Math.min(100, score));
-          const mainCircle = document.querySelector('.cred-fg-lg');
-          const mainText = document.getElementById('mainCredScoreText');
-          const mainRads = 44;
-          const mainCirc = 2 * Math.PI * mainRads;
-          const mainFilled = (percent / 100) * mainCirc;
-          mainCircle.setAttribute('stroke-dasharray', `${mainFilled} ${mainCirc}`);
-          mainText.textContent = percent;
+          const headerCircle = document.querySelector('#headerCredScore .cred-fg');
+          const headerText = document.getElementById('headerCredText');
+          const headerTooltip = document.getElementById('credTooltip');
+          const headerRads = 18;
+          const headerCirc = 2 * Math.PI * headerRads;
+          const headerFilled = (percent / 100) * headerCirc;
+          headerCircle.setAttribute('stroke-dasharray', `${headerFilled} ${headerCirc}`);
+          headerText.textContent = percent;
+          headerTooltip.textContent = `Credibility Score: ${percent}`;
         } catch {
           location.replace("signIn.html");
         }
@@ -623,17 +850,37 @@
           </article>`
           );
         });
+        // Add event listeners to all view buttons
+        wrap.querySelectorAll('.view-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const id = btn.getAttribute('data-id');
+            if (id) {
+              window.location.href = `showContract.html?id=${encodeURIComponent(id)}`;
+            }
+          });
+        });
       };
       (async () => {
         try {
-          const r = await fetch("/myContracts", {
+          // Debug: Show the decoded JWT payload in the console
+          try {
+            const tokenPayload = token ? JSON.parse(atob(token.split('.')[1])) : null;
+            console.log('Decoded JWT payload:', tokenPayload);
+          } catch (e) {
+            console.warn('Could not decode JWT:', e);
+          }
+
+          const r = await fetch("/showContract", {
             headers: { Authorization: "Bearer " + token },
           });
           if (!r.ok) throw new Error();
           const { foundContracts = [] } = await r.json();
           contracts = foundContracts;
+          // Debug: Log contracts received from API
+          console.log('Contracts received from /showContract:', contracts);
           renderContracts(contracts);
-        } catch {
+        } catch (err) {
+          console.error('Error fetching contracts:', err);
           renderContracts([]);
         }
       })();
@@ -654,6 +901,158 @@
       $("#createContractBtn").addEventListener("click", () =>
         alert("Create Contract modal here")
       );
+
+      /* ---------- notes ---------- */
+      const notesTextarea = $("#notesTextarea");
+      const notesSaveBtn = $("#notesSaveBtn");
+      const notesStatus = $("#notesStatus");
+      
+      // Load saved notes from localStorage
+      const savedNotes = localStorage.getItem("handshex_notes") || "";
+      notesTextarea.value = savedNotes;
+      
+      // Auto-save functionality
+      let autoSaveTimeout;
+      notesTextarea.addEventListener("input", () => {
+        clearTimeout(autoSaveTimeout);
+        notesSaveBtn.disabled = false;
+        notesStatus.textContent = "Unsaved changes";
+        
+        // Auto-save after 2 seconds of no typing
+        autoSaveTimeout = setTimeout(() => {
+          saveNotes();
+        }, 2000);
+      });
+      
+      // Manual save
+      notesSaveBtn.addEventListener("click", saveNotes);
+      
+      function saveNotes() {
+        const notes = notesTextarea.value;
+        localStorage.setItem("handshex_notes", notes);
+        notesSaveBtn.disabled = true;
+        notesStatus.textContent = "Saved";
+        
+        // Clear status after 2 seconds
+        setTimeout(() => {
+          notesStatus.textContent = "";
+        }, 2000);
+      }
+
+      /* ---------- calendar ---------- */
+      class Calendar {
+        constructor() {
+          this.currentDate = new Date();
+          this.selectedDate = new Date();
+          this.events = JSON.parse(localStorage.getItem("handshex_calendar_events") || "{}");
+          
+          this.init();
+        }
+        
+        init() {
+          this.renderCalendar();
+          this.bindEvents();
+        }
+        
+        renderCalendar() {
+          const year = this.currentDate.getFullYear();
+          const month = this.currentDate.getMonth();
+          
+          // Update header
+          const monthNames = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+          ];
+          document.getElementById("calendarMonthYear").textContent = 
+            `${monthNames[month]} ${year}`;
+          
+          // Get first day of month and number of days
+          const firstDay = new Date(year, month, 1);
+          const lastDay = new Date(year, month + 1, 0);
+          const startDate = new Date(firstDay);
+          startDate.setDate(startDate.getDate() - firstDay.getDay());
+          
+          const calendarDays = document.getElementById("calendarDays");
+          calendarDays.innerHTML = "";
+          
+          // Generate calendar days
+          for (let i = 0; i < 42; i++) {
+            const date = new Date(startDate);
+            date.setDate(startDate.getDate() + i);
+            
+            const dayElement = document.createElement("div");
+            dayElement.className = "calendar-day";
+            dayElement.textContent = date.getDate();
+            
+            // Check if it's current month
+            if (date.getMonth() !== month) {
+              dayElement.classList.add("other-month");
+            }
+            
+            // Check if it's today
+            const today = new Date();
+            if (date.toDateString() === today.toDateString()) {
+              dayElement.classList.add("today");
+            }
+            
+            // Check if it's selected
+            if (date.toDateString() === this.selectedDate.toDateString()) {
+              dayElement.classList.add("selected");
+            }
+            
+            // Check if it has events
+            const dateKey = date.toISOString().split('T')[0];
+            if (this.events[dateKey]) {
+              dayElement.classList.add("has-event");
+            }
+            
+            // Add click event
+            dayElement.addEventListener("click", () => {
+              this.selectDate(date);
+            });
+            
+            calendarDays.appendChild(dayElement);
+          }
+        }
+        
+        selectDate(date) {
+          this.selectedDate = date;
+          this.renderCalendar();
+          
+          // Show events for selected date
+          const dateKey = date.toISOString().split('T')[0];
+          const events = this.events[dateKey] || [];
+          
+          if (events.length > 0) {
+            alert(`Events for ${date.toLocaleDateString()}:\n${events.join('\n')}`);
+          } else {
+            const eventName = prompt(`Add event for ${date.toLocaleDateString()}:`);
+            if (eventName && eventName.trim()) {
+              if (!this.events[dateKey]) {
+                this.events[dateKey] = [];
+              }
+              this.events[dateKey].push(eventName.trim());
+              localStorage.setItem("handshex_calendar_events", JSON.stringify(this.events));
+              this.renderCalendar();
+            }
+          }
+        }
+        
+        bindEvents() {
+          document.getElementById("prevMonth").addEventListener("click", () => {
+            this.currentDate.setMonth(this.currentDate.getMonth() - 1);
+            this.renderCalendar();
+          });
+          
+          document.getElementById("nextMonth").addEventListener("click", () => {
+            this.currentDate.setMonth(this.currentDate.getMonth() + 1);
+            this.renderCalendar();
+          });
+        }
+      }
+      
+      // Initialize calendar
+      new Calendar();
     </script>
   </body>
 </html>

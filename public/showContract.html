@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Handshex | Contract Details</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg-from: #181818;
+        --bg-to: #232526;
+        --glass: rgba(255, 255, 255, 0.1);
+        --glass-border: rgba(255, 255, 255, 0.18);
+        --txt: #fff;
+        --muted: #e0e0e0;
+        --accent: #bfa14a;
+        --radius: 1.2rem;
+        --tr: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        --header-h: 72px;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: linear-gradient(90deg, #232526 0%, #414345 40%, #111 100%);
+        color: var(--txt);
+        font-family: Inter, system-ui, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        height: var(--header-h);
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0 2.2rem;
+        background: rgba(0, 0, 0, 0.35);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--glass-border);
+      }
+      .brand {
+        font-size: 2rem;
+        font-weight: 900;
+        color: #fff;
+        letter-spacing: -1.5px;
+        margin-right: 1.7rem;
+        line-height: 1;
+        user-select: none;
+        display: flex;
+        align-items: center;
+        height: 40px;
+      }
+      .brand span {
+        color: #fff;
+        background: transparent;
+        font-family: inherit;
+      }
+      .container {
+        max-width: 600px;
+        margin: 3.5rem auto 2rem auto;
+        background: var(--glass);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--radius);
+        box-shadow: 0 2px 24px 0 rgba(0,0,0,0.10);
+        padding: 2.5rem 2rem 2rem 2rem;
+        backdrop-filter: blur(8px);
+      }
+      .contract-title {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--accent);
+        margin-bottom: 0.5rem;
+      }
+      .contract-meta {
+        color: var(--muted);
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+      }
+      .contract-section {
+        margin-bottom: 1.5rem;
+      }
+      .contract-label {
+        color: var(--accent);
+        font-weight: 700;
+        font-size: 1.05rem;
+        margin-bottom: 0.2rem;
+        display: block;
+      }
+      .contract-value {
+        color: #fff;
+        font-size: 1.1rem;
+        margin-bottom: 0.7rem;
+        word-break: break-word;
+      }
+      .back-btn {
+        display: inline-block;
+        margin-bottom: 2rem;
+        padding: 0.7rem 1.5rem;
+        border-radius: 2em;
+        font-weight: 700;
+        background: linear-gradient(90deg, #232526 0%, #414345 40%, #111 100%);
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+        box-shadow: 0 2px 8px rgba(191, 161, 74, 0.12);
+        transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+      }
+      .back-btn:hover {
+        background: linear-gradient(90deg, #111 0%, #232526 60%, #414345 100%);
+        box-shadow: 0 4px 16px 0 rgba(30, 42, 120, 0.18);
+      }
+      @media (max-width: 700px) {
+        .container {
+          padding: 1.2rem 0.5rem 1rem 0.5rem;
+        }
+        .contract-title {
+          font-size: 1.3rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="brand">Handshex</div>
+    </header>
+    <div class="container">
+      <button class="back-btn" onclick="window.history.back()">← Back</button>
+      <div id="contractDetails">
+        <div style="color:var(--muted);text-align:center;">Loading contract details...</div>
+      </div>
+    </div>
+    <script>
+      const token = localStorage.getItem("token");
+      if (!token) location.replace("signIn.html");
+      function getQueryParam(name) {
+        const url = new URL(window.location.href);
+        return url.searchParams.get(name);
+      }
+      const contractId = getQueryParam("id");
+      async function fetchContract() {
+        if (!contractId) {
+          document.getElementById("contractDetails").innerHTML = '<div style="color:var(--muted);text-align:center;">No contract ID provided.</div>';
+          return;
+        }
+        try {
+          const res = await fetch(`/showSingleContract?id=${encodeURIComponent(contractId)}`, {
+            headers: { Authorization: "Bearer " + token }
+          });
+          if (!res.ok) throw new Error();
+          const { foundContract } = await res.json();
+          renderContract(foundContract);
+        } catch {
+          document.getElementById("contractDetails").innerHTML = '<div style="color:var(--muted);text-align:center;">Failed to load contract details.</div>';
+        }
+      }
+      function renderContract(contract) {
+        if (!contract) {
+          document.getElementById("contractDetails").innerHTML = '<div style="color:var(--muted);text-align:center;">Contract not found.</div>';
+          return;
+        }
+        document.getElementById("contractDetails").innerHTML = `
+          <div class="contract-title">${contract.contractName || 'Untitled Contract'}</div>
+          <div class="contract-meta">Created: ${contract.createdAt ? new Date(contract.createdAt).toLocaleDateString() : 'N/A'}${contract.expiryDate ? ' • Expires: ' + new Date(contract.expiryDate).toLocaleDateString() : ''}</div>
+          <div class="contract-section">
+            <span class="contract-label">Contract Body</span>
+            <div class="contract-value">${contract.contractBody || 'No contract body provided.'}</div>
+          </div>
+          <div class="contract-section">
+            <span class="contract-label">Maker</span>
+            <div class="contract-value">
+              <strong>Username:</strong> ${contract.constMakerUsername || 'N/A'}<br>
+              <strong>Email:</strong> ${contract.contractMakerEmail || 'N/A'}
+            </div>
+          </div>
+          <div class="contract-section">
+            <span class="contract-label">Receiver</span>
+            <div class="contract-value">
+              <strong>Username:</strong> ${contract.contractRecieverUsername || 'N/A'}<br>
+              <strong>Email:</strong> ${contract.contractRecieverEmail || 'N/A'}
+            </div>
+          </div>
+        `;
+      }
+      fetchContract();
+    </script>
+  </body>
+</html> 

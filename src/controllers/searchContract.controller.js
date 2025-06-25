@@ -6,7 +6,7 @@ async function searchContract(req, res) {
     const foundContracts = await Contract.find({
       $and: [
         {
-          $or: [{ contractMaker: id }, { contractReceiver: id }],
+          $or: [{ contractMaker: id }, { contractReciever: id }],
         },
         {
           $or: [

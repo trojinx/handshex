@@ -25,6 +25,18 @@ const contractSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    contractMakerEmail: {
+      type: String,
+    },
+    contractRecieverEmail: {
+      type: String,
+    },
+    contractMakerUsername: {
+      type: String,
+    },
+    contractRecieverUsername: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

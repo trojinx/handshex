@@ -11,6 +11,7 @@ async function createContract(req, res) {
   try {
     const { contractName, contractRecieverEmail, expiryDate, contractBody } =
       req.body;
+    let contractRecieverUsername;
     if (!contractBody) {
       return res.status(400).send("The contract must not be empty");
     }
@@ -22,10 +23,13 @@ async function createContract(req, res) {
     }
 
     const contractMaker = req.user.id;
+    const constMakerUsername = req.user.username;
+    const contractMakerEmail = req.user.email;
     let contractReciever;
     const existingUser = await User.findOne({ email: contractRecieverEmail });
     if (existingUser) {
       contractReciever = existingUser._id;
+      contractRecieverUsername = existingUser.username;
     } else {
       return res.status(400).send("reciever user is not registered");
     }
@@ -36,6 +40,10 @@ async function createContract(req, res) {
       contractReciever,
       expiryDate,
       contractBody,
+      contractRecieverEmail,
+      contractRecieverUsername,
+      contractMakerEmail,
+      constMakerUsername,
     });
 
     await newContract.save();
