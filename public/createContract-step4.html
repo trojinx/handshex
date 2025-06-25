@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Handshex | Create Contract (Step 4)</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg-from: #181818;
+        --bg-to: #232526;
+        --glass: rgba(255, 255, 255, 0.1);
+        --glass-border: rgba(255, 255, 255, 0.18);
+        --txt: #fff;
+        --muted: #e0e0e0;
+        --accent: #bfa14a;
+        --radius: 1.2rem;
+        --tr: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        --header-h: 72px;
+      }
+      html, body {
+        overflow-x: hidden;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: linear-gradient(90deg, #111 0%, #181818 40%, #000 100%);
+        color: var(--txt);
+        font-family: Inter, system-ui, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        display: block;
+        width: 100%;
+        max-width: 100vw;
+      }
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        height: var(--header-h);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        padding: 0;
+        background: rgba(0, 0, 0, 0.35);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--glass-border);
+        width: 100vw;
+      }
+      .brand {
+        font-size: 2rem;
+        font-weight: 900;
+        color: #fff;
+        letter-spacing: -1.5px;
+        margin-right: 1.7rem;
+        line-height: 1;
+        user-select: none;
+        display: flex;
+        align-items: center;
+        height: 40px;
+      }
+      .center-wrap {
+        min-height: calc(100vh - var(--header-h));
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding-top: 2.5vh;
+        padding-bottom: 2.5vh;
+      }
+      .container {
+        max-width: 480px;
+        width: 100%;
+        min-height: 420px;
+        margin: 0 auto;
+        background: var(--glass);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--radius);
+        box-shadow: 0 2px 24px 0 rgba(0,0,0,0.10);
+        padding: 2.5rem 2rem 2rem 2rem;
+        backdrop-filter: blur(8px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+      h1 {
+        color: var(--accent);
+        font-size: 1.5rem;
+        font-weight: 800;
+        margin-bottom: 1.5rem;
+        text-align: center;
+      }
+      .summary {
+        width: 100%;
+        background: rgba(255,255,255,0.07);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--radius);
+        padding: 1.2rem 1rem 1rem 1rem;
+        margin-bottom: 1.2rem;
+        box-sizing: border-box;
+        color: var(--txt);
+      }
+      .summary-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 1.1rem;
+        gap: 1.2rem;
+      }
+      .summary-label {
+        color: var(--accent);
+        font-weight: 700;
+        min-width: 120px;
+        font-size: 1.05rem;
+      }
+      .summary-value {
+        color: var(--txt);
+        font-weight: 400;
+        font-size: 1.08rem;
+        word-break: break-word;
+        flex: 1;
+        text-align: right;
+      }
+      .btn-create {
+        width: 100%;
+        margin-top: 0.7rem;
+        padding: 1rem 0;
+        font-size: 1.2rem;
+        font-weight: 700;
+        border: none;
+        border-radius: 2em;
+        cursor: pointer;
+        background: linear-gradient(90deg, #232526 0%, #414345 40%, #111 100%);
+        color: #fff;
+        box-shadow: 0 2px 8px 0 rgba(191, 161, 74, 0.12);
+        transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+      }
+      .btn-create:disabled {
+        cursor: not-allowed;
+        opacity: 0.7;
+      }
+      .message {
+        margin-top: 1.2rem;
+        font-size: 1.08rem;
+        font-weight: 700;
+        text-align: center;
+        color: #ff5252;
+      }
+      .progress-dots {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.4rem;
+        margin-top: 1.2rem;
+        margin-bottom: 0;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 1.2rem;
+      }
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: linear-gradient(90deg, #bfa14a 0%, #ffe082 100%);
+        opacity: 0.35;
+        transition: opacity 0.2s, box-shadow 0.2s;
+        box-shadow: 0 1px 4px 0 rgba(191, 161, 74, 0.10);
+      }
+      .dot.active {
+        opacity: 1;
+        box-shadow: 0 2px 8px 0 rgba(191, 161, 74, 0.18);
+      }
+      @media (max-width: 700px) {
+        .container {
+          padding: 1.2rem 0.5rem 1rem 0.5rem;
+        }
+        h1 {
+          font-size: 1.1rem;
+        }
+        .btn-create {
+          font-size: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="brand">Handshex</div>
+    </header>
+    <div class="center-wrap">
+      <div class="container" style="position:relative; margin: 0 auto;">
+        <h1>Confirm your contract</h1>
+        <form id="step4Form" autocomplete="off" onsubmit="return false;">
+          <div class="summary">
+            <div class="summary-row">
+              <span class="summary-label">Name</span>
+              <span class="summary-value" id="summaryName"></span>
+            </div>
+            <div class="summary-row">
+              <span class="summary-label">With</span>
+              <span class="summary-value" id="summaryUser"></span>
+            </div>
+            <div class="summary-row">
+              <span class="summary-label">Description</span>
+              <span class="summary-value" id="summaryBody"></span>
+            </div>
+            <div class="summary-row">
+              <span class="summary-label">Expiry</span>
+              <span class="summary-value" id="summaryExpiry"></span>
+            </div>
+          </div>
+          <button type="submit" class="btn-create" id="createBtn">Create Contract</button>
+          <div class="message" id="formMessage"></div>
+        </form>
+        <div class="progress-dots">
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot active"></span>
+        </div>
+      </div>
+    </div>
+    <script>
+      // Load contract data from localStorage
+      const name = localStorage.getItem('createContractName') || '';
+      const user = localStorage.getItem('createContractUser') || '';
+      const body = localStorage.getItem('createContractBody') || '';
+      const expiry = localStorage.getItem('createContractExpiryDate') || '';
+      document.getElementById('summaryName').textContent = name;
+      document.getElementById('summaryUser').textContent = user;
+      document.getElementById('summaryBody').textContent = body;
+      document.getElementById('summaryExpiry').textContent = expiry;
+
+      const form = document.getElementById('step4Form');
+      const createBtn = document.getElementById('createBtn');
+      const formMessage = document.getElementById('formMessage');
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        createBtn.disabled = true;
+        formMessage.textContent = 'Creating contract...';
+        try {
+          const jwt = localStorage.getItem('token');
+          const contractName = localStorage.getItem('createContractName') || '';
+          const contractRecieverEmail = localStorage.getItem('createContractUser') || '';
+          const contractBody = localStorage.getItem('createContractBody') || '';
+          const expiryDate = localStorage.getItem('createContractExpiryDate') || '';
+          const res = await fetch('/createContract', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              ...(jwt ? { 'Authorization': 'Bearer ' + jwt } : {}),
+            },
+            body: JSON.stringify({
+              contractName,
+              contractRecieverEmail,
+              expiryDate,
+              contractBody
+            })
+          });
+          let data = {};
+          try {
+            data = await res.json();
+          } catch (jsonErr) {}
+          if (res.ok) {
+            formMessage.style.color = '#bfa14a';
+            formMessage.textContent = 'Contract created successfully! Redirecting...';
+            setTimeout(() => {
+              window.location.href = 'dashboard.html';
+            }, 1500);
+          } else {
+            formMessage.style.color = '#ff5252';
+            formMessage.textContent = data.message || `Failed to create contract. (${res.status})`;
+            createBtn.disabled = false;
+          }
+        } catch (err) {
+          formMessage.style.color = '#ff5252';
+          formMessage.textContent = 'Network error. Please try again.';
+          createBtn.disabled = false;
+        }
+      });
+    </script>
+  </body>
+</html> 

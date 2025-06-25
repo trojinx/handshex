@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Handshex | Create Contract (Step 2)</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg-from: #181818;
+        --bg-to: #232526;
+        --glass: rgba(255, 255, 255, 0.1);
+        --glass-border: rgba(255, 255, 255, 0.18);
+        --txt: #fff;
+        --muted: #e0e0e0;
+        --accent: #bfa14a;
+        --radius: 1.2rem;
+        --tr: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        --header-h: 72px;
+      }
+      html, body {
+        overflow: hidden;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: linear-gradient(90deg, #111 0%, #181818 40%, #000 100%);
+        color: var(--txt);
+        font-family: Inter, system-ui, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        display: block;
+        height: 100vh;
+        width: 100vw;
+      }
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        height: var(--header-h);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        padding: 0;
+        background: rgba(0, 0, 0, 0.35);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--glass-border);
+        width: 100vw;
+      }
+      .brand {
+        font-size: 2rem;
+        font-weight: 900;
+        color: #fff;
+        letter-spacing: -1.5px;
+        margin-right: 1.7rem;
+        line-height: 1;
+        user-select: none;
+        display: flex;
+        align-items: center;
+        height: 40px;
+      }
+      .center-wrap {
+        min-height: calc(100vh - var(--header-h));
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      .container {
+        max-width: 480px;
+        width: 100%;
+        min-height: 320px;
+        margin: 0 auto;
+        background: var(--glass);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--radius);
+        box-shadow: 0 2px 24px 0 rgba(0,0,0,0.10);
+        padding: 2.5rem 2rem 2rem 2rem;
+        backdrop-filter: blur(8px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+      h1 {
+        color: var(--accent);
+        font-size: 1.5rem;
+        font-weight: 800;
+        margin-bottom: 1.5rem;
+        text-align: center;
+      }
+      .search-row {
+        width: 100%;
+        position: relative;
+        margin-bottom: 1.2rem;
+      }
+      .search-row input {
+        width: 100%;
+        padding: 1.1rem 2.8rem 1.1rem 1.2rem;
+        border-radius: 0.9em;
+        border: 1.5px solid #ccc;
+        font-size: 1.18rem;
+        font-family: inherit;
+        background: #f8fafc;
+        color: #111;
+        box-sizing: border-box;
+        transition: border 0.2s;
+        outline: none;
+      }
+      .search-row input:focus {
+        border: 2px solid var(--accent);
+        background: #fffbe6;
+      }
+      .search-row input::placeholder {
+        font-size: 0.97rem;
+        color: #888;
+        opacity: 1;
+      }
+      .search-icon {
+        position: absolute;
+        right: 1.1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 1.4rem;
+        height: 1.4rem;
+        fill: #bfa14a;
+        cursor: pointer;
+        opacity: 0.85;
+        transition: opacity 0.18s;
+      }
+      .search-icon:hover {
+        opacity: 1;
+      }
+      .results-list {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 0.7rem;
+        margin-bottom: 1.2rem;
+        max-height: 160px;
+        overflow-y: auto;
+      }
+      .user-card {
+        background: rgba(255,255,255,0.07);
+        border: 1.5px solid var(--glass-border);
+        border-radius: 0.8em;
+        padding: 0.8rem 1.1rem;
+        color: #fff;
+        font-size: 1.08rem;
+        display: flex;
+        flex-direction: column;
+        cursor: pointer;
+        transition: border 0.18s, background 0.18s;
+        position: relative;
+      }
+      .user-card.selected, .user-card:hover {
+        border: 2px solid var(--accent);
+        background: rgba(191, 161, 74, 0.10);
+      }
+      .user-card .username {
+        font-weight: 700;
+        color: var(--accent);
+        font-size: 1.08rem;
+      }
+      .user-card .email {
+        font-size: 0.97rem;
+        color: var(--muted);
+      }
+      .btn-next {
+        width: 100%;
+        margin-top: 0.7rem;
+        padding: 1rem 0;
+        font-size: 1.2rem;
+        font-weight: 700;
+        border: none;
+        border-radius: 2em;
+        cursor: pointer;
+        background: linear-gradient(90deg, #232526 0%, #414345 40%, #111 100%);
+        color: #fff;
+        box-shadow: 0 2px 8px 0 rgba(191, 161, 74, 0.12);
+        transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+        opacity: 0.7;
+      }
+      .btn-next.enabled {
+        opacity: 1;
+        cursor: pointer;
+      }
+      .btn-next:disabled {
+        cursor: not-allowed;
+        opacity: 0.7;
+      }
+      .message {
+        margin-top: 1.2rem;
+        font-size: 1.08rem;
+        font-weight: 700;
+        text-align: center;
+        color: #ff5252;
+      }
+      .progress-dots {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.4rem;
+        margin-top: 1.2rem;
+        margin-bottom: 0;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 1.2rem;
+      }
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: linear-gradient(90deg, #bfa14a 0%, #ffe082 100%);
+        opacity: 0.35;
+        transition: opacity 0.2s, box-shadow 0.2s;
+        box-shadow: 0 1px 4px 0 rgba(191, 161, 74, 0.10);
+      }
+      .dot.active {
+        opacity: 1;
+        box-shadow: 0 2px 8px 0 rgba(191, 161, 74, 0.18);
+      }
+      @media (max-width: 700px) {
+        .container {
+          padding: 1.2rem 0.5rem 1rem 0.5rem;
+        }
+        h1 {
+          font-size: 1.1rem;
+        }
+        .btn-next {
+          font-size: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="brand">Handshex</div>
+    </header>
+    <div class="center-wrap">
+      <div class="container" style="position:relative; margin: 0 auto;">
+        <h1>Who is this contract with?</h1>
+        <form id="step2Form" autocomplete="off" onsubmit="return false;">
+          <div class="search-row">
+            <input type="text" id="userSearch" name="userSearch" required maxlength="100" placeholder="Search by username or email..." />
+            <svg id="searchIcon" class="search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" stroke="#bfa14a" stroke-width="2" fill="none"/><line x1="16.5" y1="16.5" x2="21" y2="21" stroke="#bfa14a" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <div class="results-list" id="resultsList"></div>
+          <button type="submit" class="btn-next" id="nextBtn" disabled>Next</button>
+          <div class="message" id="formMessage"></div>
+        </form>
+        <div class="progress-dots">
+          <span class="dot"></span>
+          <span class="dot active"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+        </div>
+      </div>
+    </div>
+    <script>
+      const searchBtn = document.getElementById('searchIcon');
+      const userSearch = document.getElementById('userSearch');
+      const resultsList = document.getElementById('resultsList');
+      const nextBtn = document.getElementById('nextBtn');
+      const formMessage = document.getElementById('formMessage');
+      let selectedUser = null;
+
+      searchBtn.addEventListener('click', async function() {
+        const query = userSearch.value.trim();
+        resultsList.innerHTML = '';
+        formMessage.textContent = '';
+        nextBtn.disabled = true;
+        nextBtn.classList.remove('enabled');
+        selectedUser = null;
+        if (!query) {
+          formMessage.textContent = 'Please enter a username or email to search.';
+          return;
+        }
+        const token = localStorage.getItem('token');
+        if (!token) {
+          formMessage.textContent = 'You must be signed in.';
+          return;
+        }
+        try {
+          const res = await fetch(`/searchUser?query=${encodeURIComponent(query)}`, {
+            headers: { 'Authorization': 'Bearer ' + token }
+          });
+          if (!res.ok) {
+            const text = await res.text();
+            formMessage.textContent = text;
+            return;
+          }
+          const { foundUsers } = await res.json();
+          if (!foundUsers.length) {
+            formMessage.textContent = 'No users found.';
+            return;
+          }
+          resultsList.innerHTML = '';
+          foundUsers.forEach(user => {
+            const card = document.createElement('div');
+            card.className = 'user-card';
+            card.innerHTML = `<span class="username">${user.username}</span><span class="email">${user.email}</span>`;
+            card.addEventListener('click', () => {
+              document.querySelectorAll('.user-card').forEach(c => c.classList.remove('selected'));
+              card.classList.add('selected');
+              selectedUser = user;
+              nextBtn.disabled = false;
+              nextBtn.classList.add('enabled');
+            });
+            resultsList.appendChild(card);
+          });
+        } catch (err) {
+          formMessage.textContent = 'Network error. Please try again.';
+        }
+      });
+
+      document.getElementById('step2Form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (!selectedUser) {
+          formMessage.textContent = 'Please select a user.';
+          return;
+        }
+        localStorage.setItem('createContractRecieverUsername', selectedUser.username);
+        localStorage.setItem('createContractRecieverEmail', selectedUser.email);
+        localStorage.setItem('createContractUser', selectedUser.email);
+        window.location.href = 'createContract-step3.html';
+      });
+    </script>
+  </body>
+</html> 

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <title>Handshex | Dashboard</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
 
     <!-- font -->
     <link
@@ -38,10 +38,15 @@
       body {
         margin: 0;
         min-height: 100vh;
-        background: linear-gradient(90deg, #232526 0%, #414345 40%, #111 100%);
+        background: linear-gradient(90deg, #111 0%, #181818 40%, #000 100%);
         color: var(--txt);
         font-family: Inter, system-ui, sans-serif;
         -webkit-font-smoothing: antialiased;
+        zoom: reset;
+        transform: scale(1);
+        overflow-x: hidden;
+        max-width: 100vw;
+        min-width: 0;
       }
       button {
         font-family: inherit;
@@ -160,29 +165,6 @@
         pointer-events: none;
         user-select: none;
       }
-      .cred-score .tooltip {
-        display: none;
-        position: absolute;
-        left: 50%;
-        top: -2.5rem;
-        transform: translateX(-50%);
-        background: #222;
-        color: #fff;
-        font-size: 0.85rem;
-        padding: 0.5rem 0.8rem;
-        border-radius: 0.6rem;
-        box-shadow: 0 2px 12px rgba(0,0,0,0.18);
-        white-space: nowrap;
-        z-index: 100;
-        pointer-events: none;
-        opacity: 0;
-        transition: opacity 0.18s;
-      }
-      .cred-score:hover .tooltip,
-      .cred-score:focus .tooltip {
-        display: block;
-        opacity: 1;
-      }
       .avatar {
         width: 44px;
         height: 44px;
@@ -197,7 +179,7 @@
       .dropdown {
         position: absolute;
         right: 0;
-        top: calc(100% + 0.6rem);
+        top: calc(100% + 1.2rem) !important;
         min-width: 220px;
         background: #fff;
         color: #111;
@@ -208,7 +190,7 @@
         z-index: 1001;
       }
       .profile.open .dropdown {
-        display: block;
+        display: none !important;
       }
 
       /* ===== SIDEBAR ===== */
@@ -289,9 +271,12 @@
         border-radius: var(--radius);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         transition: box-shadow var(--tr), transform var(--tr);
+        opacity: 0;
+        transform: translateY(40px) scale(0.98);
+        animation: card-fade-in 0.7s cubic-bezier(0.4,0,0.2,1) forwards;
       }
       .entry:hover {
-        transform: translateY(-4px);
+        transform: translateY(-4px) scale(1.03);
         box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
       }
       .entry::before {
@@ -316,11 +301,44 @@
         margin: 0.5rem 0 1rem;
       }
       .status {
-        font-size: 0.76rem;
+        font-size: 0.95rem;
         font-weight: 700;
-        color: var(--accent);
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
         letter-spacing: 0.6px;
         text-transform: uppercase;
+        color: #fff;
+        margin-top: 1.5em;
+      }
+      .status-dot {
+        display: inline-block;
+        width: 0.7em;
+        height: 0.7em;
+        border-radius: 50%;
+        margin-right: 0.4em;
+        background: #fff;
+        opacity: 0;
+        transform: scale(0.5);
+        animation: dot-pop-in 0.5s cubic-bezier(0.4,0,0.2,1) 0.2s forwards;
+      }
+      .status.not-verified {
+        color: #fff;
+      }
+      .status-dot.not-verified {
+        background: #fff;
+      }
+      .status.active {
+        color: #4caf50;
+      }
+      .status-dot.active {
+        background: #4caf50;
+      }
+      .status.expired {
+        color: #ff5252;
+      }
+      .status-dot.expired {
+        background: #ff5252;
       }
 
       /* skeleton for loading */
@@ -359,6 +377,12 @@
       }
 
       /* ===== MEDIA ===== */
+      @media (max-width: 900px) {
+        main {
+          max-width: 98vw;
+          padding: 0 0.5rem;
+        }
+      }
       @media (max-width: 700px) {
         aside {
           width: 85vw;
@@ -380,6 +404,47 @@
         .entry::before {
           left: -24px;
         }
+        .avatar, .cred-score, .cred-svg {
+          width: 40px;
+          height: 40px;
+        }
+        main {
+          max-width: 100vw;
+          padding: 0 0.2rem;
+          order: 1;
+        }
+        .notes-section {
+          order: 2;
+        }
+        .calendar-section {
+          margin-left: auto !important;
+          margin-right: auto !important;
+          display: block !important;
+        }
+        body {
+          display: flex;
+          flex-direction: column;
+        }
+        .notes-section, .calendar-section {
+          position: static !important;
+          width: 100% !important;
+          max-width: 100vw !important;
+          margin: 1.2rem 0 1.2rem 0 !important;
+          left: 0 !important;
+          right: 0 !important;
+          top: auto !important;
+          box-sizing: border-box;
+        }
+        .calendar-section {
+          width: 80vw !important;
+          max-width: 340px !important;
+          padding: 0.7rem !important;
+        }
+      }
+      html, body {
+        overflow-x: hidden;
+        max-width: 100vw;
+        min-width: 0;
       }
 
       .main-cred-wrap {
@@ -505,6 +570,8 @@
         padding: 1.5rem;
         box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
         z-index: 50;
+        opacity: 0;
+        animation: notes-fade-in 0.7s cubic-bezier(0.4,0,0.2,1) 0.2s forwards;
       }
       .notes-header {
         display: flex;
@@ -632,6 +699,9 @@
         cursor: pointer;
         transition: all var(--tr);
         position: relative;
+        opacity: 0;
+        transform: scale(0.85);
+        animation: day-fade-in 0.5s cubic-bezier(0.4,0,0.2,1) forwards;
       }
       .calendar-day:hover {
         background: rgba(255, 255, 255, 0.1);
@@ -661,6 +731,30 @@
         background: var(--accent);
         border-radius: 50%;
       }
+      @keyframes day-fade-in {
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      @keyframes card-fade-in {
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+      @keyframes dot-pop-in {
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+      @keyframes notes-fade-in {
+        to {
+          opacity: 1;
+        }
+      }
     </style>
   </head>
 
@@ -670,7 +764,7 @@
       <button class="btn-close" id="closeSidebar" aria-label="Close sidebar">
         &times;
       </button>
-      <button class="btn-primary" id="createContractBtn">
+      <button class="btn-primary" id="createContractBtn" onclick="window.location.href='createContract-step1.html'">
         + Create New Contract
       </button>
     </aside>
@@ -696,7 +790,6 @@
             <circle class="cred-fg" cx="22" cy="22" r="18" stroke-dasharray="0 113.1" />
           </svg>
           <span class="cred-text" id="headerCredText">0</span>
-          <span class="tooltip" id="credTooltip">Credibility Score: 0</span>
         </div>
         <div class="avatar" id="profileAvatar">U</div>
         <div class="dropdown" id="profileDropdown">
@@ -779,23 +872,20 @@
           const percent = Math.max(0, Math.min(100, score));
           const headerCircle = document.querySelector('#headerCredScore .cred-fg');
           const headerText = document.getElementById('headerCredText');
-          const headerTooltip = document.getElementById('credTooltip');
-          const headerRads = 18;
-          const headerCirc = 2 * Math.PI * headerRads;
-          const headerFilled = (percent / 100) * headerCirc;
-          headerCircle.setAttribute('stroke-dasharray', `${headerFilled} ${headerCirc}`);
           headerText.textContent = percent;
-          headerTooltip.textContent = `Credibility Score: ${percent}`;
+          // Animate SVG circle fill
+          const radius = 18;
+          const circumference = 2 * Math.PI * radius;
+          headerCircle.setAttribute('stroke-dasharray', circumference);
+          headerCircle.setAttribute('stroke-dashoffset', circumference);
+          setTimeout(() => {
+            headerCircle.style.transition = 'stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1)';
+            headerCircle.setAttribute('stroke-dashoffset', circumference * (1 - percent / 100));
+          }, 200);
         } catch {
           location.replace("signIn.html");
         }
       })();
-      const profile = $("#profile");
-      profile.addEventListener("click", (e) => {
-        e.stopPropagation();
-        profile.classList.toggle("open");
-      });
-      addEventListener("click", () => profile.classList.remove("open"));
 
       /* ---------- sidebar ---------- */
       const sidebar = $("#sidebar");
@@ -825,27 +915,42 @@
           wrap.innerHTML = `
             <div style="text-align: center; padding: 3rem 1rem;">
               <p style="color: var(--muted); margin-bottom: 2rem; font-size: 1.1rem;">No contracts found.</p>
-              <button class="btn-primary" id="createContractBtnEmpty" style="padding: 1.2rem 2rem; font-size: 1.1rem; min-width: 200px;">
+              <button class="btn-primary" id="createContractBtnEmpty" style="padding: 1.2rem 2rem; font-size: 1.1rem; min-width: 200px;" onclick="window.location.href='createContract-step1.html'">
                 + Create New Contract
               </button>
             </div>`;
           // Add event listener to the new button
-          $("#createContractBtnEmpty").addEventListener("click", () =>
-            alert("Create Contract modal here")
-          );
+          $("#createContractBtnEmpty").addEventListener("click", (e) => {
+            e.preventDefault();
+            window.location.href = 'createContract-step1.html';
+          });
           return;
         }
-        list.forEach((c) => {
-          const d = (k) => (c[k] ? new Date(c[k]).toLocaleDateString() : "");
+        list.forEach((c, i) => {
+          const d = (k) => {
+            if (!c[k]) return "";
+            const date = new Date(c[k]);
+            const day = date.getDate();
+            const month = date.toLocaleString('default', { month: 'long' });
+            const year = date.getFullYear();
+            return `${day} ${month}, ${year}`;
+          };
           wrap.insertAdjacentHTML(
             "beforeend",
             `
-          <article class="entry" tabindex="0" style="position:relative;">
+          <article class="entry" tabindex="0" style="position:relative;animation-delay:${i*0.08}s">
             <h2>${c.contractName || c.title}</h2>
             <p class="meta">Created ${d("createdAt")} • Expires ${d(
               "expiryDate"
             )}</p>
-            <p class="status">${c.status || "Active"}</p>
+            <p class="status ${
+              (c.contractStatus || c.status || "active").toLowerCase().replace(/\s/g, '-')
+            }">
+              <span class="status-dot ${
+                (c.contractStatus || c.status || "active").toLowerCase().replace(/\s/g, '-')
+              }"></span>
+              ${c.contractStatus || c.status || "Active"}
+            </p>
             <button class="view-btn" data-id="${c._id || ''}" style="position:absolute;right:1.5rem;top:1.5rem;">View</button>
           </article>`
           );
@@ -896,11 +1001,6 @@
           )
         );
       });
-
-      /* ---------- create (placeholder) ---------- */
-      $("#createContractBtn").addEventListener("click", () =>
-        alert("Create Contract modal here")
-      );
 
       /* ---------- notes ---------- */
       const notesTextarea = $("#notesTextarea");
@@ -983,6 +1083,7 @@
             const dayElement = document.createElement("div");
             dayElement.className = "calendar-day";
             dayElement.textContent = date.getDate();
+            dayElement.style.animationDelay = `${i*0.015}s`;
             
             // Check if it's current month
             if (date.getMonth() !== month) {
@@ -1024,34 +1125,10 @@
           const events = this.events[dateKey] || [];
           
           if (events.length > 0) {
-            alert(`Events for ${date.toLocaleDateString()}:\n${events.join('\n')}`);
-          } else {
-            const eventName = prompt(`Add event for ${date.toLocaleDateString()}:`);
-            if (eventName && eventName.trim()) {
-              if (!this.events[dateKey]) {
-                this.events[dateKey] = [];
-              }
-              this.events[dateKey].push(eventName.trim());
-              localStorage.setItem("handshex_calendar_events", JSON.stringify(this.events));
-              this.renderCalendar();
-            }
+            // handle events here if needed
           }
         }
-        
-        bindEvents() {
-          document.getElementById("prevMonth").addEventListener("click", () => {
-            this.currentDate.setMonth(this.currentDate.getMonth() - 1);
-            this.renderCalendar();
-          });
-          
-          document.getElementById("nextMonth").addEventListener("click", () => {
-            this.currentDate.setMonth(this.currentDate.getMonth() + 1);
-            this.renderCalendar();
-          });
-        }
       }
-      
-      // Initialize calendar
       new Calendar();
     </script>
   </body>

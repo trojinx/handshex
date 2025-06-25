@@ -37,6 +37,12 @@ const contractSchema = new mongoose.Schema(
     contractRecieverUsername: {
       type: String,
     },
+    contractStatus: {
+      type: String,
+      enum: ["Active", "Not Verified", "Expired"],
+      required: true,
+      default: "Not Verified",
+    },
   },
   { timestamps: true }
 );

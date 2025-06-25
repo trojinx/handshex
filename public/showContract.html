@@ -21,7 +21,7 @@
       body {
         margin: 0;
         min-height: 100vh;
-        background: linear-gradient(90deg, #232526 0%, #414345 40%, #111 100%);
+        background: linear-gradient(90deg, #111 0%, #181818 40%, #000 100%);
         color: var(--txt);
         font-family: Inter, system-ui, sans-serif;
         -webkit-font-smoothing: antialiased;
@@ -111,12 +111,198 @@
         background: linear-gradient(90deg, #111 0%, #232526 60%, #414345 100%);
         box-shadow: 0 4px 16px 0 rgba(30, 42, 120, 0.18);
       }
+      .gold-btn {
+        background: linear-gradient(90deg, #bfa14a 0%, #ffe082 100%);
+        color: #111;
+        border: none;
+        border-radius: 2em;
+        font-weight: 700;
+        font-size: 1rem;
+        padding: 0.8rem 1.7rem;
+        margin: 0;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(191, 161, 74, 0.18);
+        transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+        width: 220px;
+        height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+      .gold-btn:hover {
+        background: linear-gradient(90deg, #ffe082 0%, #bfa14a 100%);
+        color: #111;
+        box-shadow: 0 4px 16px 0 rgba(191, 161, 74, 0.28);
+      }
+      #contractActions {
+        margin: 2.5rem auto 0 auto;
+        max-width: 600px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        gap: 0;
+      }
+      #remindBtn {
+        margin-left: 0;
+      }
+      #updateBtn {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        margin: 0;
+      }
+      #completeBtn {
+        margin-right: 0;
+      }
       @media (max-width: 700px) {
         .container {
           padding: 1.2rem 0.5rem 1rem 0.5rem;
         }
         .contract-title {
           font-size: 1.3rem;
+        }
+        #contractActions {
+          flex-direction: column;
+          gap: 0.8rem;
+          position: static;
+        }
+        #updateBtn {
+          position: static;
+          left: auto;
+          transform: none;
+        }
+        .gold-btn {
+          width: 100%;
+          min-width: 0;
+          height: 56px;
+        }
+      }
+      .corner-btn {
+        position: fixed;
+        bottom: 32px;
+        z-index: 1000;
+      }
+      .left-corner {
+        left: 32px;
+      }
+      .right-corner {
+        right: 32px;
+      }
+      .center-corner {
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      @media (max-width: 700px) {
+        .corner-btn {
+          position: fixed;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 90vw;
+          min-width: 0;
+          max-width: 98vw;
+        }
+        .left-corner {
+          bottom: 96px;
+          left: 50%;
+          transform: translateX(-50%);
+        }
+        .center-corner {
+          bottom: 56px;
+        }
+        .right-corner {
+          bottom: 16px;
+          left: 50%;
+          transform: translateX(-50%);
+        }
+      }
+      .menu-btn {
+        position: absolute;
+        top: 18px;
+        right: 18px;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: linear-gradient(90deg, #bfa14a 0%, #ffe082 100%);
+        box-shadow: 0 2px 12px rgba(191,161,74,0.18);
+        border: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        cursor: pointer;
+        z-index: 1100;
+        transition: background 0.2s, box-shadow 0.2s;
+      }
+      .menu-btn span {
+        width: 5px;
+        height: 5px;
+        background: #111;
+        border-radius: 50%;
+      }
+      .menu-btn:active, .menu-btn:focus {
+        outline: 2px solid #bfa14a;
+      }
+      .action-menu {
+        position: absolute;
+        top: 60px;
+        right: 18px;
+        left: auto;
+        background: linear-gradient(90deg, #232526 0%, #111 100%);
+        border-radius: 1.1em;
+        box-shadow: 0 4px 24px rgba(30,42,120,0.13);
+        padding: 0.2rem 0.1rem 0.2rem 0.1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        z-index: 1200;
+        min-width: 260px;
+        align-items: stretch;
+        animation: fadeInMenu 0.18s cubic-bezier(0.4,0,0.2,1);
+      }
+      @keyframes fadeInMenu {
+        from { opacity: 0; transform: translateY(20px) scale(0.98); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+      }
+      .menu-option {
+        color: #fff;
+        background: none;
+        border: none;
+        border-radius: 0.5em;
+        font-size: 0.97rem;
+        padding: 0.55rem 1rem;
+        margin: 0;
+        text-align: left;
+        cursor: pointer;
+        transition: background 0.18s;
+        outline: none;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+      }
+      .menu-option:last-child {
+        border-bottom: none;
+      }
+      .menu-option:hover, .menu-option:focus {
+        background: rgba(255,255,255,0.08);
+      }
+      @media (max-width: 700px) {
+        .menu-btn {
+          top: 10px;
+          right: 10px;
+        }
+        .action-menu {
+          top: 48px;
+          right: 8px;
+          min-width: 70vw;
+          padding: 0.7rem 0.5rem 0.7rem 0.5rem;
+        }
+        .menu-option {
+          width: 100%;
+          min-width: 0;
         }
       }
     </style>
@@ -125,11 +311,17 @@
     <header>
       <div class="brand">Handshex</div>
     </header>
-    <div class="container">
-      <button class="back-btn" onclick="window.history.back()">← Back</button>
+    <div class="container" style="position:relative;">
+      <button class="back-btn" style="position:absolute; bottom:18px; right:18px; z-index:1100;" onclick="window.history.back()">← Back</button>
+      <button id="menuBtn" class="menu-btn" aria-label="Show contract actions">
+        <span></span><span></span><span></span>
+      </button>
       <div id="contractDetails">
         <div style="color:var(--muted);text-align:center;">Loading contract details...</div>
       </div>
+    </div>
+    <div id="contractActions" style="display:none;"></div>
+    <div id="actionMenu" class="action-menu" style="display:none;">
     </div>
     <script>
       const token = localStorage.getItem("token");
@@ -170,7 +362,7 @@
           <div class="contract-section">
             <span class="contract-label">Maker</span>
             <div class="contract-value">
-              <strong>Username:</strong> ${contract.constMakerUsername || 'N/A'}<br>
+              <strong>Username:</strong> ${contract.contractMakerUsername || 'N/A'}<br>
               <strong>Email:</strong> ${contract.contractMakerEmail || 'N/A'}
             </div>
           </div>
@@ -182,8 +374,29 @@
             </div>
           </div>
         `;
+        // Set button labels and handlers
+        const userId = localStorage.getItem("userId"); // You may need to set this on login
+        let otherUser = "the other user";
+        if (userId && contract) {
+          if (contract.contractMaker === userId) {
+            otherUser = contract.contractRecieverUsername || "the other user";
+          } else if (contract.contractReciever === userId) {
+            otherUser = contract.contractMakerUsername || "the other user";
+          }
+        }
       }
       fetchContract();
+      // Menu button logic
+      const menuBtn = document.getElementById("menuBtn");
+      const actionMenu = document.getElementById("actionMenu");
+      menuBtn.addEventListener("click", () => {
+        actionMenu.style.display = actionMenu.style.display === "none" ? "flex" : "none";
+      });
+      document.addEventListener("click", (e) => {
+        if (!menuBtn.contains(e.target) && !actionMenu.contains(e.target)) {
+          actionMenu.style.display = "none";
+        }
+      });
     </script>
   </body>
 </html> 

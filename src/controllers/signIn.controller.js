@@ -14,7 +14,7 @@ async function signIn(req, res) {
       if (isMatch) {
         //issue a JWT
         const token = jwt.sign(
-          { id: existingUser._id.toString(), username: existingUser.username },
+          { id: existingUser._id.toString(), username: existingUser.username, email: existingUser.email },
           process.env.JWT_SECRET
         );
         res.status(200).json({

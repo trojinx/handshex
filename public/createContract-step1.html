@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Handshex | Create Contract (Step 1)</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg-from: #181818;
+        --bg-to: #232526;
+        --glass: rgba(255, 255, 255, 0.1);
+        --glass-border: rgba(255, 255, 255, 0.18);
+        --txt: #fff;
+        --muted: #e0e0e0;
+        --accent: #bfa14a;
+        --radius: 1.2rem;
+        --tr: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        --header-h: 72px;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: linear-gradient(90deg, #111 0%, #181818 40%, #000 100%);
+        color: var(--txt);
+        font-family: Inter, system-ui, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        display: block;
+        height: 100vh;
+        width: 100vw;
+        overflow: hidden;
+      }
+      .center-wrap {
+        min-height: calc(100vh - var(--header-h));
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        height: var(--header-h);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        padding: 0;
+        background: rgba(0, 0, 0, 0.35);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--glass-border);
+        width: 100vw;
+      }
+      .brand {
+        font-size: 2rem;
+        font-weight: 900;
+        color: #fff;
+        letter-spacing: -1.5px;
+        margin-right: 1.7rem;
+        line-height: 1;
+        user-select: none;
+        display: flex;
+        align-items: center;
+        height: 40px;
+      }
+      .container {
+        max-width: 480px;
+        width: 100%;
+        min-height: 320px;
+        margin: auto;
+        background: var(--glass);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--radius);
+        box-shadow: 0 2px 24px 0 rgba(0,0,0,0.10);
+        padding: 2.5rem 2rem 2rem 2rem;
+        backdrop-filter: blur(8px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
+      }
+      h1 {
+        color: var(--accent);
+        font-size: 1.7rem;
+        font-weight: 800;
+        margin-bottom: 2rem;
+        text-align: center;
+      }
+      form {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+      }
+      label {
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 0.3rem;
+        font-size: 1.05rem;
+      }
+      input {
+        width: 100%;
+        padding: 0.8rem 1rem;
+        border-radius: 0.7em;
+        border: 1px solid #ccc;
+        font-size: 1.08rem;
+        font-family: inherit;
+        background: #f8fafc;
+        color: #111;
+        box-sizing: border-box;
+        margin-bottom: 0.2rem;
+        transition: border 0.2s;
+      }
+      input:focus {
+        border: 1.5px solid var(--accent);
+        outline: none;
+        background: #fffbe6;
+      }
+      .btn-next {
+        width: 100%;
+        margin-top: 1.3rem;
+        padding: 1rem 0;
+        font-size: 1.2rem;
+        font-weight: 700;
+        border: none;
+        border-radius: 2em;
+        cursor: pointer;
+        background: linear-gradient(90deg, #232526 0%, #414345 40%, #111 100%);
+        color: #fff;
+        box-shadow: 0 2px 8px 0 rgba(191, 161, 74, 0.12);
+        transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+        opacity: 0.7;
+      }
+      .btn-next.enabled {
+        opacity: 1;
+        cursor: pointer;
+      }
+      .btn-next:disabled {
+        cursor: not-allowed;
+        opacity: 0.7;
+      }
+      .message {
+        margin-top: 1.2rem;
+        font-size: 1.08rem;
+        font-weight: 700;
+        text-align: center;
+        color: #ff5252;
+      }
+      @media (max-width: 700px) {
+        .container {
+          padding: 1.2rem 0.5rem 1rem 0.5rem;
+        }
+        h1 {
+          font-size: 1.2rem;
+        }
+        .btn-next {
+          font-size: 1rem;
+        }
+      }
+      .progress-dots {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.4rem;
+        margin-top: 1.2rem;
+        margin-bottom: 0;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 1.2rem;
+      }
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: linear-gradient(90deg, #bfa14a 0%, #ffe082 100%);
+        opacity: 0.35;
+        transition: opacity 0.2s, box-shadow 0.2s;
+        box-shadow: 0 1px 4px 0 rgba(191, 161, 74, 0.10);
+      }
+      .dot.active {
+        opacity: 1;
+        box-shadow: 0 2px 8px 0 rgba(191, 161, 74, 0.18);
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="brand">Handshex</div>
+    </header>
+    <div class="center-wrap">
+      <div class="container" style="position:relative; margin: 0 auto;">
+        <h1>Name your contract</h1>
+        <form id="step1Form" autocomplete="off">
+          <div>
+            <input type="text" id="contractName" name="contractName" required maxlength="100" placeholder="Enter a unique contract name" />
+          </div>
+          <button type="submit" class="btn-next" id="nextBtn" disabled>Next</button>
+          <div class="message" id="formMessage"></div>
+        </form>
+        <div class="progress-dots">
+          <span class="dot active"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+        </div>
+      </div>
+    </div>
+    <script>
+      const form = document.getElementById('step1Form');
+      const contractNameInput = document.getElementById('contractName');
+      const nextBtn = document.getElementById('nextBtn');
+      const messageEl = document.getElementById('formMessage');
+      contractNameInput.addEventListener('input', function() {
+        if (contractNameInput.value.trim().length > 0) {
+          nextBtn.disabled = false;
+          nextBtn.classList.add('enabled');
+        } else {
+          nextBtn.disabled = true;
+          nextBtn.classList.remove('enabled');
+        }
+      });
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const name = contractNameInput.value.trim();
+        if (!name) {
+          messageEl.textContent = 'Please enter a contract name.';
+          return;
+        }
+        localStorage.setItem('createContractName', name);
+        window.location.href = 'createContract-step2.html';
+      });
+    </script>
+  </body>
+</html> 

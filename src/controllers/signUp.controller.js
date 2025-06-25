@@ -16,7 +16,7 @@ async function signUp(req, res) {
       const newUser = new User({ username, email, password });
       await newUser.save();
       const token = jwt.sign(
-        { id: newUser._id.toString(), username: newUser.username },
+        { id: newUser._id.toString(), username: newUser.username, email: newUser.email },
         process.env.JWT_SECRET
       );
 

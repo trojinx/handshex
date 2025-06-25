@@ -11,6 +11,7 @@ async function createContract(req, res) {
   try {
     const { contractName, contractRecieverEmail, expiryDate, contractBody } =
       req.body;
+
     let contractRecieverUsername;
     if (!contractBody) {
       return res.status(400).send("The contract must not be empty");
@@ -23,7 +24,7 @@ async function createContract(req, res) {
     }
 
     const contractMaker = req.user.id;
-    const constMakerUsername = req.user.username;
+    const contractMakerUsername = req.user.username;
     const contractMakerEmail = req.user.email;
     let contractReciever;
     const existingUser = await User.findOne({ email: contractRecieverEmail });
@@ -36,14 +37,14 @@ async function createContract(req, res) {
 
     const newContract = new Contract({
       contractMaker,
-      contractName,
+      contractMakerEmail,
+      contractMakerUsername,
+      contractRecieverUsername,
       contractReciever,
+      contractRecieverEmail,
+      contractName,
       expiryDate,
       contractBody,
-      contractRecieverEmail,
-      contractRecieverUsername,
-      contractMakerEmail,
-      constMakerUsername,
     });
 
     await newContract.save();
