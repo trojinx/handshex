@@ -65,7 +65,7 @@
         display: flex;
         align-items: center;
         gap: 1rem;
-        padding: 0 2.2rem;
+        padding: 0 1rem 0 1.5rem;
         background: rgba(0, 0, 0, 0.35);
         backdrop-filter: blur(12px);
         border-bottom: 1px solid var(--glass-border);
@@ -88,12 +88,12 @@
         font-family: inherit;
       }
       .btn-ico {
-        width: 44px;
-        height: 44px;
-        border-radius: 1rem;
+        width: 36px;
+        height: 36px;
+        border-radius: 0.8rem;
         display: grid;
         place-items: center;
-        font-size: 1.35rem;
+        font-size: 1.1rem;
         background: var(--glass);
         border: 1px solid var(--glass-border);
         transition: background var(--tr);
@@ -111,16 +111,17 @@
         max-width: 480px;
         padding: 0.7rem 1.1rem;
         font-size: 0.95rem;
-        border: none;
+        border: 1.5px solid #232526;
         border-radius: 2em;
         outline: none;
         background: #f8fafc;
         color: #111;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        transition: box-shadow var(--tr);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), inset 0 2px 8px rgba(0,0,0,0.10);
+        transition: box-shadow var(--tr), border-color var(--tr);
       }
       .search input:focus {
-        box-shadow: 0 0 0 2px var(--accent);
+        box-shadow: 0 0 0 2px var(--accent), inset 0 2px 8px rgba(0,0,0,0.13);
+        border-color: var(--accent);
       }
       /* profile */
       .profile {
@@ -232,6 +233,50 @@
         box-shadow: 0 4px 14px rgba(191, 161, 74, 0.18);
       }
 
+      /* Filter Options Styles */
+      .filter-options {
+        margin-top: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        animation: fadeIn 0.3s ease-out;
+      }
+      
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      .filter-option {
+        padding: 0.8rem 1rem;
+        border-radius: 1.5rem;
+        font-weight: 600;
+        font-size: 0.9rem;
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--txt);
+        border: 1px solid var(--glass-border);
+        cursor: pointer;
+        transition: all var(--tr);
+        text-align: left;
+      }
+      
+      .filter-option:hover {
+        background: rgba(255, 255, 255, 0.15);
+        transform: translateX(5px);
+      }
+      
+      .filter-option.active {
+        background: var(--accent);
+        color: #111;
+        border-color: var(--accent);
+      }
+
       /* ===== MAIN / TIMELINE ===== */
       main {
         max-width: 900px;
@@ -309,7 +354,7 @@
         letter-spacing: 0.6px;
         text-transform: uppercase;
         color: #fff;
-        margin-top: 1.5em;
+        margin-top: 2.2em;
       }
       .status-dot {
         display: inline-block;
@@ -417,9 +462,11 @@
           order: 2;
         }
         .calendar-section {
-          margin-left: auto !important;
-          margin-right: auto !important;
-          display: block !important;
+          right: 10px;
+          width: 90vw;
+          max-width: 340px;
+          padding: 0.7rem;
+          top: 390px;
         }
         body {
           display: flex;
@@ -434,11 +481,6 @@
           right: 0 !important;
           top: auto !important;
           box-sizing: border-box;
-        }
-        .calendar-section {
-          width: 80vw !important;
-          max-width: 340px !important;
-          padding: 0.7rem !important;
         }
       }
       html, body {
@@ -540,7 +582,7 @@
       }
 
       .view-btn {
-        background: linear-gradient(90deg, #232526 0%, #414345 40%, #111 100%);
+        background: linear-gradient(90deg, #111 0%, #181818 40%, #000 100%);
         color: #fff;
         border: none;
         border-radius: 2em;
@@ -553,14 +595,14 @@
         z-index: 2;
       }
       .view-btn:hover {
-        background: linear-gradient(90deg, #111 0%, #232526 60%, #414345 100%);
+        background: linear-gradient(90deg, #000 0%, #111 60%, #181818 100%);
         box-shadow: 0 4px 16px 0 rgba(30, 42, 120, 0.18);
       }
 
       .notes-section {
         position: fixed;
         top: 100px;
-        right: 120px;
+        right: 40px;
         width: 280px;
         max-height: 400px;
         background: var(--glass);
@@ -569,7 +611,7 @@
         border-radius: var(--radius);
         padding: 1.5rem;
         box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
-        z-index: 50;
+        z-index: 1002;
         opacity: 0;
         animation: notes-fade-in 0.7s cubic-bezier(0.4,0,0.2,1) 0.2s forwards;
       }
@@ -628,8 +670,8 @@
       /* ===== CALENDAR ===== */
       .calendar-section {
         position: fixed;
-        top: calc(50% - 20px);
-        right: 120px;
+        top: 420px;
+        right: 40px;
         width: 280px;
         background: var(--glass);
         border: 1px solid var(--glass-border);
@@ -637,7 +679,8 @@
         border-radius: var(--radius);
         padding: 1.5rem;
         box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
-        z-index: 50;
+        z-index: 1002;
+        transform: none;
       }
       .calendar-header {
         display: flex;
@@ -755,6 +798,46 @@
           opacity: 1;
         }
       }
+
+      .home-link {
+        color: #fff;
+        font-size: 1.1rem;
+        font-weight: 600;
+        text-decoration: none;
+        margin-right: 1.5rem;
+        letter-spacing: 0.5px;
+        transition: color 0.2s;
+        padding: 0.2rem 0.7rem;
+        border-radius: 0.5rem;
+        position: relative;
+        top: 1px;
+      }
+      .home-link:hover {
+        color: var(--accent);
+        background: rgba(255,255,255,0.07);
+      }
+
+      .upgrade-link {
+        color: var(--accent);
+        font-size: 1.1rem;
+        font-weight: 700;
+        text-decoration: none;
+        margin-left: 1.2rem;
+        margin-right: 0.5rem;
+        letter-spacing: 0.5px;
+        transition: color 0.2s, text-decoration 0.2s;
+        padding: 0;
+        border-radius: 0;
+        background: none;
+        box-shadow: none;
+        position: relative;
+        top: 1px;
+      }
+      .upgrade-link:hover {
+        color: #ffe082;
+        text-decoration: underline;
+        background: none;
+      }
     </style>
   </head>
 
@@ -767,22 +850,35 @@
       <button class="btn-primary" id="createContractBtn" onclick="window.location.href='createContract-step1.html'">
         + Create New Contract
       </button>
+      <button class="btn-primary" id="filterContractsBtn">
+        🔍 Filter Contracts
+      </button>
+      <div id="filterOptions" class="filter-options" style="display: none;">
+        <button class="filter-option" data-filter="unverified">Unverified</button>
+        <button class="filter-option" data-filter="active">Active</button>
+        <button class="filter-option" data-filter="expired">Expired</button>
+        <button class="filter-option" data-filter="created-by-me">Created by me</button>
+        <button class="filter-option" data-filter="received-by-me">Received by me</button>
+      </div>
     </aside>
 
     <!-- ===== Header ===== -->
     <header>
       <button class="btn-ico" id="sidebarToggle" aria-label="Open sidebar">
-        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block">
+        <svg width="20" height="20" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block">
           <rect y="6" width="28" height="3.2" rx="1.6" fill="#fff"/>
           <rect y="12.4" width="28" height="3.2" rx="1.6" fill="#fff"/>
           <rect y="18.8" width="28" height="3.2" rx="1.6" fill="#fff"/>
         </svg>
       </button>
       <div class="brand">Handshex</div>
+      <a href="dashboard.html" class="home-link">Home</a>
+      <a href="#" class="home-link">Notifications</a>
       <form class="search" role="search">
         <label class="sr-only" for="searchInput" style="position:absolute;left:-9999px;">Search contracts</label>
         <input id="searchInput" type="search" placeholder="Search contracts…" />
       </form>
+      <a href="#" class="upgrade-link">Upgrade to Max</a>
       <div class="profile" id="profile">
         <div class="cred-score" id="headerCredScore">
           <svg class="cred-svg">
@@ -867,6 +963,16 @@
           $("#profileUsername").textContent = u.username;
           $("#profileEmail").textContent = u.email;
           $("#profileAvatar").textContent = u.username[0].toUpperCase();
+          
+          // Store current user ID for filtering
+          currentUserId = u._id;
+          
+          // Update main heading with username
+          const mainHeading = document.querySelector('main h1');
+          if (mainHeading && u.username) {
+            mainHeading.textContent = `${u.username}'s Contracts`;
+          }
+          
           // Credibility Score (header only)
           const score = typeof u.credibilityScore === 'number' ? u.credibilityScore : 0;
           const percent = Math.max(0, Math.min(100, score));
@@ -908,6 +1014,9 @@
 
       /* ---------- contracts ---------- */
       let contracts = [];
+      let currentFilter = null;
+      let currentUserId = null;
+      
       const renderContracts = (list) => {
         const wrap = $("#contractsList");
         wrap.innerHTML = "";
@@ -965,6 +1074,72 @@
           });
         });
       };
+      
+      // Filter functionality
+      const filterContracts = async (filterType) => {
+        currentFilter = filterType;
+        
+        try {
+          let endpoint = "/showContract"; // default endpoint
+          
+          switch (filterType) {
+            case 'unverified':
+              endpoint = "/showNotVerifiedContracts";
+              break;
+            case 'active':
+              endpoint = "/showActiveContracts";
+              break;
+            case 'expired':
+              endpoint = "/showExpiredContractts";
+              break;
+            case 'created-by-me':
+              endpoint = "/filterContracts?type=created";
+              break;
+            case 'received-by-me':
+              endpoint = "/filterContracts?type=received";
+              break;
+            default:
+              endpoint = "/showContract";
+          }
+          
+          const response = await fetch(endpoint, {
+            headers: { Authorization: "Bearer " + token },
+          });
+          
+          if (!response.ok) throw new Error();
+          
+          const { foundContracts = [] } = await response.json();
+          contracts = foundContracts;
+          renderContracts(contracts);
+          
+          // Update active filter button
+          document.querySelectorAll('.filter-option').forEach(btn => {
+            btn.classList.remove('active');
+          });
+          if (filterType) {
+            document.querySelector(`[data-filter="${filterType}"]`).classList.add('active');
+          }
+        } catch (error) {
+          console.error('Error filtering contracts:', error);
+          // Fallback to showing all contracts
+          renderContracts(contracts);
+        }
+      };
+      
+      // Filter button toggle
+      $("#filterContractsBtn").addEventListener("click", () => {
+        const filterOptions = $("#filterOptions");
+        filterOptions.style.display = filterOptions.style.display === "none" ? "flex" : "none";
+      });
+      
+      // Filter option clicks
+      document.querySelectorAll('.filter-option').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          const filterType = e.target.getAttribute('data-filter');
+          await filterContracts(filterType);
+        });
+      });
+
       (async () => {
         try {
           // Debug: Show the decoded JWT payload in the console
@@ -1045,13 +1220,11 @@
           this.currentDate = new Date();
           this.selectedDate = new Date();
           this.events = JSON.parse(localStorage.getItem("handshex_calendar_events") || "{}");
-          
           this.init();
         }
         
         init() {
           this.renderCalendar();
-          this.bindEvents();
         }
         
         renderCalendar() {
@@ -1130,6 +1303,17 @@
         }
       }
       new Calendar();
+
+      // Upgrade to Max click handler
+      window.addEventListener('DOMContentLoaded', function() {
+        var upgradeLink = document.querySelector('.upgrade-link');
+        if (upgradeLink) {
+          upgradeLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Coming soon');
+          });
+        }
+      });
     </script>
   </body>
 </html>

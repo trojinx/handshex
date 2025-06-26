@@ -18,6 +18,70 @@
         --tr: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         --header-h: 72px;
       }
+
+      /* Page Load Animation */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes slideInFromLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes slideInFromRight {
+        from {
+          opacity: 0;
+          transform: translateX(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes scaleIn {
+        from {
+          opacity: 0;
+          transform: scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      @keyframes pulse {
+        0%, 100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+
+      @keyframes shimmer {
+        0% {
+          background-position: -200px 0;
+        }
+        100% {
+          background-position: calc(200px + 100%) 0;
+        }
+      }
+
       body {
         margin: 0;
         min-height: 100vh;
@@ -25,7 +89,10 @@
         color: var(--txt);
         font-family: Inter, system-ui, sans-serif;
         -webkit-font-smoothing: antialiased;
+        opacity: 0;
+        animation: fadeInUp 0.8s ease-out forwards;
       }
+
       header {
         position: sticky;
         top: 0;
@@ -38,7 +105,9 @@
         background: rgba(0, 0, 0, 0.35);
         backdrop-filter: blur(12px);
         border-bottom: 1px solid var(--glass-border);
+        animation: slideInFromLeft 0.6s ease-out 0.2s both;
       }
+
       .brand {
         font-size: 2rem;
         font-weight: 900;
@@ -50,12 +119,20 @@
         display: flex;
         align-items: center;
         height: 40px;
+        transition: transform 0.3s ease, text-shadow 0.3s ease;
       }
+
+      .brand:hover {
+        transform: scale(1.05);
+        text-shadow: 0 0 20px rgba(191, 161, 74, 0.5);
+      }
+
       .brand span {
         color: #fff;
         background: transparent;
         font-family: inherit;
       }
+
       .container {
         max-width: 600px;
         margin: 3.5rem auto 2rem auto;
@@ -65,34 +142,75 @@
         box-shadow: 0 2px 24px 0 rgba(0,0,0,0.10);
         padding: 2.5rem 2rem 2rem 2rem;
         backdrop-filter: blur(8px);
+        animation: scaleIn 0.8s ease-out 0.4s both;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
       }
+
+      .container:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 32px 0 rgba(0,0,0,0.15);
+      }
+
       .contract-title {
         font-size: 2rem;
         font-weight: 800;
         color: var(--accent);
         margin-bottom: 0.5rem;
+        animation: fadeInUp 0.6s ease-out 0.6s both;
+        transition: color 0.3s ease, text-shadow 0.3s ease;
       }
+
+      .contract-title:hover {
+        color: #ffe082;
+        text-shadow: 0 0 15px rgba(191, 161, 74, 0.4);
+      }
+
       .contract-meta {
         color: var(--muted);
         font-size: 1rem;
         margin-bottom: 1.5rem;
+        animation: fadeInUp 0.6s ease-out 0.7s both;
       }
+
       .contract-section {
         margin-bottom: 1.5rem;
+        animation: fadeInUp 0.6s ease-out 0.8s both;
+        transition: transform 0.3s ease;
       }
+
+      .contract-section:nth-child(3) { animation-delay: 0.8s; }
+      .contract-section:nth-child(4) { animation-delay: 0.9s; }
+      .contract-section:nth-child(5) { animation-delay: 1.0s; }
+
+      .contract-section:hover {
+        transform: translateX(5px);
+      }
+
       .contract-label {
         color: var(--accent);
         font-weight: 700;
         font-size: 1.05rem;
         margin-bottom: 0.2rem;
         display: block;
+        transition: color 0.3s ease;
       }
+
+      .contract-section:hover .contract-label {
+        color: #ffe082;
+      }
+
       .contract-value {
         color: #fff;
         font-size: 1.1rem;
         margin-bottom: 0.7rem;
         word-break: break-word;
+        transition: color 0.3s ease;
       }
+
+      .contract-section:hover .contract-value {
+        color: #f0f0f0;
+      }
+
       .back-btn {
         display: inline-block;
         margin-bottom: 2rem;
@@ -105,12 +223,20 @@
         cursor: pointer;
         font-size: 1rem;
         box-shadow: 0 2px 8px rgba(191, 161, 74, 0.12);
-        transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        animation: slideInFromRight 0.6s ease-out 0.5s both;
       }
+
       .back-btn:hover {
         background: linear-gradient(90deg, #111 0%, #232526 60%, #414345 100%);
-        box-shadow: 0 4px 16px 0 rgba(30, 42, 120, 0.18);
+        box-shadow: 0 6px 20px 0 rgba(30, 42, 120, 0.25);
+        transform: translateY(-2px);
       }
+
+      .back-btn:active {
+        transform: translateY(0);
+      }
+
       .gold-btn {
         background: linear-gradient(90deg, #bfa14a 0%, #ffe082 100%);
         color: #111;
@@ -122,19 +248,43 @@
         margin: 0;
         cursor: pointer;
         box-shadow: 0 2px 8px rgba(191, 161, 74, 0.18);
-        transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         width: 220px;
         height: 56px;
         display: flex;
         align-items: center;
         justify-content: center;
         text-align: center;
+        position: relative;
+        overflow: hidden;
       }
+
+      .gold-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s;
+      }
+
       .gold-btn:hover {
         background: linear-gradient(90deg, #ffe082 0%, #bfa14a 100%);
         color: #111;
-        box-shadow: 0 4px 16px 0 rgba(191, 161, 74, 0.28);
+        box-shadow: 0 8px 24px 0 rgba(191, 161, 74, 0.35);
+        transform: translateY(-3px);
       }
+
+      .gold-btn:hover::before {
+        left: 100%;
+      }
+
+      .gold-btn:active {
+        transform: translateY(-1px);
+      }
+
       #contractActions {
         margin: 2.5rem auto 0 auto;
         max-width: 600px;
@@ -143,19 +293,24 @@
         align-items: center;
         position: relative;
         gap: 0;
+        animation: fadeInUp 0.6s ease-out 1.1s both;
       }
+
       #remindBtn {
         margin-left: 0;
       }
+
       #updateBtn {
         position: absolute;
         left: 50%;
         transform: translateX(-50%);
         margin: 0;
       }
+
       #completeBtn {
         margin-right: 0;
       }
+
       @media (max-width: 700px) {
         .container {
           padding: 1.2rem 0.5rem 1rem 0.5rem;
@@ -179,21 +334,26 @@
           height: 56px;
         }
       }
+
       .corner-btn {
         position: fixed;
         bottom: 32px;
         z-index: 1000;
       }
+
       .left-corner {
         left: 32px;
       }
+
       .right-corner {
         right: 32px;
       }
+
       .center-corner {
         left: 50%;
         transform: translateX(-50%);
       }
+
       @media (max-width: 700px) {
         .corner-btn {
           position: fixed;
@@ -217,6 +377,7 @@
           transform: translateX(-50%);
         }
       }
+
       .menu-btn {
         position: absolute;
         top: 18px;
@@ -234,17 +395,31 @@
         gap: 4px;
         cursor: pointer;
         z-index: 1100;
-        transition: background 0.2s, box-shadow 0.2s;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        animation: scaleIn 0.6s ease-out 0.5s both;
       }
+
+      .menu-btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 20px rgba(191,161,74,0.3);
+      }
+
       .menu-btn span {
         width: 5px;
         height: 5px;
         background: #111;
         border-radius: 50%;
+        transition: all 0.3s ease;
       }
+
+      .menu-btn:hover span {
+        transform: scale(1.2);
+      }
+
       .menu-btn:active, .menu-btn:focus {
         outline: 2px solid #bfa14a;
       }
+
       .action-menu {
         position: absolute;
         top: 60px;
@@ -260,12 +435,20 @@
         z-index: 1200;
         min-width: 260px;
         align-items: stretch;
-        animation: fadeInMenu 0.18s cubic-bezier(0.4,0,0.2,1);
+        animation: fadeInMenu 0.3s cubic-bezier(0.4,0,0.2,1);
       }
+
       @keyframes fadeInMenu {
-        from { opacity: 0; transform: translateY(20px) scale(0.98); }
-        to { opacity: 1; transform: translateY(0) scale(1); }
+        from { 
+          opacity: 0; 
+          transform: translateY(20px) scale(0.95); 
+        }
+        to { 
+          opacity: 1; 
+          transform: translateY(0) scale(1); 
+        }
       }
+
       .menu-option {
         color: #fff;
         background: none;
@@ -276,19 +459,55 @@
         margin: 0;
         text-align: left;
         cursor: pointer;
-        transition: background 0.18s;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         outline: none;
         width: 100%;
         display: flex;
         align-items: center;
         border-bottom: 1px solid rgba(255,255,255,0.08);
+        position: relative;
+        overflow: hidden;
       }
+
+      .menu-option::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(191, 161, 74, 0.1), transparent);
+        transition: left 0.3s ease;
+      }
+
       .menu-option:last-child {
         border-bottom: none;
       }
+
       .menu-option:hover, .menu-option:focus {
         background: rgba(255,255,255,0.08);
+        transform: translateX(5px);
       }
+
+      .menu-option:hover::before {
+        left: 100%;
+      }
+
+      /* Loading animation */
+      .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(191, 161, 74, 0.3);
+        border-radius: 50%;
+        border-top-color: var(--accent);
+        animation: spin 1s ease-in-out infinite;
+      }
+
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+
       @media (max-width: 700px) {
         .menu-btn {
           top: 10px;
@@ -305,11 +524,245 @@
           min-width: 0;
         }
       }
+
+      /* profile */
+      .profile {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-left: auto;
+      }
+      .cred-score {
+        position: relative;
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        animation: scaleIn 0.6s ease-out 0.3s both;
+      }
+      .cred-score::after {
+        content: 'Credibility Score';
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.9);
+        color: white;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        white-space: nowrap;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.2s ease, visibility 0.2s ease;
+        z-index: 1000;
+        pointer-events: none;
+      }
+      .cred-score::before {
+        content: '';
+        position: absolute;
+        top: calc(100% + 2px);
+        left: 50%;
+        transform: translateX(-50%);
+        border: 4px solid transparent;
+        border-bottom-color: rgba(0, 0, 0, 0.9);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.2s ease, visibility 0.2s ease;
+        z-index: 1000;
+        pointer-events: none;
+      }
+      .cred-score:hover::after,
+      .cred-score:hover::before {
+        opacity: 1;
+        visibility: visible;
+      }
+      .cred-svg {
+        width: 44px;
+        height: 44px;
+        transform: rotate(-90deg);
+      }
+      .cred-bg {
+        stroke: #444;
+        stroke-width: 4;
+        fill: none;
+      }
+      .cred-fg {
+        stroke: var(--accent);
+        stroke-width: 4;
+        fill: none;
+        transition: stroke-dasharray 0.5s;
+      }
+      .cred-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--accent);
+        pointer-events: none;
+        user-select: none;
+      }
+      .avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        font-weight: 700;
+        display: grid;
+        place-items: center;
+        color: #111;
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        animation: scaleIn 0.6s ease-out 0.4s both;
+      }
+      .avatar:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      }
+      .dropdown {
+        position: absolute;
+        right: 0;
+        top: calc(100% + 1.2rem) !important;
+        min-width: 220px;
+        background: #fff;
+        color: #111;
+        border-radius: var(--radius);
+        box-shadow: 0 2px 14px rgba(0, 0, 0, 0.25);
+        padding: 1rem 1.2rem;
+        display: none;
+        z-index: 1001;
+        animation: fadeInMenu 0.3s cubic-bezier(0.4,0,0.2,1);
+      }
+      .profile.open .dropdown {
+        display: block !important;
+      }
+
+      @media (max-width: 700px) {
+        .profile {
+          gap: 0.5rem;
+        }
+        .cred-score, .avatar {
+          width: 36px;
+          height: 36px;
+        }
+        .cred-svg {
+          width: 36px;
+          height: 36px;
+        }
+        .cred-text {
+          font-size: 0.7rem;
+        }
+        .dropdown {
+          min-width: 200px;
+          right: -10px;
+        }
+      }
+
+      /* Contract Status Styles */
+      .contract-status {
+        font-size: 0.95rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        color: #fff;
+        margin-top: 1.5em;
+        margin-bottom: 1rem;
+        animation: fadeInUp 0.6s ease-out 1.0s both;
+      }
+      .status-dot {
+        display: inline-block;
+        width: 0.7em;
+        height: 0.7em;
+        border-radius: 50%;
+        margin-right: 0.4em;
+        background: #fff;
+        opacity: 0;
+        transform: scale(0.5);
+        animation: dot-pop-in 0.5s cubic-bezier(0.4,0,0.2,1) 0.2s forwards;
+      }
+      @keyframes dot-pop-in {
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+      .contract-status.not-verified {
+        color: #fff;
+      }
+      .status-dot.not-verified {
+        background: #fff;
+      }
+      .contract-status.active {
+        color: #4caf50;
+      }
+      .status-dot.active {
+        background: #4caf50;
+      }
+      .contract-status.expired {
+        color: #ff5252;
+      }
+      .status-dot.expired {
+        background: #ff5252;
+      }
+      .contract-status.completed {
+        color: #2196f3;
+      }
+      .status-dot.completed {
+        background: #2196f3;
+      }
+      .contract-status.pending {
+        color: #ff9800;
+      }
+      .status-dot.pending {
+        background: #ff9800;
+      }
+
+      @media (max-width: 700px) {
+        .profile {
+          gap: 0.5rem;
+        }
+        .cred-score, .avatar {
+          width: 36px;
+          height: 36px;
+        }
+        .cred-svg {
+          width: 36px;
+          height: 36px;
+        }
+        .cred-text {
+          font-size: 0.7rem;
+        }
+        .dropdown {
+          min-width: 200px;
+          right: -10px;
+        }
+      }
     </style>
   </head>
   <body>
     <header>
       <div class="brand">Handshex</div>
+      <div class="profile">
+        <div class="cred-score">
+          <svg class="cred-svg">
+            <circle class="cred-bg" cx="22" cy="22" r="20"></circle>
+            <circle class="cred-fg" cx="22" cy="22" r="20"></circle>
+          </svg>
+          <span class="cred-text">0%</span>
+        </div>
+        <div class="avatar">
+          <span>U</span>
+        </div>
+      </div>
     </header>
     <div class="container" style="position:relative;">
       <button class="back-btn" style="position:absolute; bottom:18px; right:18px; z-index:1100;" onclick="window.history.back()">← Back</button>
@@ -317,7 +770,10 @@
         <span></span><span></span><span></span>
       </button>
       <div id="contractDetails">
-        <div style="color:var(--muted);text-align:center;">Loading contract details...</div>
+        <div style="color:var(--muted);text-align:center;display:flex;align-items:center;justify-content:center;gap:10px;">
+          <div class="loading"></div>
+          Loading contract details...
+        </div>
       </div>
     </div>
     <div id="contractActions" style="display:none;"></div>
@@ -326,56 +782,118 @@
     <script>
       const token = localStorage.getItem("token");
       if (!token) location.replace("signIn.html");
+      
+      // Profile functionality
+      async function loadProfile() {
+        try {
+          const response = await fetch("/myProfile", {
+            headers: { Authorization: "Bearer " + token },
+          });
+          if (!response.ok) throw new Error();
+          
+          const { foundProfile: user } = await response.json();
+          
+          // Update avatar with user's first letter
+          const avatar = document.querySelector('.avatar span');
+          if (avatar && user.username) {
+            avatar.textContent = user.username[0].toUpperCase();
+          }
+          
+          // Update credibility score
+          const score = typeof user.credibilityScore === 'number' ? user.credibilityScore : 0;
+          const percent = Math.max(0, Math.min(100, score));
+          const credText = document.querySelector('.cred-text');
+          const credCircle = document.querySelector('.cred-fg');
+          
+          if (credText) {
+            credText.textContent = percent;
+          }
+          
+          // Animate credibility circle
+          if (credCircle) {
+            const radius = 20;
+            const circumference = 2 * Math.PI * radius;
+            credCircle.setAttribute('stroke-dasharray', circumference);
+            credCircle.setAttribute('stroke-dashoffset', circumference);
+            
+            setTimeout(() => {
+              credCircle.style.transition = 'stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1)';
+              credCircle.setAttribute('stroke-dashoffset', circumference * (1 - percent / 100));
+            }, 500);
+          }
+        } catch (error) {
+          console.error('Error loading profile:', error);
+        }
+      }
+      
+      // Load profile on page load
+      loadProfile();
+      
       function getQueryParam(name) {
         const url = new URL(window.location.href);
         return url.searchParams.get(name);
       }
+      
       const contractId = getQueryParam("id");
+      
       async function fetchContract() {
         if (!contractId) {
           document.getElementById("contractDetails").innerHTML = '<div style="color:var(--muted);text-align:center;">No contract ID provided.</div>';
           return;
         }
+        
         try {
           const res = await fetch(`/showSingleContract?id=${encodeURIComponent(contractId)}`, {
             headers: { Authorization: "Bearer " + token }
           });
+          
           if (!res.ok) throw new Error();
+          
           const { foundContract } = await res.json();
           renderContract(foundContract);
         } catch {
           document.getElementById("contractDetails").innerHTML = '<div style="color:var(--muted);text-align:center;">Failed to load contract details.</div>';
         }
       }
+      
       function renderContract(contract) {
         if (!contract) {
           document.getElementById("contractDetails").innerHTML = '<div style="color:var(--muted);text-align:center;">Contract not found.</div>';
           return;
         }
-        document.getElementById("contractDetails").innerHTML = `
-          <div class="contract-title">${contract.contractName || 'Untitled Contract'}</div>
-          <div class="contract-meta">Created: ${contract.createdAt ? new Date(contract.createdAt).toLocaleDateString() : 'N/A'}${contract.expiryDate ? ' • Expires: ' + new Date(contract.expiryDate).toLocaleDateString() : ''}</div>
-          <div class="contract-section">
+        
+        // Add staggered animation to each section
+        const sections = [
+          `<div class="contract-title">${contract.contractName || 'Untitled Contract'}</div>`,
+          `<div class="contract-meta">Created: ${contract.createdAt ? new Date(contract.createdAt).toLocaleDateString() : 'N/A'}${contract.expiryDate ? ' • Expires: ' + new Date(contract.expiryDate).toLocaleDateString() : ''}</div>`,
+          `<div class="contract-status ${(contract.contractStatus || contract.status || "active").toLowerCase().replace(/\s/g, '-')}">
+            <span class="status-dot ${(contract.contractStatus || contract.status || "active").toLowerCase().replace(/\s/g, '-')}"></span>
+            ${contract.contractStatus || contract.status || "Active"}
+          </div>`,
+          `<div class="contract-section">
             <span class="contract-label">Contract Body</span>
             <div class="contract-value">${contract.contractBody || 'No contract body provided.'}</div>
-          </div>
-          <div class="contract-section">
+          </div>`,
+          `<div class="contract-section">
             <span class="contract-label">Maker</span>
             <div class="contract-value">
               <strong>Username:</strong> ${contract.contractMakerUsername || 'N/A'}<br>
               <strong>Email:</strong> ${contract.contractMakerEmail || 'N/A'}
             </div>
-          </div>
-          <div class="contract-section">
+          </div>`,
+          `<div class="contract-section">
             <span class="contract-label">Receiver</span>
             <div class="contract-value">
               <strong>Username:</strong> ${contract.contractRecieverUsername || 'N/A'}<br>
               <strong>Email:</strong> ${contract.contractRecieverEmail || 'N/A'}
             </div>
-          </div>
-        `;
+          </div>`
+        ];
+        
+        document.getElementById("contractDetails").innerHTML = sections.join('');
+        
         // Set button labels and handlers
-        const userId = localStorage.getItem("userId"); // You may need to set this on login
+        const userId = localStorage.getItem("userId");
         let otherUser = "the other user";
         if (userId && contract) {
           if (contract.contractMaker === userId) {
@@ -385,13 +903,17 @@
           }
         }
       }
+      
       fetchContract();
+      
       // Menu button logic
       const menuBtn = document.getElementById("menuBtn");
       const actionMenu = document.getElementById("actionMenu");
+      
       menuBtn.addEventListener("click", () => {
         actionMenu.style.display = actionMenu.style.display === "none" ? "flex" : "none";
       });
+      
       document.addEventListener("click", (e) => {
         if (!menuBtn.contains(e.target) && !actionMenu.contains(e.target)) {
           actionMenu.style.display = "none";

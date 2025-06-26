@@ -14,43 +14,53 @@ import showProfile from "./src/controllers/myProfile.controller.js";
 import { fileURLToPath } from "url";
 import path from "path";
 import showSingleContract from "./src/controllers/showSingleContract.controller.js";
+import showNotVerifiedContracts from "./src/controllers/showNotVerifiedContracts.controller.js";
+import showActiveContracts from "./src/controllers/showActiveContracts.controller.js";
+import showExpiredContracts from "./src/controllers/showExpiredContracts.controller.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 dotenv.config();
+connectDB();
 
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
-});
-
+//____________________________________________________________________________
+//auth routes:
 app.get("/signup", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "get-started.html"));
 });
-
-app.post("/createContract", verifyJWT, createContract); // TODO: make a middleware for verifying if the reciever user has agreed to the contract
 app.post("/signup", signUp);
-app.get("/showSingleContract", verifyJWT, showSingleContract);
-
 app.post("/signIn", signIn);
+//____________________________________________________________________________
 
-app.get("/showContract", verifyJWT, showContract);
-
-app.get("/searchContract", verifyJWT, searchContract);
-
+//user routes:
 app.get("/searchUser", verifyJWT, searchUser);
-
-app.get("/myContracts", verifyJWT, myContracts);
-
-app.get("/checkContractExpiry", verifyJWT, checkIfContractExpires);
-
 app.get("/myProfile", verifyJWT, showProfile);
+//____________________________________________________________________________
 
+//contract routes
+app.post("/createContract", verifyJWT, createContract); // TODO: make a middleware for verifying if the reciever user has agreed to the contract
+app.get("/showSingleContract", verifyJWT, showSingleContract);
+app.get("/showContract", verifyJWT, showContract);
+app.get("/searchContract", verifyJWT, searchContract);
+app.get("/myContracts", verifyJWT, myContracts);
+app.get("/checkContractExpiry", verifyJWT, checkIfContractExpires);
+//____________________________________________________________________________
+
+//contract routes on basis of status:
+app.get("/showNotVerifiedContracts", verifyJWT, showNotVerifiedContracts);
+app.get("/showActiveContracts", verifyJWT, showActiveContracts);
+app.get("/showExpiredContracts", verifyJWT, showExpiredContracts);
+//____________________________________________________________________________
+
+//miscellaneous routes
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
 app.get("/welcome", (req, res) => {
   res.sendFile(__dirname + "/public/index.html");
 });
-
-connectDB();
+//____________________________________________________________________________
 
 app.listen(process.env.PORT, () => {
   console.log(`server started on: http://localhost:${process.env.PORT}`);
