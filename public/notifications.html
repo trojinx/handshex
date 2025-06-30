@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notifications</title>
+  <style>
+    body {
+      background: #181818;
+      color: #fff;
+      font-family: Inter, system-ui, sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    .container {
+      margin-top: 3rem;
+      background: rgba(255,255,255,0.08);
+      border-radius: 1.2rem;
+      padding: 2rem 2.5rem;
+      box-shadow: 0 2px 14px rgba(0,0,0,0.25);
+      min-width: 320px;
+      max-width: 480px;
+      width: 100%;
+    }
+    .notification {
+      background: #232526;
+      border-radius: 1rem;
+      padding: 1.2rem 1.5rem;
+      margin-bottom: 1.2rem;
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+    }
+    .empty {
+      text-align: center;
+      color: #bfa14a;
+      font-size: 1.2rem;
+      margin-top: 2rem;
+    }
+    h1 {
+      color: #bfa14a;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Notifications</h1>
+    <div id="notificationsList">
+      <div class="empty">Loading...</div>
+    </div>
+  </div>
+  <script>
+    const token = localStorage.getItem('token');
+    const notificationsList = document.getElementById('notificationsList');
+    async function fetchNotifications() {
+      try {
+        const res = await fetch('/unverifiedContracts', {
+          headers: { Authorization: 'Bearer ' + token }
+        });
+        if (!res.ok) throw new Error('Failed to fetch notifications');
+        const { foundContracts = [] } = await res.json();
+        if (!foundContracts.length) {
+          notificationsList.innerHTML = '<div class="empty">No new notifications</div>';
+        } else {
+          notificationsList.innerHTML = foundContracts.map(c => `
+            <div class="notification">
+              <strong>${c.contractName || c.title || 'Untitled Contract'}</strong><br/>
+              <span>Status: ${c.contractStatus || c.status || 'Not Verified'}</span><br/>
+              <span>Created: ${new Date(c.createdAt).toLocaleString()}</span>
+            </div>
+          `).join('');
+        }
+      } catch (err) {
+        notificationsList.innerHTML = '<div class="empty">Error loading notifications</div>';
+      }
+    }
+    fetchNotifications();
+  </script>
+</body>
+</html> 

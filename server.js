@@ -19,6 +19,7 @@ import showActiveContracts from "./src/controllers/showActiveContracts.controlle
 import showExpiredContracts from "./src/controllers/showExpiredContracts.controller.js";
 import findUnVerifiedContractsOnRecieverSide from "./src/controllers/unverifiedContractsRecieverSide.controller.js.js";
 import showNotVerifiedContractsOnMakerSide from "./src/controllers/showNotVerifiedContractsMakerSide.controller.js";
+import verifyContract from "./src/controllers/verifyContract.controller.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -51,6 +52,7 @@ app.get(
   verifyJWT,
   findUnVerifiedContractsOnRecieverSide
 );
+app.patch("/verifyContract", verifyJWT, verifyContract);
 // app.patch("/verifyContract", verifyJWT, verifyContract);
 //____________________________________________________________________________
 

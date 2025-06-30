@@ -178,20 +178,25 @@
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
       }
       .dropdown {
-        position: absolute;
-        right: 0;
-        top: calc(100% + 1.2rem) !important;
+        position: fixed;
+        right: 40px;
+        top: 0;
         min-width: 220px;
+        max-width: 320px;
+        width: auto;
         background: #fff;
         color: #111;
         border-radius: var(--radius);
         box-shadow: 0 2px 14px rgba(0, 0, 0, 0.25);
         padding: 1rem 1.2rem;
         display: none;
-        z-index: 1001;
+        z-index: 9999;
       }
       .profile.open .dropdown {
-        display: none !important;
+        display: block !important;
+      }
+      .profile.open {
+        z-index: 5001;
       }
 
       /* ===== SIDEBAR ===== */
@@ -586,8 +591,9 @@
         color: #fff;
         border: none;
         border-radius: 2em;
-        padding: 0.5rem 1.3rem;
-        font-size: 1rem;
+        padding: 0.9rem 2rem;
+        font-size: 1.15rem;
+        min-width: 140px;
         font-weight: 700;
         cursor: pointer;
         box-shadow: 0 2px 8px 0 rgba(191, 161, 74, 0.10);
@@ -888,16 +894,6 @@
           <span class="cred-text" id="headerCredText">0</span>
         </div>
         <div class="avatar" id="profileAvatar">U</div>
-        <div class="dropdown" id="profileDropdown">
-          <p>
-            <strong>Username:</strong>
-            <span id="profileUsername">username</span>
-          </p>
-          <p>
-            <strong>Email:</strong>
-            <span id="profileEmail">user@email.com</span>
-          </p>
-        </div>
       </div>
     </header>
 
@@ -945,6 +941,18 @@
         <div class="skeleton"></div>
       </div>
     </main>
+
+    <!-- Profile Dropdown (moved to end of body for fixed positioning) -->
+    <div class="dropdown" id="profileDropdown">
+      <p>
+        <strong>Username:</strong>
+        <span id="profileUsername">username</span>
+      </p>
+      <p>
+        <strong>Email:</strong>
+        <span id="profileEmail">user@email.com</span>
+      </p>
+    </div>
 
     <!-- ===== JS ===== -->
     <script type="module">
@@ -1017,7 +1025,7 @@
       let currentFilter = null;
       let currentUserId = null;
       
-      const renderContracts = (list) => {
+      const renderContracts = (list, showVerifyButton = false) => {
         const wrap = $("#contractsList");
         wrap.innerHTML = "";
         if (!list.length) {
@@ -1049,18 +1057,13 @@
             `
           <article class="entry" tabindex="0" style="position:relative;animation-delay:${i*0.08}s">
             <h2>${c.contractName || c.title}</h2>
-            <p class="meta">Created ${d("createdAt")} • Expires ${d(
-              "expiryDate"
-            )}</p>
-            <p class="status ${
-              (c.contractStatus || c.status || "active").toLowerCase().replace(/\s/g, '-')
-            }">
-              <span class="status-dot ${
-                (c.contractStatus || c.status || "active").toLowerCase().replace(/\s/g, '-')
-              }"></span>
+            <p class="meta">Created ${d("createdAt")} • Expires ${d("expiryDate")}</p>
+            <p class="status ${(c.contractStatus || c.status || "active").toLowerCase().replace(/\s/g, '-')}">
+              <span class="status-dot ${(c.contractStatus || c.status || "active").toLowerCase().replace(/\s/g, '-')}"></span>
               ${c.contractStatus || c.status || "Active"}
             </p>
             <button class="view-btn" data-id="${c._id || ''}" style="position:absolute;right:1.5rem;top:1.5rem;">View</button>
+            ${showVerifyButton ? `<button class=\"verify-btn view-btn\" data-id=\"${c._id || ''}\" style=\"position:absolute;right:1.5rem;top:4.5rem;margin-top:0.7rem;\">Verify</button>` : ''}
           </article>`
           );
         });
@@ -1070,6 +1073,28 @@
             const id = btn.getAttribute('data-id');
             if (id) {
               window.location.href = `showContract.html?id=${encodeURIComponent(id)}`;
+            }
+          });
+        });
+        // Add event listeners to all verify buttons (if present)
+        wrap.querySelectorAll('.verify-btn').forEach(btn => {
+          btn.addEventListener('click', async (e) => {
+            const id = btn.getAttribute('data-id');
+            try {
+              const response = await fetch('/verifyContract', {
+                method: 'PATCH',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify({ contractId: id, statusUpdate: 'Active' })
+              });
+              if (!response.ok) throw new Error('Failed to verify contract');
+              // Remove the verified contract from the list and re-render
+              const updatedList = list.filter(contract => contract._id !== id);
+              renderContracts(updatedList, showVerifyButton);
+            } catch (err) {
+              alert('Error verifying contract: ' + err.message);
             }
           });
         });
@@ -1117,7 +1142,12 @@
           }
           
           contracts = filteredContracts;
-          renderContracts(contracts);
+          if (!Array.isArray(contracts) || contracts.length === 0) {
+            showNoNotificationsMessage();
+          } else {
+            // Only show verify button for notifications, not for unverified filter
+            renderContracts(contracts, false);
+          }
           
           // Update active filter button
           document.querySelectorAll('.filter-option').forEach(btn => {
@@ -1129,7 +1159,7 @@
         } catch (error) {
           console.error('Error filtering contracts:', error);
           // Fallback to showing all contracts
-          renderContracts(contracts);
+          renderContracts(contracts, false);
         }
       };
       
@@ -1167,7 +1197,7 @@
           contracts = foundContracts;
           // Debug: Log contracts received from API
           console.log('Contracts received from /showActiveContracts:', contracts);
-          renderContracts(contracts);
+          renderContracts(contracts, false);
         } catch (err) {
           console.error('Error fetching contracts:', err);
           renderContracts([]);
@@ -1325,24 +1355,55 @@
       });
 
       // Notifications click handler
-      document.addEventListener('DOMContentLoaded', () => {
-        const notificationsLink = document.getElementById('notificationsLink');
-        if (notificationsLink) {
-          notificationsLink.addEventListener('click', async (e) => {
-            e.preventDefault();
-            try {
-              const response = await fetch('/unverifiedContracts', {
-                headers: { Authorization: 'Bearer ' + token },
-              });
-              if (!response.ok) throw new Error('Failed to fetch unverified contracts');
-              const data = await response.json();
-              const { foundContracts = [] } = data;
-              contracts = foundContracts;
-              renderContracts(contracts);
-            } catch (err) {
-              console.error('Error fetching unverified contracts:', err);
+      const notificationsLink = document.getElementById('notificationsLink');
+      if (notificationsLink) {
+        notificationsLink.addEventListener('click', async (e) => {
+          e.preventDefault();
+          try {
+            const response = await fetch('/unverifiedContracts', {
+              headers: { Authorization: 'Bearer ' + token },
+            });
+            if (!response.ok) throw new Error('Failed to fetch unverified contracts');
+            const data = await response.json();
+            const { foundContracts = [] } = data;
+            if (!Array.isArray(foundContracts) || foundContracts.length === 0) {
+              showNoNotificationsMessage('No new notifications');
+            } else {
+              renderContracts(foundContracts, true);
             }
-          });
+          } catch (err) {
+            showNoNotificationsMessage('Error loading notifications');
+          }
+        });
+      }
+
+      // Helper to show empty state in contracts area
+      function showNoNotificationsMessage(message = 'No notifications') {
+        const wrap = document.getElementById('contractsList');
+        wrap.innerHTML = `<div style='text-align:center;padding:3rem 1rem;'><p style='color:var(--muted);font-size:1.1rem;'>${message}</p></div>`;
+      }
+
+      // Profile dropdown toggle
+      const profileDiv = document.getElementById('profile');
+      const avatar = document.getElementById('profileAvatar');
+      const dropdown = document.getElementById('profileDropdown');
+      avatar.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (dropdown.style.display === 'block') {
+          dropdown.style.display = 'none';
+        } else {
+          // Position the dropdown below the avatar
+          const rect = avatar.getBoundingClientRect();
+          dropdown.style.left = '';
+          dropdown.style.right = '40px';
+          dropdown.style.top = (rect.bottom + window.scrollY + 10) + 'px';
+          dropdown.style.display = 'block';
+        }
+      });
+      // Close dropdown when clicking outside
+      document.addEventListener('mousedown', (e) => {
+        if (dropdown.style.display === 'block' && !dropdown.contains(e.target) && e.target !== avatar) {
+          dropdown.style.display = 'none';
         }
       });
     </script>
