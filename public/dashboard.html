@@ -873,7 +873,7 @@
       </button>
       <div class="brand">Handshex</div>
       <a href="dashboard.html" class="home-link">Home</a>
-      <a href="#" class="home-link">Notifications</a>
+      <a href="#" class="home-link" id="notificationsLink">Notifications</a>
       <form class="search" role="search">
         <label class="sr-only" for="searchInput" style="position:absolute;left:-9999px;">Search contracts</label>
         <input id="searchInput" type="search" placeholder="Search contracts…" />
@@ -1023,7 +1023,7 @@
         if (!list.length) {
           wrap.innerHTML = `
             <div style="text-align: center; padding: 3rem 1rem;">
-              <p style="color: var(--muted); margin-bottom: 2rem; font-size: 1.1rem;">No contracts found.</p>
+              <p style="color: var(--muted); margin-bottom: 2rem; font-size: 1.1rem;">No Active contracts found.</p>
               <button class="btn-primary" id="createContractBtnEmpty" style="padding: 1.2rem 2rem; font-size: 1.1rem; min-width: 200px;" onclick="window.location.href='createContract-step1.html'">
                 + Create New Contract
               </button>
@@ -1080,7 +1080,7 @@
         currentFilter = filterType;
         
         try {
-          let endpoint = "/showContract"; // default endpoint
+          let endpoint = "/showActiveContracts"; // default endpoint (since dashboard shows active by default)
           
           switch (filterType) {
             case 'unverified':
@@ -1090,16 +1090,14 @@
               endpoint = "/showActiveContracts";
               break;
             case 'expired':
-              endpoint = "/showExpiredContractts";
+              endpoint = "/showExpiredContracts";
               break;
             case 'created-by-me':
-              endpoint = "/filterContracts?type=created";
-              break;
             case 'received-by-me':
-              endpoint = "/filterContracts?type=received";
+              endpoint = "/myContracts";
               break;
             default:
-              endpoint = "/showContract";
+              endpoint = "/showActiveContracts";
           }
           
           const response = await fetch(endpoint, {
@@ -1109,7 +1107,16 @@
           if (!response.ok) throw new Error();
           
           const { foundContracts = [] } = await response.json();
-          contracts = foundContracts;
+          
+          // Additional filtering for created-by-me and received-by-me
+          let filteredContracts = foundContracts;
+          if (filterType === 'created-by-me' && currentUserId) {
+            filteredContracts = foundContracts.filter(contract => contract.contractMaker === currentUserId);
+          } else if (filterType === 'received-by-me' && currentUserId) {
+            filteredContracts = foundContracts.filter(contract => contract.contractReciever === currentUserId);
+          }
+          
+          contracts = filteredContracts;
           renderContracts(contracts);
           
           // Update active filter button
@@ -1133,10 +1140,12 @@
       });
       
       // Filter option clicks
-      document.querySelectorAll('.filter-option').forEach(btn => {
-        btn.addEventListener('click', async (e) => {
-          const filterType = e.target.getAttribute('data-filter');
-          await filterContracts(filterType);
+      document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.filter-option').forEach(btn => {
+          btn.addEventListener('click', async (e) => {
+            const filterType = e.target.getAttribute('data-filter');
+            await filterContracts(filterType);
+          });
         });
       });
 
@@ -1150,14 +1159,14 @@
             console.warn('Could not decode JWT:', e);
           }
 
-          const r = await fetch("/showContract", {
+          const r = await fetch("/showActiveContracts", {
             headers: { Authorization: "Bearer " + token },
           });
           if (!r.ok) throw new Error();
           const { foundContracts = [] } = await r.json();
           contracts = foundContracts;
           // Debug: Log contracts received from API
-          console.log('Contracts received from /showContract:', contracts);
+          console.log('Contracts received from /showActiveContracts:', contracts);
           renderContracts(contracts);
         } catch (err) {
           console.error('Error fetching contracts:', err);
@@ -1311,6 +1320,28 @@
           upgradeLink.addEventListener('click', function(e) {
             e.preventDefault();
             alert('Coming soon');
+          });
+        }
+      });
+
+      // Notifications click handler
+      document.addEventListener('DOMContentLoaded', () => {
+        const notificationsLink = document.getElementById('notificationsLink');
+        if (notificationsLink) {
+          notificationsLink.addEventListener('click', async (e) => {
+            e.preventDefault();
+            try {
+              const response = await fetch('/unverifiedContracts', {
+                headers: { Authorization: 'Bearer ' + token },
+              });
+              if (!response.ok) throw new Error('Failed to fetch unverified contracts');
+              const data = await response.json();
+              const { foundContracts = [] } = data;
+              contracts = foundContracts;
+              renderContracts(contracts);
+            } catch (err) {
+              console.error('Error fetching unverified contracts:', err);
+            }
           });
         }
       });

@@ -14,10 +14,11 @@ import showProfile from "./src/controllers/myProfile.controller.js";
 import { fileURLToPath } from "url";
 import path from "path";
 import showSingleContract from "./src/controllers/showSingleContract.controller.js";
-import showNotVerifiedContracts from "./src/controllers/showNotVerifiedContracts.controller.js";
+import showNotVerifiedContracts from "./src/controllers/showNotVerifiedContractsMakerSide.controller.js";
 import showActiveContracts from "./src/controllers/showActiveContracts.controller.js";
 import showExpiredContracts from "./src/controllers/showExpiredContracts.controller.js";
-
+import findUnVerifiedContractsOnRecieverSide from "./src/controllers/unverifiedContractsRecieverSide.controller.js.js";
+import showNotVerifiedContractsOnMakerSide from "./src/controllers/showNotVerifiedContractsMakerSide.controller.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -45,10 +46,20 @@ app.get("/showContract", verifyJWT, showContract);
 app.get("/searchContract", verifyJWT, searchContract);
 app.get("/myContracts", verifyJWT, myContracts);
 app.get("/checkContractExpiry", verifyJWT, checkIfContractExpires);
+app.get(
+  "/unverifiedContracts",
+  verifyJWT,
+  findUnVerifiedContractsOnRecieverSide
+);
+// app.patch("/verifyContract", verifyJWT, verifyContract);
 //____________________________________________________________________________
 
 //contract routes on basis of status:
-app.get("/showNotVerifiedContracts", verifyJWT, showNotVerifiedContracts);
+app.get(
+  "/showNotVerifiedContracts",
+  verifyJWT,
+  showNotVerifiedContractsOnMakerSide
+);
 app.get("/showActiveContracts", verifyJWT, showActiveContracts);
 app.get("/showExpiredContracts", verifyJWT, showExpiredContracts);
 //____________________________________________________________________________

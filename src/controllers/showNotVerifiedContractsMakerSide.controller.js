@@ -1,13 +1,10 @@
 import { Contract } from "../schema/contract.schema.js";
 
-async function showNotVerifiedContracts(req, res) {
+async function showNotVerifiedContractsOnMakerSide(req, res) {
   try {
     const id = req.user.id;
     const foundNotVerifiedContracts = await Contract.find({
-      $and: [
-        { $or: [{ contractMaker: id }, { contractReciever: id }] },
-        { contractStatus: "Not Verified" },
-      ],
+      $and: [{ contractMaker: id }, { contractStatus: "Not Verified" }],
     });
     if (foundNotVerifiedContracts.length > 0) {
       return res.status(200).json({
@@ -23,4 +20,4 @@ async function showNotVerifiedContracts(req, res) {
   }
 }
 
-export default showNotVerifiedContracts;
+export default showNotVerifiedContractsOnMakerSide;
