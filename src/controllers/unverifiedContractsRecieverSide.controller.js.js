@@ -1,4 +1,5 @@
 import { Contract } from "../schema/contract.schema.js";
+//this is notifications wala API
 
 async function findUnVerifiedContractsOnRecieverSide(req, res) {
   try {

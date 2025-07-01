@@ -879,7 +879,10 @@
       </button>
       <div class="brand">Handshex</div>
       <a href="dashboard.html" class="home-link">Home</a>
-      <a href="#" class="home-link" id="notificationsLink">Notifications</a>
+      <span style="position:relative;display:inline-block;">
+        <a href="#" class="home-link" id="notificationsLink">Notifications</a>
+        <span id="notificationDot" style="display:none;position:absolute;top:-8px;right:10px;width:12px;height:12px;background:#bfa14a;border-radius:50%;box-shadow:0 0 6px #bfa14a;"></span>
+      </span>
       <form class="search" role="search">
         <label class="sr-only" for="searchInput" style="position:absolute;left:-9999px;">Search contracts</label>
         <input id="searchInput" type="search" placeholder="Search contracts…" />
@@ -953,6 +956,9 @@
         <span id="profileEmail">user@email.com</span>
       </p>
     </div>
+
+    <!-- Credibility Tooltip -->
+    <div id="credTooltip" style="display:none;position:fixed;z-index:9999;background:#fff;color:#111;padding:0.7rem 1.2rem;border-radius:0.8rem;box-shadow:0 2px 14px rgba(0,0,0,0.18);font-size:1rem;font-weight:600;pointer-events:none;white-space:nowrap;">Credibility Score</div>
 
     <!-- ===== JS ===== -->
     <script type="module">
@@ -1063,7 +1069,6 @@
               ${c.contractStatus || c.status || "Active"}
             </p>
             <button class="view-btn" data-id="${c._id || ''}" style="position:absolute;right:1.5rem;top:1.5rem;">View</button>
-            ${showVerifyButton ? `<button class=\"verify-btn view-btn\" data-id=\"${c._id || ''}\" style=\"position:absolute;right:1.5rem;top:4.5rem;margin-top:0.7rem;\">Verify</button>` : ''}
           </article>`
           );
         });
@@ -1073,28 +1078,6 @@
             const id = btn.getAttribute('data-id');
             if (id) {
               window.location.href = `showContract.html?id=${encodeURIComponent(id)}`;
-            }
-          });
-        });
-        // Add event listeners to all verify buttons (if present)
-        wrap.querySelectorAll('.verify-btn').forEach(btn => {
-          btn.addEventListener('click', async (e) => {
-            const id = btn.getAttribute('data-id');
-            try {
-              const response = await fetch('/verifyContract', {
-                method: 'PATCH',
-                headers: {
-                  'Content-Type': 'application/json',
-                  'Authorization': 'Bearer ' + token
-                },
-                body: JSON.stringify({ contractId: id, statusUpdate: 'Active' })
-              });
-              if (!response.ok) throw new Error('Failed to verify contract');
-              // Remove the verified contract from the list and re-render
-              const updatedList = list.filter(contract => contract._id !== id);
-              renderContracts(updatedList, showVerifyButton);
-            } catch (err) {
-              alert('Error verifying contract: ' + err.message);
             }
           });
         });
@@ -1129,7 +1112,17 @@
             headers: { Authorization: "Bearer " + token },
           });
           
-          if (!response.ok) throw new Error();
+          if (!response.ok) {
+            if (response.status === 400 && filterType === 'expired') {
+              showNoNotificationsMessage('No expired contracts found');
+              return;
+            }
+            if (response.status === 400 && filterType === 'unverified') {
+              showNoNotificationsMessage('No unverified contracts found');
+              return;
+            }
+            throw new Error();
+          }
           
           const { foundContracts = [] } = await response.json();
           
@@ -1173,6 +1166,8 @@
       document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.filter-option').forEach(btn => {
           btn.addEventListener('click', async (e) => {
+            document.querySelectorAll('.filter-option').forEach(btn2 => btn2.classList.remove('active'));
+            e.target.classList.add('active');
             const filterType = e.target.getAttribute('data-filter');
             await filterContracts(filterType);
           });
@@ -1357,23 +1352,10 @@
       // Notifications click handler
       const notificationsLink = document.getElementById('notificationsLink');
       if (notificationsLink) {
-        notificationsLink.addEventListener('click', async (e) => {
+        notificationsLink.addEventListener('click', (e) => {
           e.preventDefault();
-          try {
-            const response = await fetch('/unverifiedContracts', {
-              headers: { Authorization: 'Bearer ' + token },
-            });
-            if (!response.ok) throw new Error('Failed to fetch unverified contracts');
-            const data = await response.json();
-            const { foundContracts = [] } = data;
-            if (!Array.isArray(foundContracts) || foundContracts.length === 0) {
-              showNoNotificationsMessage('No new notifications');
-            } else {
-              renderContracts(foundContracts, true);
-            }
-          } catch (err) {
-            showNoNotificationsMessage('Error loading notifications');
-          }
+          location.hash = '#notifications';
+          showNotifications();
         });
       }
 
@@ -1406,6 +1388,61 @@
           dropdown.style.display = 'none';
         }
       });
+
+      // On page load, if hash is #notifications, show notifications automatically
+      async function showNotifications() {
+        try {
+          const response = await fetch('/unverifiedContracts', {
+            headers: { Authorization: 'Bearer ' + token },
+          });
+          if (!response.ok) throw new Error('Failed to fetch unverified contracts');
+          const data = await response.json();
+          const { foundContracts = [] } = data;
+          if (!Array.isArray(foundContracts) || foundContracts.length === 0) {
+            showNoNotificationsMessage('No new notifications');
+          } else {
+            renderContracts(foundContracts, true);
+          }
+        } catch (err) {
+          showNoNotificationsMessage('No new notifications');
+        }
+      }
+      if (window.location.hash === '#notifications') {
+        showNotifications();
+      }
+
+      // Custom tooltip for credibility circle
+      const credScore = document.getElementById('headerCredScore');
+      const credTooltip = document.getElementById('credTooltip');
+      credScore.addEventListener('mouseenter', (e) => {
+        const rect = credScore.getBoundingClientRect();
+        credTooltip.style.left = (rect.left + rect.width/2 - credTooltip.offsetWidth/2 + window.scrollX - 50) + 'px';
+        credTooltip.style.top = (rect.bottom + 8 + window.scrollY) + 'px';
+        credTooltip.style.display = 'block';
+      });
+      credScore.addEventListener('mouseleave', () => {
+        credTooltip.style.display = 'none';
+      });
+
+      // Show notification dot if there are notifications
+      async function updateNotificationDot() {
+        try {
+          const res = await fetch('/unverifiedContracts', {
+            headers: { Authorization: 'Bearer ' + token }
+          });
+          if (!res.ok) throw new Error();
+          const { foundContracts = [] } = await res.json();
+          const dot = document.getElementById('notificationDot');
+          if (Array.isArray(foundContracts) && foundContracts.length > 0) {
+            dot.style.display = 'block';
+          } else {
+            dot.style.display = 'none';
+          }
+        } catch {
+          document.getElementById('notificationDot').style.display = 'none';
+        }
+      }
+      updateNotificationDot();
     </script>
   </body>
 </html>

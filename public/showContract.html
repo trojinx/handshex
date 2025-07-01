@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
     <style>
+      /* ===== TOKENS (copied from landing page palette) ===== */
       :root {
         --bg-from: #181818;
         --bg-to: #232526;
@@ -18,70 +19,7 @@
         --tr: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         --header-h: 72px;
       }
-
-      /* Page Load Animation */
-      @keyframes fadeInUp {
-        from {
-          opacity: 0;
-          transform: translateY(30px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      @keyframes slideInFromLeft {
-        from {
-          opacity: 0;
-          transform: translateX(-30px);
-        }
-        to {
-          opacity: 1;
-          transform: translateX(0);
-        }
-      }
-
-      @keyframes slideInFromRight {
-        from {
-          opacity: 0;
-          transform: translateX(30px);
-        }
-        to {
-          opacity: 1;
-          transform: translateX(0);
-        }
-      }
-
-      @keyframes scaleIn {
-        from {
-          opacity: 0;
-          transform: scale(0.9);
-        }
-        to {
-          opacity: 1;
-          transform: scale(1);
-        }
-      }
-
-      @keyframes pulse {
-        0%, 100% {
-          transform: scale(1);
-        }
-        50% {
-          transform: scale(1.05);
-        }
-      }
-
-      @keyframes shimmer {
-        0% {
-          background-position: -200px 0;
-        }
-        100% {
-          background-position: calc(200px + 100%) 0;
-        }
-      }
-
+      *, *::before, *::after { box-sizing: border-box; }
       body {
         margin: 0;
         min-height: 100vh;
@@ -89,10 +27,19 @@
         color: var(--txt);
         font-family: Inter, system-ui, sans-serif;
         -webkit-font-smoothing: antialiased;
-        opacity: 0;
-        animation: fadeInUp 0.8s ease-out forwards;
+        zoom: reset;
+        transform: scale(1);
+        overflow-x: hidden;
+        max-width: 100vw;
+        min-width: 0;
       }
-
+      button {
+        font-family: inherit;
+        border: none;
+        background: none;
+        color: inherit;
+        cursor: pointer;
+      }
       header {
         position: sticky;
         top: 0;
@@ -101,13 +48,11 @@
         display: flex;
         align-items: center;
         gap: 1rem;
-        padding: 0 2.2rem;
+        padding: 0 1rem 0 1.5rem;
         background: rgba(0, 0, 0, 0.35);
         backdrop-filter: blur(12px);
         border-bottom: 1px solid var(--glass-border);
-        animation: slideInFromLeft 0.6s ease-out 0.2s both;
       }
-
       .brand {
         font-size: 2rem;
         font-weight: 900;
@@ -119,18 +64,87 @@
         display: flex;
         align-items: center;
         height: 40px;
-        transition: transform 0.3s ease, text-shadow 0.3s ease;
       }
-
-      .brand:hover {
-        transform: scale(1.05);
-        text-shadow: 0 0 20px rgba(191, 161, 74, 0.5);
-      }
-
       .brand span {
         color: #fff;
         background: transparent;
         font-family: inherit;
+      }
+      .home-link {
+        color: #fff;
+        font-size: 1.1rem;
+        font-weight: 600;
+        text-decoration: none;
+        margin-right: 1.5rem;
+        letter-spacing: 0.5px;
+      }
+      .profile {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      .cred-score {
+        position: relative;
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+      .cred-svg {
+        width: 44px;
+        height: 44px;
+        transform: rotate(-90deg);
+      }
+      .cred-bg {
+        stroke: #444;
+        stroke-width: 4;
+        fill: none;
+      }
+      .cred-fg {
+        stroke: var(--accent);
+        stroke-width: 4;
+        fill: none;
+        transition: stroke-dasharray 0.5s;
+      }
+      .cred-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--accent);
+        pointer-events: none;
+        user-select: none;
+      }
+      .avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        font-weight: 700;
+        display: grid;
+        place-items: center;
+        color: #111;
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+      }
+      .dropdown {
+        position: fixed;
+        right: 40px;
+        top: 0;
+        min-width: 220px;
+        max-width: 320px;
+        width: auto;
+        background: #fff;
+        color: #111;
+        border-radius: var(--radius);
+        box-shadow: 0 2px 14px rgba(0, 0, 0, 0.25);
+        padding: 1rem 1.2rem;
+        display: none;
+        z-index: 9999;
       }
 
       .container {
@@ -751,24 +765,34 @@
   <body>
     <header>
       <div class="brand">Handshex</div>
-      <div class="profile">
-        <div class="cred-score">
+      <a href="dashboard.html" class="home-link">Home</a>
+      <span style="position:relative;display:inline-block;">
+        <a href="#" class="home-link" id="notificationsLink">Notifications</a>
+        <span id="notificationDot" style="display:none;position:absolute;top:-8px;right:10px;width:12px;height:12px;background:#bfa14a;border-radius:50%;box-shadow:0 0 6px #bfa14a;"></span>
+      </span>
+      <div class="profile" id="profile">
+        <div class="cred-score" id="headerCredScore">
           <svg class="cred-svg">
-            <circle class="cred-bg" cx="22" cy="22" r="20"></circle>
-            <circle class="cred-fg" cx="22" cy="22" r="20"></circle>
+            <circle class="cred-bg" cx="22" cy="22" r="18" />
+            <circle class="cred-fg" cx="22" cy="22" r="18" stroke-dasharray="0 113.1" />
           </svg>
-          <span class="cred-text">0%</span>
+          <span class="cred-text" id="headerCredText">0</span>
         </div>
-        <div class="avatar">
-          <span>U</span>
+        <div class="avatar" id="profileAvatar">U</div>
+        <div class="dropdown" id="profileDropdown">
+          <p>
+            <strong>Username:</strong>
+            <span id="profileUsername">username</span>
+          </p>
+          <p>
+            <strong>Email:</strong>
+            <span id="profileEmail">user@email.com</span>
+          </p>
         </div>
       </div>
     </header>
     <div class="container" style="position:relative;">
       <button class="back-btn" style="position:absolute; bottom:18px; right:18px; z-index:1100;" onclick="window.history.back()">← Back</button>
-      <button id="menuBtn" class="menu-btn" aria-label="Show contract actions">
-        <span></span><span></span><span></span>
-      </button>
       <div id="contractDetails">
         <div style="color:var(--muted);text-align:center;display:flex;align-items:center;justify-content:center;gap:10px;">
           <div class="loading"></div>
@@ -890,7 +914,22 @@
           </div>`
         ];
         
-        document.getElementById("contractDetails").innerHTML = sections.join('');
+        let verifyBtnHtml = '';
+        const status = (contract.contractStatus || contract.status || '').toLowerCase();
+        if (status === 'not verified') {
+          verifyBtnHtml = `
+            <div style="text-align:center;margin-top:2.5rem;">
+              <button id="verifyBtn" class="gold-btn">Verify</button>
+            </div>
+          `;
+        }
+        document.getElementById("contractDetails").innerHTML = sections.join('') + verifyBtnHtml;
+        const verifyBtn = document.getElementById('verifyBtn');
+        if (verifyBtn) {
+          verifyBtn.addEventListener('click', () => {
+            window.location.href = `verify-confirmation.html?id=${encodeURIComponent(contract._id)}`;
+          });
+        }
         
         // Set button labels and handlers
         const userId = localStorage.getItem("userId");
@@ -919,6 +958,35 @@
           actionMenu.style.display = "none";
         }
       });
+
+      // Notifications logic for notification dot and button
+      async function updateNotificationDot() {
+        try {
+          const res = await fetch('/unverifiedContracts', {
+            headers: { Authorization: 'Bearer ' + token }
+          });
+          if (!res.ok) throw new Error();
+          const { foundContracts = [] } = await res.json();
+          const dot = document.getElementById('notificationDot');
+          if (Array.isArray(foundContracts) && foundContracts.length > 0) {
+            dot.style.display = 'block';
+          } else {
+            dot.style.display = 'none';
+          }
+        } catch {
+          document.getElementById('notificationDot').style.display = 'none';
+        }
+      }
+      updateNotificationDot();
+      const notificationsLink = document.getElementById('notificationsLink');
+      if (notificationsLink) {
+        notificationsLink.addEventListener('click', (e) => {
+          e.preventDefault();
+          location.hash = '#notifications';
+          // You may want to implement showNotifications() here if you want to show notifications inline
+          window.location.href = 'dashboard.html#notifications';
+        });
+      }
     </script>
   </body>
 </html> 

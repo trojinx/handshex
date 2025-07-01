@@ -51,7 +51,7 @@ app.get(
   "/unverifiedContracts",
   verifyJWT,
   findUnVerifiedContractsOnRecieverSide
-);
+); //notifications wala API
 app.patch("/verifyContract", verifyJWT, verifyContract);
 // app.patch("/verifyContract", verifyJWT, verifyContract);
 //____________________________________________________________________________
