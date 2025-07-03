@@ -1,0 +1,581 @@
+<!-- link notifications-detail.html and this page -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Verify Contract Warning | Handshex</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: linear-gradient(90deg, #111 0%, #181818 40%, #000 100%);
+        color: #fff;
+        font-family: Inter, system-ui, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+        max-width: 100vw;
+        min-width: 0;
+      }
+      .warning-card {
+        max-width: 700px;
+        margin: 5rem auto 2rem auto;
+        background: rgba(255, 255, 255, 0.09);
+        border: 1.5px solid rgba(255, 255, 255, 0.18);
+        border-radius: 1.3rem;
+        box-shadow: 0 4px 32px 0 rgba(0, 0, 0, 0.18);
+        padding: 2.5rem 3.5rem 2.5rem 3.5rem;
+        position: relative;
+        backdrop-filter: blur(10px);
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        align-items: flex-start;
+        padding-bottom: 5.5rem;
+      }
+      @media (max-width: 900px) {
+        .warning-card {
+          padding: 1.2rem 0.7rem 1.2rem 0.7rem;
+        }
+      }
+      .warning-title {
+        font-size: 2rem;
+        font-weight: 900;
+        color: #bfa14a;
+        margin-bottom: 0.5rem;
+        line-height: 1.1;
+        text-align: center;
+        width: 100%;
+      }
+      .warning-message {
+        background: rgba(255, 255, 255, 0.13);
+        border: 1.5px solid #bfa14a;
+        color: #ffe082;
+        border-radius: 1rem;
+        padding: 1.2rem 1.5rem;
+        font-size: 1.08rem;
+        font-weight: 600;
+        box-shadow: 0 2px 12px 0 #bfa14a33;
+        margin-bottom: 1.2rem;
+      }
+      .button-row {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: absolute;
+        left: 0;
+        bottom: 1.7rem;
+        padding: 0 2.2rem;
+        box-sizing: border-box;
+      }
+      .proceed-btn {
+        background: linear-gradient(90deg, #bfa14a 0%, #ffe082 100%);
+        color: #111;
+        font-size: 1rem;
+        font-weight: 700;
+        border-radius: 999px;
+        border: none;
+        padding: 0.7rem 2.2rem;
+        box-shadow: 0 2px 10px 0 #bfa14a55;
+        cursor: pointer;
+        transition: background 0.18s;
+        margin-top: 0;
+      }
+      .back-btn {
+        margin-top: 0;
+        padding: 0.6rem 1.3rem;
+        border-radius: 999px;
+        background: linear-gradient(90deg, #232526 0%, #414345 40%, #111 100%);
+        color: #fff;
+        font-size: 0.92rem;
+        font-weight: 700;
+        min-width: 90px;
+        box-shadow: 0 2px 10px 0 #bfa14a55;
+        border: none;
+        display: flex;
+        align-items: center;
+        gap: 0.7em;
+        transition: background 0.18s;
+        z-index: 2;
+      }
+      .contract-summary {
+        font-size: 1.05rem;
+        color: #fff;
+        font-weight: 500;
+        background: rgba(255, 255, 255, 0.06);
+        border-radius: 0.7rem;
+        padding: 1.1rem 1.2rem;
+        margin-bottom: 1.2rem;
+        width: 100%;
+      }
+      .success-message {
+        color: #4caf50;
+        font-weight: 700;
+        margin-top: 1.2rem;
+        font-size: 1.1rem;
+      }
+      .error-message {
+        color: #ff5252;
+        font-weight: 700;
+        margin-top: 1.2rem;
+        font-size: 1.1rem;
+      }
+      :root {
+        --bg-from: #181818;
+        --bg-to: #232526;
+        --glass: rgba(255, 255, 255, 0.1);
+        --glass-border: rgba(255, 255, 255, 0.18);
+        --txt: #fff;
+        --muted: #e0e0e0;
+        --accent: #bfa14a;
+        --radius: 1.2rem;
+        --tr: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        --header-h: 72px;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        height: var(--header-h);
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0 1rem 0 1.5rem;
+        background: rgba(0, 0, 0, 0.35);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--glass-border);
+        justify-content: flex-start;
+      }
+      .brand {
+        font-size: 2rem;
+        font-weight: 900;
+        color: #fff;
+        letter-spacing: -1.5px;
+        margin-right: 1.7rem;
+        line-height: 1;
+        user-select: none;
+        display: flex;
+        align-items: center;
+        height: 40px;
+      }
+      .brand span {
+        color: #fff;
+        background: transparent;
+        font-family: inherit;
+      }
+      .btn-ico {
+        width: 36px;
+        height: 36px;
+        border-radius: 0.8rem;
+        display: grid;
+        place-items: center;
+        font-size: 1.1rem;
+        background: var(--glass);
+        border: 1px solid var(--glass-border);
+        transition: background var(--tr);
+      }
+      .btn-ico:hover {
+        background: rgba(255, 255, 255, 0.15);
+      }
+      .profile {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      .cred-score {
+        position: relative;
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+      .cred-svg {
+        width: 44px;
+        height: 44px;
+        transform: rotate(-90deg);
+      }
+      .cred-bg {
+        stroke: #444;
+        stroke-width: 4;
+        fill: none;
+      }
+      .cred-fg {
+        stroke: var(--accent);
+        stroke-width: 4;
+        fill: none;
+        transition: stroke-dasharray 0.5s;
+      }
+      .cred-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--accent);
+        pointer-events: none;
+        user-select: none;
+      }
+      .avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        font-weight: 700;
+        display: grid;
+        place-items: center;
+        color: #111;
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+      }
+      .dropdown {
+        position: fixed;
+        right: 40px;
+        top: 0;
+        min-width: 220px;
+        max-width: 320px;
+        width: auto;
+        background: #fff;
+        color: #111;
+        border-radius: var(--radius);
+        box-shadow: 0 2px 14px rgba(0, 0, 0, 0.25);
+        padding: 1rem 1.2rem;
+        display: none;
+        z-index: 9999;
+      }
+      .profile.open .dropdown {
+        display: block !important;
+      }
+      .profile.open {
+        z-index: 5001;
+      }
+      .home-link {
+        color: #fff;
+        font-size: 1.1rem;
+        font-weight: 600;
+        text-decoration: none;
+        margin-right: 1.5rem;
+        letter-spacing: 0.5px;
+        transition: color 0.2s;
+        padding: 0.2rem 0.7rem;
+        border-radius: 0.5rem;
+        position: relative;
+        top: 1px;
+      }
+      .home-link:hover {
+        color: var(--accent);
+        background: rgba(255, 255, 255, 0.07);
+      }
+      .upgrade-link {
+        color: var(--accent);
+        font-size: 1.1rem;
+        font-weight: 700;
+        text-decoration: none;
+        margin-left: 1.2rem;
+        margin-right: 0.5rem;
+        letter-spacing: 0.5px;
+        transition: color 0.2s, text-decoration 0.2s;
+        padding: 0;
+        border-radius: 0;
+        background: none;
+        box-shadow: none;
+        position: relative;
+        top: 1px;
+      }
+      .upgrade-link:hover {
+        color: #ffe082;
+        text-decoration: underline;
+        background: none;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="brand">Handshex</div>
+      <a href="dashboard.html" class="home-link">Home</a>
+      <span style="position: relative; display: inline-block">
+        <a href="notifications.html" class="home-link" id="notificationsLink"
+          >Notifications</a
+        >
+        <span
+          id="notificationDot"
+          style="
+            display: none;
+            position: absolute;
+            top: -8px;
+            right: 10px;
+            width: 12px;
+            height: 12px;
+            background: #bfa14a;
+            border-radius: 50%;
+            box-shadow: 0 0 6px #bfa14a;
+          "
+        ></span>
+      </span>
+      <div style="flex: 1"></div>
+      <a href="#" class="upgrade-link">Upgrade to Max</a>
+      <div class="profile" id="profile">
+        <div class="cred-score" id="headerCredScore">
+          <svg class="cred-svg">
+            <circle class="cred-bg" cx="22" cy="22" r="18" />
+            <circle
+              class="cred-fg"
+              cx="22"
+              cy="22"
+              r="18"
+              stroke-dasharray="0 113.1"
+            />
+          </svg>
+          <span class="cred-text" id="headerCredText">0</span>
+        </div>
+        <div class="avatar" id="profileAvatar">U</div>
+      </div>
+    </header>
+    <div class="dropdown" id="profileDropdown">
+      <p>
+        <strong>Username:</strong>
+        <span id="profileUsername">username</span>
+      </p>
+      <p>
+        <strong>Email:</strong>
+        <span id="profileEmail">user@email.com</span>
+      </p>
+    </div>
+    <div
+      id="credTooltip"
+      style="
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        background: #fff;
+        color: #111;
+        padding: 0.7rem 1.2rem;
+        border-radius: 0.8rem;
+        box-shadow: 0 2px 14px rgba(0, 0, 0, 0.18);
+        font-size: 1rem;
+        font-weight: 600;
+        pointer-events: none;
+        white-space: nowrap;
+      "
+    >
+      Credibility Score
+    </div>
+    <div class="warning-card">
+      <div class="warning-title">Verify Contract</div>
+      <div class="warning-message">
+        Warning! You are about to verify this contract. This process cannot be
+        undone. Make sure you have read the contract carefully.
+      </div>
+      <div id="contractSummary" class="contract-summary">
+        Loading contract details...
+      </div>
+      <div class="button-row">
+        <button class="back-btn" id="backBtn">&#8592; Back</button>
+        <button class="proceed-btn" id="proceedBtn">Proceed</button>
+      </div>
+      <div id="resultMessage"></div>
+    </div>
+    <script type="module">
+      const $ = (s) => document.querySelector(s);
+      const token = localStorage.getItem("token");
+      if (!token) location.replace("signIn.html");
+      (async () => {
+        try {
+          const r = await fetch("/myProfile", {
+            headers: { Authorization: "Bearer " + token },
+          });
+          if (!r.ok) throw new Error();
+          const { foundProfile: u } = await r.json();
+          $("#profileUsername").textContent = u.username;
+          $("#profileEmail").textContent = u.email;
+          $("#profileAvatar").textContent = u.username[0].toUpperCase();
+          const score =
+            typeof u.credibilityScore === "number" ? u.credibilityScore : 0;
+          const percent = Math.max(0, Math.min(100, score));
+          const headerCircle = document.querySelector(
+            "#headerCredScore .cred-fg"
+          );
+          const headerText = document.getElementById("headerCredText");
+          headerText.textContent = percent;
+          const radius = 18;
+          const circumference = 2 * Math.PI * radius;
+          headerCircle.setAttribute("stroke-dasharray", circumference);
+          headerCircle.setAttribute("stroke-dashoffset", circumference);
+          setTimeout(() => {
+            headerCircle.style.transition =
+              "stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1)";
+            headerCircle.setAttribute(
+              "stroke-dashoffset",
+              circumference * (1 - percent / 100)
+            );
+          }, 200);
+        } catch {
+          location.replace("signIn.html");
+        }
+      })();
+      // Profile dropdown logic
+      const profile = $("#profile");
+      const dropdown = $("#profileDropdown");
+      profile.addEventListener("click", (e) => {
+        e.stopPropagation();
+        profile.classList.toggle("open");
+        dropdown.style.display = profile.classList.contains("open")
+          ? "block"
+          : "none";
+        const rect = profile.getBoundingClientRect();
+        dropdown.style.top = rect.bottom + 8 + "px";
+        dropdown.style.right = window.innerWidth - rect.right + 8 + "px";
+      });
+      document.addEventListener("mousedown", (e) => {
+        if (!profile.contains(e.target) && !dropdown.contains(e.target)) {
+          profile.classList.remove("open");
+          dropdown.style.display = "none";
+        }
+      });
+      // Credibility tooltip logic
+      const credScore = $("#headerCredScore");
+      const credTooltip = $("#credTooltip");
+      credScore.addEventListener("mouseenter", (e) => {
+        credTooltip.style.display = "block";
+        const rect = credScore.getBoundingClientRect();
+        credTooltip.style.top = rect.bottom + 8 + "px";
+        credTooltip.style.left = rect.left + "px";
+      });
+      credScore.addEventListener("mouseleave", () => {
+        credTooltip.style.display = "none";
+      });
+      // Notification dot logic
+      async function updateNotificationDot() {
+        try {
+          const res = await fetch("/unverifiedContracts", {
+            headers: { Authorization: "Bearer " + token },
+          });
+          if (!res.ok) throw new Error();
+          const { foundContracts = [] } = await res.json();
+          const dot = document.getElementById("notificationDot");
+          if (Array.isArray(foundContracts) && foundContracts.length > 0) {
+            dot.style.display = "block";
+          } else {
+            dot.style.display = "none";
+          }
+        } catch {
+          document.getElementById("notificationDot").style.display = "none";
+        }
+      }
+      updateNotificationDot();
+      function getQueryParam(name) {
+        const url = new URL(window.location.href);
+        return url.searchParams.get(name);
+      }
+      const contractId = getQueryParam("id");
+      const contractSummary = document.getElementById("contractSummary");
+      const proceedBtn = document.getElementById("proceedBtn");
+      const backBtn = document.getElementById("backBtn");
+      const resultMessage = document.getElementById("resultMessage");
+      let contract;
+      async function fetchContract() {
+        if (!contractId) {
+          contractSummary.textContent = "No contract ID provided.";
+          proceedBtn.disabled = true;
+          return;
+        }
+        try {
+          const res = await fetch(
+            `/showSingleContract?id=${encodeURIComponent(contractId)}`,
+            {
+              headers: { Authorization: "Bearer " + token },
+            }
+          );
+          if (!res.ok) throw new Error();
+          const { foundContract } = await res.json();
+          contract = foundContract;
+          contractSummary.innerHTML = `
+            <b>${contract.contractName || "Untitled Contract"}</b><br/>
+            <span style='color:#e0e0e0;'>Created: ${
+              contract.createdAt
+                ? new Date(contract.createdAt).toLocaleDateString()
+                : "N/A"
+            } • Expires: ${
+            contract.expiryDate
+              ? new Date(contract.expiryDate).toLocaleDateString()
+              : "N/A"
+          }</span><br/><br/>
+            <b>Maker:</b> ${contract.contractMakerUsername || "N/A"}<br/>
+            <b>Receiver:</b> ${contract.contractRecieverUsername || "N/A"}<br/>
+            <b>Status:</b> <span style='color:${
+              (
+                contract.contractStatus ||
+                contract.status ||
+                ""
+              ).toLowerCase() === "active"
+                ? "#4caf50"
+                : (
+                    contract.contractStatus ||
+                    contract.status ||
+                    ""
+                  ).toLowerCase() === "expired"
+                ? "#ff5252"
+                : "#fff"
+            };'>${contract.contractStatus || contract.status || "N/A"}</span>
+          `;
+        } catch {
+          contractSummary.textContent = "Failed to load contract details.";
+          proceedBtn.disabled = true;
+        }
+      }
+      fetchContract();
+      proceedBtn.onclick = async () => {
+        proceedBtn.disabled = true;
+        proceedBtn.textContent = "Verifying...";
+        resultMessage.textContent = "";
+        try {
+          const res = await fetch("/verifyContract", {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + token,
+            },
+            body: JSON.stringify({ contractId, statusUpdate: "Active" }),
+          });
+          if (res.ok) {
+            resultMessage.innerHTML =
+              '<span class="success-message">Contract verified successfully!</span>';
+            setTimeout(() => {
+              window.location.href = `notifications-detail.html?id=${encodeURIComponent(
+                contractId
+              )}`;
+            }, 1500);
+          } else {
+            resultMessage.innerHTML =
+              '<span class="error-message">Failed to verify contract.</span>';
+            proceedBtn.disabled = false;
+            proceedBtn.textContent = "Proceed";
+          }
+        } catch {
+          resultMessage.innerHTML =
+            '<span class="error-message">Failed to verify contract.</span>';
+          proceedBtn.disabled = false;
+          proceedBtn.textContent = "Proceed";
+        }
+      };
+      backBtn.onclick = () => {
+        window.location.href = `notifications-detail.html?id=${encodeURIComponent(
+          contractId
+        )}`;
+      };
+    </script>
+  </body>
+</html>

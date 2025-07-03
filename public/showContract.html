@@ -760,17 +760,108 @@
           right: -10px;
         }
       }
+
+      .upgrade-link {
+        color: var(--accent);
+        font-size: 1.1rem;
+        font-weight: 700;
+        text-decoration: none;
+        margin-left: 0;
+        margin-right: 0.8rem;
+        letter-spacing: 0.5px;
+        transition: color 0.2s, text-decoration 0.2s;
+        padding: 0;
+        border-radius: 0;
+        background: none;
+        box-shadow: none;
+        position: relative;
+        top: 1px;
+        display: inline-block;
+      }
+      .upgrade-link:hover {
+        color: #ffe082;
+        text-decoration: underline;
+        background: none;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes scaleIn {
+        from {
+          opacity: 0;
+          transform: scale(0.95);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+      @keyframes glow {
+        0% { box-shadow: 0 0 0px #bfa14a44; }
+        50% { box-shadow: 0 0 16px 4px #bfa14a88; }
+        100% { box-shadow: 0 0 0px #bfa14a44; }
+      }
+      @keyframes shimmer {
+        0% { background-position: -40px 0; }
+        100% { background-position: 40px 0; }
+      }
+      .glow {
+        animation: glow 1.6s ease-in-out 1.2s 2;
+      }
+      .status-dot.glow {
+        animation: dot-pop-in 0.5s 0.2s forwards, glow 1.6s 1.2s 2;
+      }
+      .animate-in {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1), transform 0.7s cubic-bezier(0.4,0,0.2,1);
+      }
+      .contract-section, .contract-title, .contract-meta, .contract-status {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(191, 161, 74, 0.3);
+        border-radius: 50%;
+        border-top-color: var(--accent);
+        animation: spin 1s ease-in-out infinite;
+        background: linear-gradient(90deg, #bfa14a22 25%, #fff0 50%, #bfa14a22 75%);
+        background-size: 40px 20px;
+        background-repeat: no-repeat;
+        background-position: -40px 0;
+        animation: spin 1s linear infinite, shimmer 1.2s linear infinite;
+      }
     </style>
   </head>
   <body>
+    <!-- ===== Header ===== -->
     <header>
+      <button class="btn-ico" id="sidebarToggle" aria-label="Open sidebar">
+        <svg width="20" height="20" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block">
+          <rect y="6" width="28" height="3.2" rx="1.6" fill="#fff"/>
+          <rect y="12.4" width="28" height="3.2" rx="1.6" fill="#fff"/>
+          <rect y="18.8" width="28" height="3.2" rx="1.6" fill="#fff"/>
+        </svg>
+      </button>
       <div class="brand">Handshex</div>
       <a href="dashboard.html" class="home-link">Home</a>
       <span style="position:relative;display:inline-block;">
-        <a href="#" class="home-link" id="notificationsLink">Notifications</a>
+        <a href="notifications.html" class="home-link" id="notificationsLink">Notifications</a>
         <span id="notificationDot" style="display:none;position:absolute;top:-8px;right:10px;width:12px;height:12px;background:#bfa14a;border-radius:50%;box-shadow:0 0 6px #bfa14a;"></span>
       </span>
       <div class="profile" id="profile">
+        <a href="#" class="upgrade-link">Upgrade to Max</a>
         <div class="cred-score" id="headerCredScore">
           <svg class="cred-svg">
             <circle class="cred-bg" cx="22" cy="22" r="18" />
@@ -779,20 +870,10 @@
           <span class="cred-text" id="headerCredText">0</span>
         </div>
         <div class="avatar" id="profileAvatar">U</div>
-        <div class="dropdown" id="profileDropdown">
-          <p>
-            <strong>Username:</strong>
-            <span id="profileUsername">username</span>
-          </p>
-          <p>
-            <strong>Email:</strong>
-            <span id="profileEmail">user@email.com</span>
-          </p>
-        </div>
       </div>
     </header>
     <div class="container" style="position:relative;">
-      <button class="back-btn" style="position:absolute; bottom:18px; right:18px; z-index:1100;" onclick="window.history.back()">← Back</button>
+      <button class="back-btn" style="position:absolute; bottom:18px; right:18px; z-index:1100;" onclick="setReloadFlagAndBack()">← Back</button>
       <div id="contractDetails">
         <div style="color:var(--muted);text-align:center;display:flex;align-items:center;justify-content:center;gap:10px;">
           <div class="loading"></div>
@@ -818,7 +899,7 @@
           const { foundProfile: user } = await response.json();
           
           // Update avatar with user's first letter
-          const avatar = document.querySelector('.avatar span');
+          const avatar = document.getElementById('profileAvatar');
           if (avatar && user.username) {
             avatar.textContent = user.username[0].toUpperCase();
           }
@@ -885,27 +966,26 @@
           document.getElementById("contractDetails").innerHTML = '<div style="color:var(--muted);text-align:center;">Contract not found.</div>';
           return;
         }
-        
         // Add staggered animation to each section
         const sections = [
-          `<div class="contract-title">${contract.contractName || 'Untitled Contract'}</div>`,
-          `<div class="contract-meta">Created: ${contract.createdAt ? new Date(contract.createdAt).toLocaleDateString() : 'N/A'}${contract.expiryDate ? ' • Expires: ' + new Date(contract.expiryDate).toLocaleDateString() : ''}</div>`,
-          `<div class="contract-status ${(contract.contractStatus || contract.status || "active").toLowerCase().replace(/\s/g, '-')}">
-            <span class="status-dot ${(contract.contractStatus || contract.status || "active").toLowerCase().replace(/\s/g, '-')}"></span>
+          `<div class="contract-title" id="contractTitle">${contract.contractName || 'Untitled Contract'}</div>`,
+          `<div class="contract-meta" id="contractMeta">Created: ${contract.createdAt ? new Date(contract.createdAt).toLocaleDateString() : 'N/A'}${contract.expiryDate ? ' • Expires: ' + new Date(contract.expiryDate).toLocaleDateString() : ''}</div>`,
+          `<div class="contract-status ${(contract.contractStatus || contract.status || "active").toLowerCase().replace(/\s/g, '-')}" id="contractStatus">
+            <span class="status-dot ${(contract.contractStatus || contract.status || "active").toLowerCase().replace(/\s/g, '-')}" id="statusDot"></span>
             ${contract.contractStatus || contract.status || "Active"}
           </div>`,
-          `<div class="contract-section">
+          `<div class="contract-section" id="sectionBody">
             <span class="contract-label">Contract Body</span>
             <div class="contract-value">${contract.contractBody || 'No contract body provided.'}</div>
           </div>`,
-          `<div class="contract-section">
+          `<div class="contract-section" id="sectionMaker">
             <span class="contract-label">Maker</span>
             <div class="contract-value">
               <strong>Username:</strong> ${contract.contractMakerUsername || 'N/A'}<br>
               <strong>Email:</strong> ${contract.contractMakerEmail || 'N/A'}
             </div>
           </div>`,
-          `<div class="contract-section">
+          `<div class="contract-section" id="sectionReceiver">
             <span class="contract-label">Receiver</span>
             <div class="contract-value">
               <strong>Username:</strong> ${contract.contractRecieverUsername || 'N/A'}<br>
@@ -913,7 +993,6 @@
             </div>
           </div>`
         ];
-        
         let verifyBtnHtml = '';
         const status = (contract.contractStatus || contract.status || '').toLowerCase();
         if (status === 'not verified') {
@@ -924,13 +1003,24 @@
           `;
         }
         document.getElementById("contractDetails").innerHTML = sections.join('') + verifyBtnHtml;
+        // Animate in each section
+        const ids = ["contractTitle", "contractMeta", "contractStatus", "sectionBody", "sectionMaker", "sectionReceiver"];
+        ids.forEach((id, i) => {
+          setTimeout(() => {
+            const el = document.getElementById(id);
+            if (el) el.classList.add('animate-in');
+            if (id === "contractStatus") {
+              const dot = document.getElementById('statusDot');
+              if (dot) dot.classList.add('glow');
+            }
+          }, 200 + i * 120);
+        });
         const verifyBtn = document.getElementById('verifyBtn');
         if (verifyBtn) {
           verifyBtn.addEventListener('click', () => {
             window.location.href = `verify-confirmation.html?id=${encodeURIComponent(contract._id)}`;
           });
         }
-        
         // Set button labels and handlers
         const userId = localStorage.getItem("userId");
         let otherUser = "the other user";
@@ -978,14 +1068,11 @@
         }
       }
       updateNotificationDot();
-      const notificationsLink = document.getElementById('notificationsLink');
-      if (notificationsLink) {
-        notificationsLink.addEventListener('click', (e) => {
-          e.preventDefault();
-          location.hash = '#notifications';
-          // You may want to implement showNotifications() here if you want to show notifications inline
-          window.location.href = 'dashboard.html#notifications';
-        });
+
+      // Add this function to set the reload flag before going back
+      function setReloadFlagAndBack() {
+        sessionStorage.setItem('reloadDashboardOnBack', '1');
+        window.history.back();
       }
     </script>
   </body>

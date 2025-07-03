@@ -68,7 +68,7 @@ app.get("/showExpiredContracts", verifyJWT, showExpiredContracts);
 
 //miscellaneous routes
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+  res.sendFile(path.join(__dirname, "public", "dashboard.html"));
 });
 app.get("/welcome", (req, res) => {
   res.sendFile(__dirname + "/public/index.html");

@@ -266,10 +266,13 @@
           } catch (jsonErr) {}
           if (res.ok) {
             formMessage.style.color = '#bfa14a';
-            formMessage.textContent = 'Contract created successfully! Redirecting...';
+            formMessage.textContent = 'Your contract will be visible on the dashboard once the receiver has verified it.';
+            if (data.foundContract && data.foundContract._id) {
+              localStorage.setItem('newlyCreatedContractId', data.foundContract._id);
+            }
             setTimeout(() => {
               window.location.href = 'dashboard.html';
-            }, 1500);
+            }, 2000);
           } else {
             formMessage.style.color = '#ff5252';
             formMessage.textContent = data.message || `Failed to create contract. (${res.status})`;

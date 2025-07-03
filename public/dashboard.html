@@ -47,6 +47,11 @@
         overflow-x: hidden;
         max-width: 100vw;
         min-width: 0;
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none;  /* IE 10+ */
+      }
+      body::-webkit-scrollbar {
+        display: none; /* Chrome, Safari, Opera */
       }
       button {
         font-family: inherit;
@@ -311,6 +316,33 @@
         background: #bfa14a;
         border-radius: 2px;
       }
+      .timeline-row {
+        display: flex;
+        align-items: center;
+        position: relative;
+        min-height: 140px;
+        transition: transform 0.25s cubic-bezier(0.4,0,0.2,1);
+        will-change: transform;
+      }
+      .timeline-row.dragging-row {
+        opacity: 0.7;
+        box-shadow: 0 16px 40px rgba(191,161,74,0.25);
+        z-index: 10;
+        background: rgba(191,161,74,0.07);
+      }
+      .drag-handle {
+        position: relative;
+        left: 0;
+        margin-right: 10px;
+        width: 18px;
+        height: 18px;
+        background: var(--accent);
+        border-radius: 50%;
+        box-shadow: 0 0 0 4px var(--bg-from);
+        cursor: grab;
+        z-index: 2;
+        animation: dot-fade-in 0.7s cubic-bezier(0.4,0,0.2,1);
+      }
       .entry {
         position: relative;
         margin-bottom: 2rem;
@@ -320,25 +352,15 @@
         backdrop-filter: blur(8px);
         border-radius: var(--radius);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        transition: box-shadow var(--tr), transform var(--tr);
+        transition: box-shadow var(--tr), transform var(--tr), background 0.3s, border-color 0.3s;
         opacity: 0;
         transform: translateY(40px) scale(0.98);
         animation: card-fade-in 0.7s cubic-bezier(0.4,0,0.2,1) forwards;
       }
       .entry:hover {
-        transform: translateY(-4px) scale(1.03);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-      }
-      .entry::before {
-        content: "";
-        position: absolute;
-        left: -30px;
-        top: 1.2rem;
-        width: 14px;
-        height: 14px;
-        border-radius: 50%;
-        background: var(--accent);
-        box-shadow: 0 0 0 4px var(--bg-from);
+        transform: translateY(-8px) scale(1.04);
+        box-shadow: 0 10px 32px rgba(0, 0, 0, 0.45);
+        border-color: var(--accent);
       }
       .entry h2 {
         margin: 0;
@@ -451,9 +473,6 @@
         .timeline::before {
           left: 12px;
         }
-        .entry::before {
-          left: -24px;
-        }
         .avatar, .cred-score, .cred-svg {
           width: 40px;
           height: 40px;
@@ -488,7 +507,7 @@
           box-sizing: border-box;
         }
       }
-      html, body {
+      html {
         overflow-x: hidden;
         max-width: 100vw;
         min-width: 0;
@@ -844,6 +863,68 @@
         text-decoration: underline;
         background: none;
       }
+
+      /* Add drag handle styles */
+      .drag-handle {
+        position: absolute;
+        left: -38px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 18px;
+        height: 18px;
+        background: var(--accent);
+        border-radius: 50%;
+        box-shadow: 0 0 0 4px var(--bg-from);
+        cursor: grab;
+        z-index: 2;
+      }
+      .entry.dragging {
+        opacity: 0.7;
+        box-shadow: 0 16px 40px rgba(191,161,74,0.25);
+        transform: scale(1.03);
+        transition: box-shadow 0.2s, transform 0.2s;
+      }
+
+      /* Add drag handle and timeline row styles */
+      .drag-handle.dragging-dot, .ghost-dot {
+        opacity: 0.8;
+        box-shadow: 0 0 0 12px var(--accent), 0 0 0 4px var(--bg-from);
+        pointer-events: none;
+        transition: box-shadow 0.18s, opacity 0.18s;
+      }
+      .ghost-dot {
+        filter: blur(0.5px) brightness(1.1);
+        mix-blend-mode: lighten;
+      }
+
+      @keyframes dot-fade-in {
+        0% {
+          opacity: 0;
+          transform: scale(0.5);
+        }
+        60% {
+          opacity: 1;
+          transform: scale(1.15);
+        }
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      /* Restrict scrolling to only the contract list area */
+      html, body {
+        overflow: hidden !important;
+        height: 100%;
+      }
+      main {
+        height: calc(100vh - var(--header-h));
+        overflow-y: auto;
+        scrollbar-width: none; /* Firefox */
+      }
+      main::-webkit-scrollbar {
+        display: none; /* Chrome, Safari, Opera */
+      }
     </style>
   </head>
 
@@ -857,7 +938,7 @@
         + Create New Contract
       </button>
       <button class="btn-primary" id="filterContractsBtn">
-        🔍 Filter Contracts
+        Filter Contracts
       </button>
       <div id="filterOptions" class="filter-options" style="display: none;">
         <button class="filter-option" data-filter="unverified">Unverified</button>
@@ -880,7 +961,7 @@
       <div class="brand">Handshex</div>
       <a href="dashboard.html" class="home-link">Home</a>
       <span style="position:relative;display:inline-block;">
-        <a href="#" class="home-link" id="notificationsLink">Notifications</a>
+        <a href="notifications.html" class="home-link" id="notificationsLink">Notifications</a>
         <span id="notificationDot" style="display:none;position:absolute;top:-8px;right:10px;width:12px;height:12px;background:#bfa14a;border-radius:50%;box-shadow:0 0 6px #bfa14a;"></span>
       </span>
       <form class="search" role="search">
@@ -1034,6 +1115,24 @@
       const renderContracts = (list, showVerifyButton = false) => {
         const wrap = $("#contractsList");
         wrap.innerHTML = "";
+        // Get the most recently created contract ID from localStorage
+        const newContractId = localStorage.getItem('newlyCreatedContractId');
+        // Restore order from localStorage if available
+        let order = [];
+        try {
+          order = JSON.parse(localStorage.getItem('contractsOrder')) || [];
+        } catch {}
+        if (order.length) {
+          // Sort list by order, fallback to original order for new contracts
+          list = [...list].sort((a, b) => {
+            const ia = order.indexOf(a._id);
+            const ib = order.indexOf(b._id);
+            if (ia === -1 && ib === -1) return 0;
+            if (ia === -1) return 1;
+            if (ib === -1) return -1;
+            return ia - ib;
+          });
+        }
         if (!list.length) {
           wrap.innerHTML = `
             <div style="text-align: center; padding: 3rem 1rem;">
@@ -1058,18 +1157,23 @@
             const year = date.getFullYear();
             return `${day} ${month}, ${year}`;
           };
+          // Add NEW badge if this is the most recently created contract
+          const isNew = newContractId && c._id === newContractId;
           wrap.insertAdjacentHTML(
             "beforeend",
             `
-          <article class="entry" tabindex="0" style="position:relative;animation-delay:${i*0.08}s">
-            <h2>${c.contractName || c.title}</h2>
-            <p class="meta">Created ${d("createdAt")} • Expires ${d("expiryDate")}</p>
-            <p class="status ${(c.contractStatus || c.status || "active").toLowerCase().replace(/\s/g, '-')}">
-              <span class="status-dot ${(c.contractStatus || c.status || "active").toLowerCase().replace(/\s/g, '-')}"></span>
-              ${c.contractStatus || c.status || "Active"}
-            </p>
-            <button class="view-btn" data-id="${c._id || ''}" style="position:absolute;right:1.5rem;top:1.5rem;">View</button>
-          </article>`
+          <div class="timeline-row" data-id="${c._id || ''}" style="display:flex;align-items:center;position:relative;">
+            <span class="drag-handle" title="Drag to reorder"></span>
+            <article class="entry" tabindex="0" style="position:relative;animation-delay:${i*0.08}s;width:100%;">
+              <h2>${c.contractName || c.title} ${isNew ? '<span style="background:var(--accent);color:#111;font-size:0.85rem;font-weight:800;padding:0.2em 0.8em;border-radius:1em;margin-left:0.7em;vertical-align:middle;letter-spacing:1px;">NEW</span>' : ''}</h2>
+              <p class="meta">Created ${d("createdAt")} • Expires ${d("expiryDate")}</p>
+              <p class="status ${(c.contractStatus || c.status || "active").toLowerCase().replace(/\s/g, '-')}">
+                <span class="status-dot ${(c.contractStatus || c.status || "active").toLowerCase().replace(/\s/g, '-')}"></span>
+                ${c.contractStatus || c.status || "Active"}
+              </p>
+              <button class="view-btn" data-id="${c._id || ''}" style="position:absolute;right:1.5rem;top:1.5rem;">View</button>
+            </article>
+          </div>`
           );
         });
         // Add event listeners to all view buttons
@@ -1079,6 +1183,96 @@
             if (id) {
               window.location.href = `showContract.html?id=${encodeURIComponent(id)}`;
             }
+          });
+        });
+        // Initialize SortableJS for drag-and-drop after rendering
+        if (window.Sortable) {
+          if (window.contractsSortable) window.contractsSortable.destroy();
+          window.contractsSortable = Sortable.create(wrap, {
+            handle: '.drag-handle',
+            animation: 200,
+            ghostClass: 'dragging',
+            draggable: '.timeline-row',
+            onEnd: function (evt) {
+              // Save new order to localStorage
+              const ids = Array.from(wrap.querySelectorAll('.timeline-row')).map(el => el.getAttribute('data-id'));
+              localStorage.setItem('contractsOrder', JSON.stringify(ids));
+              // Reorder the global contracts array to match the new order
+              contracts = ids.map(id => contracts.find(c => c._id === id)).filter(Boolean);
+            }
+          });
+        }
+        // In renderContracts, after rendering all .timeline-row and .drag-handle elements:
+        const rows = Array.from(wrap.querySelectorAll('.timeline-row'));
+        rows.forEach(row => {
+          const dot = row.querySelector('.drag-handle');
+          dot.style.cursor = 'grab';
+          dot.addEventListener('mousedown', function(e) {
+            e.preventDefault();
+            const timeline = wrap;
+            const timelineRect = timeline.getBoundingClientRect();
+            const dotRect = dot.getBoundingClientRect();
+            const offsetY = e.clientY - dotRect.top - dotRect.height / 2;
+            const fixedX = dotRect.left + dotRect.width / 2;
+            // Create ghost dot
+            const ghost = dot.cloneNode(true);
+            ghost.classList.add('ghost-dot');
+            ghost.style.position = 'fixed';
+            ghost.style.left = `${fixedX - dotRect.width / 2}px`;
+            ghost.style.top = `${e.clientY - offsetY - dotRect.height / 2}px`;
+            ghost.style.pointerEvents = 'none';
+            ghost.style.zIndex = 10000;
+            document.body.appendChild(ghost);
+            dot.style.setProperty('opacity', '0', 'important');
+            dot.style.setProperty('pointer-events', 'none', 'important');
+            let draggingRow = row;
+            let lastOverIdx = rows.indexOf(row);
+            function onMouseMove(ev) {
+              // Clamp Y to timeline
+              let y = Math.max(timelineRect.top, Math.min(ev.clientY - offsetY, timelineRect.bottom - dotRect.height));
+              ghost.style.top = `${y}px`;
+              // Find which dot the ghost is over
+              let ghostCenterY = y + dotRect.height / 2;
+              let overIdx = lastOverIdx;
+              for (let i = 0; i < rows.length; i++) {
+                if (rows[i] === draggingRow) continue;
+                const otherDot = rows[i].querySelector('.drag-handle');
+                const otherDotRect = otherDot.getBoundingClientRect();
+                const otherCenterY = otherDotRect.top + otherDotRect.height / 2;
+                // If dragging down and ghost crosses below another dot's center
+                if (lastOverIdx < i && ghostCenterY > otherCenterY) {
+                  overIdx = i;
+                }
+                // If dragging up and ghost crosses above another dot's center
+                if (lastOverIdx > i && ghostCenterY < otherCenterY) {
+                  overIdx = i;
+                }
+              }
+              if (overIdx !== lastOverIdx) {
+                if (overIdx > lastOverIdx) {
+                  wrap.insertBefore(draggingRow, rows[overIdx].nextSibling);
+                } else {
+                  wrap.insertBefore(draggingRow, rows[overIdx]);
+                }
+                // Update rows array
+                rows.splice(lastOverIdx, 1);
+                rows.splice(overIdx, 0, draggingRow);
+                lastOverIdx = overIdx;
+              }
+            }
+            function onMouseUp() {
+              document.removeEventListener('mousemove', onMouseMove);
+              document.removeEventListener('mouseup', onMouseUp);
+              ghost.remove();
+              dot.style.setProperty('opacity', '', 'important');
+              dot.style.setProperty('pointer-events', '', 'important');
+              // Update contracts array and localStorage to match DOM order
+              const ids = Array.from(wrap.querySelectorAll('.timeline-row')).map(el => el.getAttribute('data-id'));
+              contracts = ids.map(id => contracts.find(c => c._id === id)).filter(Boolean);
+              localStorage.setItem('contractsOrder', JSON.stringify(ids));
+            }
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
           });
         });
       };
@@ -1349,16 +1543,6 @@
         }
       });
 
-      // Notifications click handler
-      const notificationsLink = document.getElementById('notificationsLink');
-      if (notificationsLink) {
-        notificationsLink.addEventListener('click', (e) => {
-          e.preventDefault();
-          location.hash = '#notifications';
-          showNotifications();
-        });
-      }
-
       // Helper to show empty state in contracts area
       function showNoNotificationsMessage(message = 'No notifications') {
         const wrap = document.getElementById('contractsList');
@@ -1389,41 +1573,6 @@
         }
       });
 
-      // On page load, if hash is #notifications, show notifications automatically
-      async function showNotifications() {
-        try {
-          const response = await fetch('/unverifiedContracts', {
-            headers: { Authorization: 'Bearer ' + token },
-          });
-          if (!response.ok) throw new Error('Failed to fetch unverified contracts');
-          const data = await response.json();
-          const { foundContracts = [] } = data;
-          if (!Array.isArray(foundContracts) || foundContracts.length === 0) {
-            showNoNotificationsMessage('No new notifications');
-          } else {
-            renderContracts(foundContracts, true);
-          }
-        } catch (err) {
-          showNoNotificationsMessage('No new notifications');
-        }
-      }
-      if (window.location.hash === '#notifications') {
-        showNotifications();
-      }
-
-      // Custom tooltip for credibility circle
-      const credScore = document.getElementById('headerCredScore');
-      const credTooltip = document.getElementById('credTooltip');
-      credScore.addEventListener('mouseenter', (e) => {
-        const rect = credScore.getBoundingClientRect();
-        credTooltip.style.left = (rect.left + rect.width/2 - credTooltip.offsetWidth/2 + window.scrollX - 50) + 'px';
-        credTooltip.style.top = (rect.bottom + 8 + window.scrollY) + 'px';
-        credTooltip.style.display = 'block';
-      });
-      credScore.addEventListener('mouseleave', () => {
-        credTooltip.style.display = 'none';
-      });
-
       // Show notification dot if there are notifications
       async function updateNotificationDot() {
         try {
@@ -1443,6 +1592,11 @@
         }
       }
       updateNotificationDot();
+
+      if (sessionStorage.getItem('reloadDashboardOnBack')) {
+        sessionStorage.removeItem('reloadDashboardOnBack');
+        window.location.reload();
+      }
     </script>
   </body>
 </html>
