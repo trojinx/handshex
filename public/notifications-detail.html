@@ -518,7 +518,21 @@
           </div>
           ${verifyBtn}
         </div>
-      `
+      `;
+      // Add event listener for verify button if it exists
+      const verifyButton = document.getElementById('verifyBtn');
+      if (verifyButton) {
+        verifyButton.addEventListener('click', function() {
+          window.location.href = `warning.html?id=${encodeURIComponent(contract._id)}`;
+        });
+      }
+      // Add event listener for back button if it exists
+      const backButton = document.getElementById('backBtn');
+      if (backButton) {
+        backButton.addEventListener('click', function() {
+          window.history.back();
+        });
+      }
     }
     fetchContract();
   </script>

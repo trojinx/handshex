@@ -554,9 +554,7 @@
             resultMessage.innerHTML =
               '<span class="success-message">Contract verified successfully!</span>';
             setTimeout(() => {
-              window.location.href = `notifications-detail.html?id=${encodeURIComponent(
-                contractId
-              )}`;
+              window.location.href = 'dashboard.html';
             }, 1500);
           } else {
             resultMessage.innerHTML =
