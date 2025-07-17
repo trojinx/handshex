@@ -1,4 +1,4 @@
-import { Contract } from "../schema/contract.schema.js";
+import { Contract } from '../schema/contract.schema.js';
 
 async function myContracts(req, res) {
   //fetch userid from JWT
@@ -17,7 +17,7 @@ async function myContracts(req, res) {
         foundContracts,
       });
     } else if (foundContracts.length == 0) {
-      return res.status(400).send("No contracts found!");
+      return res.status(400).send('No contracts found!');
     }
   } catch (error) {
     return res.status(500).send(`Internal server error: ${error}`);

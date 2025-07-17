@@ -1,5 +1,5 @@
 <!-- link notifications-detail.html and this page -->
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -287,7 +287,9 @@
         margin-left: 1.2rem;
         margin-right: 0.5rem;
         letter-spacing: 0.5px;
-        transition: color 0.2s, text-decoration 0.2s;
+        transition:
+          color 0.2s,
+          text-decoration 0.2s;
         padding: 0;
         border-radius: 0;
         background: none;
@@ -390,89 +392,89 @@
     </div>
     <script type="module">
       const $ = (s) => document.querySelector(s);
-      const token = localStorage.getItem("token");
-      if (!token) location.replace("signIn.html");
+      const token = localStorage.getItem('token');
+      if (!token) location.replace('signIn.html');
       (async () => {
         try {
-          const r = await fetch("/myProfile", {
-            headers: { Authorization: "Bearer " + token },
+          const r = await fetch('/myProfile', {
+            headers: { Authorization: 'Bearer ' + token },
           });
           if (!r.ok) throw new Error();
           const { foundProfile: u } = await r.json();
-          $("#profileUsername").textContent = u.username;
-          $("#profileEmail").textContent = u.email;
-          $("#profileAvatar").textContent = u.username[0].toUpperCase();
+          $('#profileUsername').textContent = u.username;
+          $('#profileEmail').textContent = u.email;
+          $('#profileAvatar').textContent = u.username[0].toUpperCase();
           const score =
-            typeof u.credibilityScore === "number" ? u.credibilityScore : 0;
+            typeof u.credibilityScore === 'number' ? u.credibilityScore : 0;
           const percent = Math.max(0, Math.min(100, score));
           const headerCircle = document.querySelector(
-            "#headerCredScore .cred-fg"
+            '#headerCredScore .cred-fg'
           );
-          const headerText = document.getElementById("headerCredText");
+          const headerText = document.getElementById('headerCredText');
           headerText.textContent = percent;
           const radius = 18;
           const circumference = 2 * Math.PI * radius;
-          headerCircle.setAttribute("stroke-dasharray", circumference);
-          headerCircle.setAttribute("stroke-dashoffset", circumference);
+          headerCircle.setAttribute('stroke-dasharray', circumference);
+          headerCircle.setAttribute('stroke-dashoffset', circumference);
           setTimeout(() => {
             headerCircle.style.transition =
-              "stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1)";
+              'stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1)';
             headerCircle.setAttribute(
-              "stroke-dashoffset",
+              'stroke-dashoffset',
               circumference * (1 - percent / 100)
             );
           }, 200);
         } catch {
-          location.replace("signIn.html");
+          location.replace('signIn.html');
         }
       })();
       // Profile dropdown logic
-      const profile = $("#profile");
-      const dropdown = $("#profileDropdown");
-      profile.addEventListener("click", (e) => {
+      const profile = $('#profile');
+      const dropdown = $('#profileDropdown');
+      profile.addEventListener('click', (e) => {
         e.stopPropagation();
-        profile.classList.toggle("open");
-        dropdown.style.display = profile.classList.contains("open")
-          ? "block"
-          : "none";
+        profile.classList.toggle('open');
+        dropdown.style.display = profile.classList.contains('open')
+          ? 'block'
+          : 'none';
         const rect = profile.getBoundingClientRect();
-        dropdown.style.top = rect.bottom + 8 + "px";
-        dropdown.style.right = window.innerWidth - rect.right + 8 + "px";
+        dropdown.style.top = rect.bottom + 8 + 'px';
+        dropdown.style.right = window.innerWidth - rect.right + 8 + 'px';
       });
-      document.addEventListener("mousedown", (e) => {
+      document.addEventListener('mousedown', (e) => {
         if (!profile.contains(e.target) && !dropdown.contains(e.target)) {
-          profile.classList.remove("open");
-          dropdown.style.display = "none";
+          profile.classList.remove('open');
+          dropdown.style.display = 'none';
         }
       });
       // Credibility tooltip logic
-      const credScore = $("#headerCredScore");
-      const credTooltip = $("#credTooltip");
-      credScore.addEventListener("mouseenter", (e) => {
-        credTooltip.style.display = "block";
+      const credScore = $('#headerCredScore');
+      const credTooltip = $('#credTooltip');
+      credScore.addEventListener('mouseenter', (e) => {
+        credTooltip.style.display = 'block';
         const rect = credScore.getBoundingClientRect();
-        credTooltip.style.top = rect.bottom + 8 + "px";
-        credTooltip.style.left = rect.left + "px";
+        credTooltip.style.top = rect.bottom + 8 + 'px';
+        credTooltip.style.left = rect.left + 'px';
       });
-      credScore.addEventListener("mouseleave", () => {
-        credTooltip.style.display = "none";
+      credScore.addEventListener('mouseleave', () => {
+        credTooltip.style.display = 'none';
       });
       // Notification dot logic
       async function updateNotificationDot() {
         try {
-          const res = await fetch("/unverifiedContracts", {
-            headers: { Authorization: "Bearer " + token },
+          const res = await fetch('/unverifiedContracts', {
+            headers: { Authorization: 'Bearer ' + token },
           });
           if (!res.ok) throw new Error();
           const { foundContracts = [] } = await res.json();
-          const dot = document.getElementById("notificationDot");
+          const dot = document.getElementById('notificationDot');
           if (Array.isArray(foundContracts) && foundContracts.length > 0) {
-            dot.style.display = "block";
+            dot.style.display = 'block';
           } else {
-            dot.style.display = "none";
+            dot.style.display = 'none';
           }
         } catch {
-          document.getElementById("notificationDot").style.display = "none";
+          document.getElementById('notificationDot').style.display = 'none';
         }
       }
       updateNotificationDot();
@@ -480,15 +482,15 @@
         const url = new URL(window.location.href);
         return url.searchParams.get(name);
       }
-      const contractId = getQueryParam("id");
-      const contractSummary = document.getElementById("contractSummary");
-      const proceedBtn = document.getElementById("proceedBtn");
-      const backBtn = document.getElementById("backBtn");
-      const resultMessage = document.getElementById("resultMessage");
+      const contractId = getQueryParam('id');
+      const contractSummary = document.getElementById('contractSummary');
+      const proceedBtn = document.getElementById('proceedBtn');
+      const backBtn = document.getElementById('backBtn');
+      const resultMessage = document.getElementById('resultMessage');
       let contract;
       async function fetchContract() {
         if (!contractId) {
-          contractSummary.textContent = "No contract ID provided.";
+          contractSummary.textContent = 'No contract ID provided.';
           proceedBtn.disabled = true;
           return;
         }
@@ -496,59 +498,62 @@
           const res = await fetch(
             `/showSingleContract?id=${encodeURIComponent(contractId)}`,
             {
-              headers: { Authorization: "Bearer " + token },
+              headers: { Authorization: 'Bearer ' + token },
             }
           );
           if (!res.ok) throw new Error();
           const { foundContract } = await res.json();
           contract = foundContract;
           contractSummary.innerHTML = `
-            <b>${contract.contractName || "Untitled Contract"}</b><br/>
+            <b>${contract.contractName || 'Untitled Contract'}</b><br/>
             <span style='color:#e0e0e0;'>Created: ${
               contract.createdAt
                 ? new Date(contract.createdAt).toLocaleDateString()
-                : "N/A"
+                : 'N/A'
             } • Expires: ${
-            contract.expiryDate
-              ? new Date(contract.expiryDate).toLocaleDateString()
-              : "N/A"
-          }</span><br/><br/>
-            <b>Maker:</b> ${contract.contractMakerUsername || "N/A"}<br/>
-            <b>Receiver:</b> ${contract.contractRecieverUsername || "N/A"}<br/>
+              contract.expiryDate
+                ? new Date(contract.expiryDate).toLocaleDateString()
+                : 'N/A'
+            }</span><br/><br/>
+            <b>Maker:</b> ${contract.contractMakerUsername || 'N/A'}<br/>
+            <b>Receiver:</b> ${contract.contractRecieverUsername || 'N/A'}<br/>
             <b>Status:</b> <span style='color:${
               (
                 contract.contractStatus ||
                 contract.status ||
-                ""
-              ).toLowerCase() === "active"
-                ? "#4caf50"
+                ''
+              ).toLowerCase() === 'active'
+                ? '#4caf50'
                 : (
-                    contract.contractStatus ||
-                    contract.status ||
-                    ""
-                  ).toLowerCase() === "expired"
-                ? "#ff5252"
-                : "#fff"
-            };'>${contract.contractStatus || contract.status || "N/A"}</span>
+                      contract.contractStatus ||
+                      contract.status ||
+                      ''
+                    ).toLowerCase() === 'expired'
+                  ? '#ff5252'
+                  : '#fff'
+            };'>${contract.contractStatus || contract.status || 'N/A'}</span>
           `;
         } catch {
-          contractSummary.textContent = "Failed to load contract details.";
+          contractSummary.textContent = 'Failed to load contract details.';
           proceedBtn.disabled = true;
         }
       }
       fetchContract();
       proceedBtn.onclick = async () => {
         proceedBtn.disabled = true;
-        proceedBtn.textContent = "Verifying...";
-        resultMessage.textContent = "";
+        proceedBtn.textContent = 'Verifying...';
+        resultMessage.textContent = '';
         try {
-          const res = await fetch("/verifyContract", {
-            method: "PATCH",
+          const res = await fetch('/verifyContract', {
+            method: 'PATCH',
             headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + token,
+              'Content-Type': 'application/json',
+              Authorization: 'Bearer ' + token,
             },
-            body: JSON.stringify({ contractId, statusUpdate: "Active" }),
+            body: JSON.stringify({
+              contractId,
+              statusUpdate: 'Active',
+            }),
           });
           if (res.ok) {
             resultMessage.innerHTML =
@@ -560,13 +565,13 @@
             resultMessage.innerHTML =
               '<span class="error-message">Failed to verify contract.</span>';
             proceedBtn.disabled = false;
-            proceedBtn.textContent = "Proceed";
+            proceedBtn.textContent = 'Proceed';
           }
         } catch {
           resultMessage.innerHTML =
             '<span class="error-message">Failed to verify contract.</span>';
           proceedBtn.disabled = false;
-          proceedBtn.textContent = "Proceed";
+          proceedBtn.textContent = 'Proceed';
         }
       };
       backBtn.onclick = () => {

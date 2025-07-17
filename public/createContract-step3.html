@@ -1,10 +1,16 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <title>Handshex | Create Contract (Step 3)</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
       :root {
         --bg-from: #181818;
@@ -18,7 +24,8 @@
         --tr: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         --header-h: 72px;
       }
-      html, body {
+      html,
+      body {
         /* overflow: hidden; */
         overflow-x: hidden;
       }
@@ -80,7 +87,7 @@
         background: var(--glass);
         border: 1px solid var(--glass-border);
         border-radius: var(--radius);
-        box-shadow: 0 2px 24px 0 rgba(0,0,0,0.10);
+        box-shadow: 0 2px 24px 0 rgba(0, 0, 0, 0.1);
         padding: 2.5rem 2rem 2rem 2rem;
         backdrop-filter: blur(8px);
         display: flex;
@@ -125,7 +132,7 @@
       .calendar-section {
         width: 260px;
         max-width: 100%;
-        background: rgba(255,255,255,0.07);
+        background: rgba(255, 255, 255, 0.07);
         border: 1px solid var(--glass-border);
         border-radius: var(--radius);
         padding: 1.2rem 1rem 1rem 1rem;
@@ -215,7 +222,7 @@
         border: 2px solid var(--accent);
       }
       .calendar-day.has-event::after {
-        content: "";
+        content: '';
         position: absolute;
         bottom: 2px;
         left: 50%;
@@ -237,7 +244,10 @@
         background: linear-gradient(90deg, #232526 0%, #414345 40%, #111 100%);
         color: #fff;
         box-shadow: 0 2px 8px 0 rgba(191, 161, 74, 0.12);
-        transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+        transition:
+          background 0.2s,
+          color 0.2s,
+          box-shadow 0.2s;
         opacity: 0.7;
       }
       .btn-next.enabled {
@@ -273,8 +283,10 @@
         border-radius: 50%;
         background: linear-gradient(90deg, #bfa14a 0%, #ffe082 100%);
         opacity: 0.35;
-        transition: opacity 0.2s, box-shadow 0.2s;
-        box-shadow: 0 1px 4px 0 rgba(191, 161, 74, 0.10);
+        transition:
+          opacity 0.2s,
+          box-shadow 0.2s;
+        box-shadow: 0 1px 4px 0 rgba(191, 161, 74, 0.1);
       }
       .dot.active {
         opacity: 1;
@@ -307,18 +319,38 @@
       <div class="brand">Handshex</div>
     </header>
     <div class="center-wrap">
-      <div class="container" style="position:relative; margin: 0 auto;">
+      <div class="container" style="position: relative; margin: 0 auto">
         <h1>Describe your contract & set expiry</h1>
         <form id="step3Form" autocomplete="off" onsubmit="return false;">
           <div>
-            <textarea id="contractBody" name="contractBody" required maxlength="2000" placeholder="Describe your contract (e.g. 'I will deliver the project by 30th June...')"></textarea>
+            <textarea
+              id="contractBody"
+              name="contractBody"
+              required
+              maxlength="2000"
+              placeholder="Describe your contract (e.g. 'I will deliver the project by 30th June...')"
+            ></textarea>
           </div>
           <div class="calendar-section">
             <div class="calendar-header">
               <span id="calendarMonthYear">Month Year</span>
               <div class="calendar-nav">
-                <button type="button" class="calendar-nav-btn" id="prevMonth" aria-label="Previous month">‹</button>
-                <button type="button" class="calendar-nav-btn" id="nextMonth" aria-label="Next month">›</button>
+                <button
+                  type="button"
+                  class="calendar-nav-btn"
+                  id="prevMonth"
+                  aria-label="Previous month"
+                >
+                  ‹
+                </button>
+                <button
+                  type="button"
+                  class="calendar-nav-btn"
+                  id="nextMonth"
+                  aria-label="Next month"
+                >
+                  ›
+                </button>
               </div>
             </div>
             <div class="calendar-weekdays">
@@ -333,7 +365,9 @@
             <div class="calendar-days" id="calendarDays"></div>
           </div>
           <input type="hidden" id="expiryDate" name="expiryDate" />
-          <button type="submit" class="btn-next" id="nextBtn" disabled>Next</button>
+          <button type="submit" class="btn-next" id="nextBtn" disabled>
+            Next
+          </button>
           <div class="message" id="formMessage"></div>
         </form>
         <div class="progress-dots">
@@ -360,33 +394,47 @@
           const year = this.currentDate.getFullYear();
           const month = this.currentDate.getMonth();
           const monthNames = [
-            "January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"
+            'January',
+            'February',
+            'March',
+            'April',
+            'May',
+            'June',
+            'July',
+            'August',
+            'September',
+            'October',
+            'November',
+            'December',
           ];
-          document.getElementById("calendarMonthYear").textContent = `${monthNames[month]} ${year}`;
+          document.getElementById('calendarMonthYear').textContent =
+            `${monthNames[month]} ${year}`;
           const firstDay = new Date(year, month, 1);
           const lastDay = new Date(year, month + 1, 0);
           const startDate = new Date(firstDay);
           startDate.setDate(startDate.getDate() - firstDay.getDay());
-          const calendarDays = document.getElementById("calendarDays");
-          calendarDays.innerHTML = "";
+          const calendarDays = document.getElementById('calendarDays');
+          calendarDays.innerHTML = '';
           for (let i = 0; i < 42; i++) {
             const date = new Date(startDate);
             date.setDate(startDate.getDate() + i);
-            const dayElement = document.createElement("div");
-            dayElement.className = "calendar-day";
+            const dayElement = document.createElement('div');
+            dayElement.className = 'calendar-day';
             dayElement.textContent = date.getDate();
             if (date.getMonth() !== month) {
-              dayElement.classList.add("other-month");
+              dayElement.classList.add('other-month');
             }
             const today = new Date();
             if (date.toDateString() === today.toDateString()) {
-              dayElement.classList.add("today");
+              dayElement.classList.add('today');
             }
-            if (this.selectedDate && date.toDateString() === this.selectedDate.toDateString()) {
-              dayElement.classList.add("selected");
+            if (
+              this.selectedDate &&
+              date.toDateString() === this.selectedDate.toDateString()
+            ) {
+              dayElement.classList.add('selected');
             }
-            dayElement.addEventListener("click", () => {
+            dayElement.addEventListener('click', () => {
               this.selectDate(date);
             });
             calendarDays.appendChild(dayElement);
@@ -396,15 +444,17 @@
           this.selectedDate = date;
           this.renderCalendar();
           // Set hidden input value
-          document.getElementById('expiryDate').value = date.toISOString().split('T')[0];
+          document.getElementById('expiryDate').value = date
+            .toISOString()
+            .split('T')[0];
           checkFormValidity();
         }
         bindEvents() {
-          document.getElementById("prevMonth").addEventListener("click", () => {
+          document.getElementById('prevMonth').addEventListener('click', () => {
             this.currentDate.setMonth(this.currentDate.getMonth() - 1);
             this.renderCalendar();
           });
-          document.getElementById("nextMonth").addEventListener("click", () => {
+          document.getElementById('nextMonth').addEventListener('click', () => {
             this.currentDate.setMonth(this.currentDate.getMonth() + 1);
             this.renderCalendar();
           });
@@ -427,20 +477,22 @@
       }
       contractBody.addEventListener('input', checkFormValidity);
       // No need to listen to expiryDate, calendar does it
-      document.getElementById('step3Form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        if (!contractBody.value.trim()) {
-          formMessage.textContent = 'Please enter a contract description.';
-          return;
-        }
-        if (!expiryDate.value) {
-          formMessage.textContent = 'Please select an expiry date.';
-          return;
-        }
-        localStorage.setItem('createContractBody', contractBody.value.trim());
-        localStorage.setItem('createContractExpiryDate', expiryDate.value);
-        window.location.href = 'createContract-step4.html';
-      });
+      document
+        .getElementById('step3Form')
+        .addEventListener('submit', function (e) {
+          e.preventDefault();
+          if (!contractBody.value.trim()) {
+            formMessage.textContent = 'Please enter a contract description.';
+            return;
+          }
+          if (!expiryDate.value) {
+            formMessage.textContent = 'Please select an expiry date.';
+            return;
+          }
+          localStorage.setItem('createContractBody', contractBody.value.trim());
+          localStorage.setItem('createContractExpiryDate', expiryDate.value);
+          window.location.href = 'createContract-step4.html';
+        });
     </script>
   </body>
-</html> 
+</html>

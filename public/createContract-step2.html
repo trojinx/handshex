@@ -1,10 +1,16 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <title>Handshex | Create Contract (Step 2)</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
       :root {
         --bg-from: #181818;
@@ -18,7 +24,8 @@
         --tr: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         --header-h: 72px;
       }
-      html, body {
+      html,
+      body {
         overflow: hidden;
       }
       body {
@@ -74,7 +81,7 @@
         background: var(--glass);
         border: 1px solid var(--glass-border);
         border-radius: var(--radius);
-        box-shadow: 0 2px 24px 0 rgba(0,0,0,0.10);
+        box-shadow: 0 2px 24px 0 rgba(0, 0, 0, 0.1);
         padding: 2.5rem 2rem 2rem 2rem;
         backdrop-filter: blur(8px);
         display: flex;
@@ -142,7 +149,7 @@
         overflow-y: auto;
       }
       .user-card {
-        background: rgba(255,255,255,0.07);
+        background: rgba(255, 255, 255, 0.07);
         border: 1.5px solid var(--glass-border);
         border-radius: 0.8em;
         padding: 0.8rem 1.1rem;
@@ -151,12 +158,15 @@
         display: flex;
         flex-direction: column;
         cursor: pointer;
-        transition: border 0.18s, background 0.18s;
+        transition:
+          border 0.18s,
+          background 0.18s;
         position: relative;
       }
-      .user-card.selected, .user-card:hover {
+      .user-card.selected,
+      .user-card:hover {
         border: 2px solid var(--accent);
-        background: rgba(191, 161, 74, 0.10);
+        background: rgba(191, 161, 74, 0.1);
       }
       .user-card .username {
         font-weight: 700;
@@ -179,7 +189,10 @@
         background: linear-gradient(90deg, #232526 0%, #414345 40%, #111 100%);
         color: #fff;
         box-shadow: 0 2px 8px 0 rgba(191, 161, 74, 0.12);
-        transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+        transition:
+          background 0.2s,
+          color 0.2s,
+          box-shadow 0.2s;
         opacity: 0.7;
       }
       .btn-next.enabled {
@@ -215,8 +228,10 @@
         border-radius: 50%;
         background: linear-gradient(90deg, #bfa14a 0%, #ffe082 100%);
         opacity: 0.35;
-        transition: opacity 0.2s, box-shadow 0.2s;
-        box-shadow: 0 1px 4px 0 rgba(191, 161, 74, 0.10);
+        transition:
+          opacity 0.2s,
+          box-shadow 0.2s;
+        box-shadow: 0 1px 4px 0 rgba(191, 161, 74, 0.1);
       }
       .dot.active {
         opacity: 1;
@@ -240,15 +255,42 @@
       <div class="brand">Handshex</div>
     </header>
     <div class="center-wrap">
-      <div class="container" style="position:relative; margin: 0 auto;">
+      <div class="container" style="position: relative; margin: 0 auto">
         <h1>Who is this contract with?</h1>
         <form id="step2Form" autocomplete="off" onsubmit="return false;">
           <div class="search-row">
-            <input type="text" id="userSearch" name="userSearch" required maxlength="100" placeholder="Search by username or email..." />
-            <svg id="searchIcon" class="search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" stroke="#bfa14a" stroke-width="2" fill="none"/><line x1="16.5" y1="16.5" x2="21" y2="21" stroke="#bfa14a" stroke-width="2" stroke-linecap="round"/></svg>
+            <input
+              type="text"
+              id="userSearch"
+              name="userSearch"
+              required
+              maxlength="100"
+              placeholder="Search by username or email..."
+            />
+            <svg id="searchIcon" class="search-icon" viewBox="0 0 24 24">
+              <circle
+                cx="11"
+                cy="11"
+                r="7"
+                stroke="#bfa14a"
+                stroke-width="2"
+                fill="none"
+              />
+              <line
+                x1="16.5"
+                y1="16.5"
+                x2="21"
+                y2="21"
+                stroke="#bfa14a"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
           </div>
           <div class="results-list" id="resultsList"></div>
-          <button type="submit" class="btn-next" id="nextBtn" disabled>Next</button>
+          <button type="submit" class="btn-next" id="nextBtn" disabled>
+            Next
+          </button>
           <div class="message" id="formMessage"></div>
         </form>
         <div class="progress-dots">
@@ -267,7 +309,7 @@
       const formMessage = document.getElementById('formMessage');
       let selectedUser = null;
 
-      searchBtn.addEventListener('click', async function() {
+      searchBtn.addEventListener('click', async function () {
         const query = userSearch.value.trim();
         resultsList.innerHTML = '';
         formMessage.textContent = '';
@@ -275,7 +317,8 @@
         nextBtn.classList.remove('enabled');
         selectedUser = null;
         if (!query) {
-          formMessage.textContent = 'Please enter a username or email to search.';
+          formMessage.textContent =
+            'Please enter a username or email to search.';
           return;
         }
         const token = localStorage.getItem('token');
@@ -284,9 +327,12 @@
           return;
         }
         try {
-          const res = await fetch(`/searchUser?query=${encodeURIComponent(query)}`, {
-            headers: { 'Authorization': 'Bearer ' + token }
-          });
+          const res = await fetch(
+            `/searchUser?query=${encodeURIComponent(query)}`,
+            {
+              headers: { Authorization: 'Bearer ' + token },
+            }
+          );
           if (!res.ok) {
             const text = await res.text();
             formMessage.textContent = text;
@@ -298,12 +344,14 @@
             return;
           }
           resultsList.innerHTML = '';
-          foundUsers.forEach(user => {
+          foundUsers.forEach((user) => {
             const card = document.createElement('div');
             card.className = 'user-card';
             card.innerHTML = `<span class="username">${user.username}</span><span class="email">${user.email}</span>`;
             card.addEventListener('click', () => {
-              document.querySelectorAll('.user-card').forEach(c => c.classList.remove('selected'));
+              document
+                .querySelectorAll('.user-card')
+                .forEach((c) => c.classList.remove('selected'));
               card.classList.add('selected');
               selectedUser = user;
               nextBtn.disabled = false;
@@ -316,17 +364,25 @@
         }
       });
 
-      document.getElementById('step2Form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        if (!selectedUser) {
-          formMessage.textContent = 'Please select a user.';
-          return;
-        }
-        localStorage.setItem('createContractRecieverUsername', selectedUser.username);
-        localStorage.setItem('createContractRecieverEmail', selectedUser.email);
-        localStorage.setItem('createContractUser', selectedUser.email);
-        window.location.href = 'createContract-step3.html';
-      });
+      document
+        .getElementById('step2Form')
+        .addEventListener('submit', function (e) {
+          e.preventDefault();
+          if (!selectedUser) {
+            formMessage.textContent = 'Please select a user.';
+            return;
+          }
+          localStorage.setItem(
+            'createContractRecieverUsername',
+            selectedUser.username
+          );
+          localStorage.setItem(
+            'createContractRecieverEmail',
+            selectedUser.email
+          );
+          localStorage.setItem('createContractUser', selectedUser.email);
+          window.location.href = 'createContract-step3.html';
+        });
     </script>
   </body>
-</html> 
+</html>

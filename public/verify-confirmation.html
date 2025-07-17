@@ -1,107 +1,112 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Verify Contract</title>
-  <style>
-    body {
-      background: #181818;
-      color: #fff;
-      font-family: Inter, system-ui, sans-serif;
-      margin: 0;
-      padding: 0;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-    .container {
-      background: rgba(255,255,255,0.08);
-      border-radius: 1.2rem;
-      padding: 2.5rem 2.5rem 2rem 2.5rem;
-      box-shadow: 0 2px 14px rgba(0,0,0,0.25);
-      min-width: 320px;
-      max-width: 480px;
-      width: 100%;
-      text-align: center;
-    }
-    .warning {
-      color: #bfa14a;
-      font-size: 1.2rem;
-      margin-bottom: 2rem;
-      font-weight: 700;
-    }
-    .proceed-btn {
-      background: linear-gradient(90deg, #bfa14a 0%, #ffe082 100%);
-      color: #111;
-      border: none;
-      border-radius: 2em;
-      font-weight: 700;
-      font-size: 1.1rem;
-      padding: 0.9rem 2.2rem;
-      margin-top: 1.5rem;
-      cursor: pointer;
-      box-shadow: 0 2px 8px rgba(191, 161, 74, 0.18);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .proceed-btn:hover {
-      background: linear-gradient(90deg, #ffe082 0%, #bfa14a 100%);
-      color: #111;
-      box-shadow: 0 8px 24px 0 rgba(191, 161, 74, 0.35);
-      transform: translateY(-3px);
-    }
-    .status-msg {
-      margin-top: 1.5rem;
-      color: #bfa14a;
-      font-size: 1.1rem;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <div class="warning">
-      Warning: You are about to verify this contract. This process cannot be undone. Please read the contract carefully!
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Verify Contract</title>
+    <style>
+      body {
+        background: #181818;
+        color: #fff;
+        font-family: Inter, system-ui, sans-serif;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      .container {
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 1.2rem;
+        padding: 2.5rem 2.5rem 2rem 2.5rem;
+        box-shadow: 0 2px 14px rgba(0, 0, 0, 0.25);
+        min-width: 320px;
+        max-width: 480px;
+        width: 100%;
+        text-align: center;
+      }
+      .warning {
+        color: #bfa14a;
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+        font-weight: 700;
+      }
+      .proceed-btn {
+        background: linear-gradient(90deg, #bfa14a 0%, #ffe082 100%);
+        color: #111;
+        border: none;
+        border-radius: 2em;
+        font-weight: 700;
+        font-size: 1.1rem;
+        padding: 0.9rem 2.2rem;
+        margin-top: 1.5rem;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(191, 161, 74, 0.18);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .proceed-btn:hover {
+        background: linear-gradient(90deg, #ffe082 0%, #bfa14a 100%);
+        color: #111;
+        box-shadow: 0 8px 24px 0 rgba(191, 161, 74, 0.35);
+        transform: translateY(-3px);
+      }
+      .status-msg {
+        margin-top: 1.5rem;
+        color: #bfa14a;
+        font-size: 1.1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="warning">
+        Warning: You are about to verify this contract. This process cannot be
+        undone. Please read the contract carefully!
+      </div>
+      <button id="proceedBtn" class="proceed-btn">Proceed</button>
+      <div id="statusMsg" class="status-msg"></div>
     </div>
-    <button id="proceedBtn" class="proceed-btn">Proceed</button>
-    <div id="statusMsg" class="status-msg"></div>
-  </div>
-  <script>
-    const token = localStorage.getItem('token');
-    function getQueryParam(name) {
-      const url = new URL(window.location.href);
-      return url.searchParams.get(name);
-    }
-    const contractId = getQueryParam('id');
-    const proceedBtn = document.getElementById('proceedBtn');
-    const statusMsg = document.getElementById('statusMsg');
-    proceedBtn.addEventListener('click', async () => {
-      if (!contractId) {
-        statusMsg.textContent = 'No contract ID provided.';
-        return;
+    <script>
+      const token = localStorage.getItem('token');
+      function getQueryParam(name) {
+        const url = new URL(window.location.href);
+        return url.searchParams.get(name);
       }
-      proceedBtn.disabled = true;
-      statusMsg.textContent = 'Verifying...';
-      try {
-        const response = await fetch('/verifyContract', {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token
-          },
-          body: JSON.stringify({ contractId, statusUpdate: 'Active' })
-        });
-        if (!response.ok) throw new Error('Failed to verify contract');
-        statusMsg.textContent = 'Contract verified! Redirecting to dashboard...';
-        setTimeout(() => {
-          window.location.href = 'dashboard.html';
-        }, 1200);
-      } catch (err) {
-        statusMsg.textContent = 'Error verifying contract: ' + err.message;
-        proceedBtn.disabled = false;
-      }
-    });
-  </script>
-</body>
-</html> 
+      const contractId = getQueryParam('id');
+      const proceedBtn = document.getElementById('proceedBtn');
+      const statusMsg = document.getElementById('statusMsg');
+      proceedBtn.addEventListener('click', async () => {
+        if (!contractId) {
+          statusMsg.textContent = 'No contract ID provided.';
+          return;
+        }
+        proceedBtn.disabled = true;
+        statusMsg.textContent = 'Verifying...';
+        try {
+          const response = await fetch('/verifyContract', {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: 'Bearer ' + token,
+            },
+            body: JSON.stringify({
+              contractId,
+              statusUpdate: 'Active',
+            }),
+          });
+          if (!response.ok) throw new Error('Failed to verify contract');
+          statusMsg.textContent =
+            'Contract verified! Redirecting to dashboard...';
+          setTimeout(() => {
+            window.location.href = 'dashboard.html';
+          }, 1200);
+        } catch (err) {
+          statusMsg.textContent = 'Error verifying contract: ' + err.message;
+          proceedBtn.disabled = false;
+        }
+      });
+    </script>
+  </body>
+</html>

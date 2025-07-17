@@ -1,10 +1,16 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <title>Handshex | Create Contract (Step 4)</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
       :root {
         --bg-from: #181818;
@@ -18,7 +24,8 @@
         --tr: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         --header-h: 72px;
       }
-      html, body {
+      html,
+      body {
         overflow-x: hidden;
       }
       body {
@@ -76,7 +83,7 @@
         background: var(--glass);
         border: 1px solid var(--glass-border);
         border-radius: var(--radius);
-        box-shadow: 0 2px 24px 0 rgba(0,0,0,0.10);
+        box-shadow: 0 2px 24px 0 rgba(0, 0, 0, 0.1);
         padding: 2.5rem 2rem 2rem 2rem;
         backdrop-filter: blur(8px);
         display: flex;
@@ -94,7 +101,7 @@
       }
       .summary {
         width: 100%;
-        background: rgba(255,255,255,0.07);
+        background: rgba(255, 255, 255, 0.07);
         border: 1px solid var(--glass-border);
         border-radius: var(--radius);
         padding: 1.2rem 1rem 1rem 1rem;
@@ -135,7 +142,10 @@
         background: linear-gradient(90deg, #232526 0%, #414345 40%, #111 100%);
         color: #fff;
         box-shadow: 0 2px 8px 0 rgba(191, 161, 74, 0.12);
-        transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+        transition:
+          background 0.2s,
+          color 0.2s,
+          box-shadow 0.2s;
       }
       .btn-create:disabled {
         cursor: not-allowed;
@@ -166,8 +176,10 @@
         border-radius: 50%;
         background: linear-gradient(90deg, #bfa14a 0%, #ffe082 100%);
         opacity: 0.35;
-        transition: opacity 0.2s, box-shadow 0.2s;
-        box-shadow: 0 1px 4px 0 rgba(191, 161, 74, 0.10);
+        transition:
+          opacity 0.2s,
+          box-shadow 0.2s;
+        box-shadow: 0 1px 4px 0 rgba(191, 161, 74, 0.1);
       }
       .dot.active {
         opacity: 1;
@@ -191,7 +203,7 @@
       <div class="brand">Handshex</div>
     </header>
     <div class="center-wrap">
-      <div class="container" style="position:relative; margin: 0 auto;">
+      <div class="container" style="position: relative; margin: 0 auto">
         <h1>Confirm your contract</h1>
         <form id="step4Form" autocomplete="off" onsubmit="return false;">
           <div class="summary">
@@ -212,7 +224,9 @@
               <span class="summary-value" id="summaryExpiry"></span>
             </div>
           </div>
-          <button type="submit" class="btn-create" id="createBtn">Create Contract</button>
+          <button type="submit" class="btn-create" id="createBtn">
+            Create Contract
+          </button>
           <div class="message" id="formMessage"></div>
         </form>
         <div class="progress-dots">
@@ -237,28 +251,30 @@
       const form = document.getElementById('step4Form');
       const createBtn = document.getElementById('createBtn');
       const formMessage = document.getElementById('formMessage');
-      form.addEventListener('submit', async function(e) {
+      form.addEventListener('submit', async function (e) {
         e.preventDefault();
         createBtn.disabled = true;
         formMessage.textContent = 'Creating contract...';
         try {
           const jwt = localStorage.getItem('token');
           const contractName = localStorage.getItem('createContractName') || '';
-          const contractRecieverEmail = localStorage.getItem('createContractUser') || '';
+          const contractRecieverEmail =
+            localStorage.getItem('createContractUser') || '';
           const contractBody = localStorage.getItem('createContractBody') || '';
-          const expiryDate = localStorage.getItem('createContractExpiryDate') || '';
+          const expiryDate =
+            localStorage.getItem('createContractExpiryDate') || '';
           const res = await fetch('/createContract', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              ...(jwt ? { 'Authorization': 'Bearer ' + jwt } : {}),
+              ...(jwt ? { Authorization: 'Bearer ' + jwt } : {}),
             },
             body: JSON.stringify({
               contractName,
               contractRecieverEmail,
               expiryDate,
-              contractBody
-            })
+              contractBody,
+            }),
           });
           let data = {};
           try {
@@ -266,16 +282,21 @@
           } catch (jsonErr) {}
           if (res.ok) {
             formMessage.style.color = '#bfa14a';
-            formMessage.textContent = 'Your contract will be visible on the dashboard once the receiver has verified it.';
+            formMessage.textContent =
+              'Your contract will be visible on the dashboard once the receiver has verified it.';
             if (data.foundContract && data.foundContract._id) {
-              localStorage.setItem('newlyCreatedContractId', data.foundContract._id);
+              localStorage.setItem(
+                'newlyCreatedContractId',
+                data.foundContract._id
+              );
             }
             setTimeout(() => {
               window.location.href = 'dashboard.html';
             }, 2000);
           } else {
             formMessage.style.color = '#ff5252';
-            formMessage.textContent = data.message || `Failed to create contract. (${res.status})`;
+            formMessage.textContent =
+              data.message || `Failed to create contract. (${res.status})`;
             createBtn.disabled = false;
           }
         } catch (err) {
@@ -286,4 +307,4 @@
       });
     </script>
   </body>
-</html> 
+</html>

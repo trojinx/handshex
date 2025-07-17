@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import { User } from "./user.schema.js";
+import mongoose from 'mongoose';
+import { User } from './user.schema.js';
 const contractSchema = new mongoose.Schema(
   {
     contractName: {
@@ -17,12 +17,12 @@ const contractSchema = new mongoose.Schema(
     },
     contractMaker: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
       required: true,
     },
     contractReciever: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
       required: true,
     },
     contractMakerEmail: {
@@ -39,11 +39,11 @@ const contractSchema = new mongoose.Schema(
     },
     contractStatus: {
       type: String,
-      enum: ["Active", "Not Verified", "Expired"],
+      enum: ['Active', 'Not Verified', 'Expired'],
       required: true,
-      default: "Not Verified",
+      default: 'Not Verified',
     },
   },
   { timestamps: true }
 );
-export const Contract = new mongoose.model("Contract", contractSchema);
+export const Contract = new mongoose.model('Contract', contractSchema);

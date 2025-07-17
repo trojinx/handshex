@@ -1,10 +1,13 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <title>Handshex | Contract Details</title>
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
       /* ===== TOKENS (copied from landing page palette) ===== */
       :root {
@@ -19,7 +22,11 @@
         --tr: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         --header-h: 72px;
       }
-      *, *::before, *::after { box-sizing: border-box; }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
       body {
         margin: 0;
         min-height: 100vh;
@@ -153,16 +160,18 @@
         background: var(--glass);
         border: 1px solid var(--glass-border);
         border-radius: var(--radius);
-        box-shadow: 0 2px 24px 0 rgba(0,0,0,0.10);
+        box-shadow: 0 2px 24px 0 rgba(0, 0, 0, 0.1);
         padding: 2.5rem 2rem 2rem 2rem;
         backdrop-filter: blur(8px);
         animation: scaleIn 0.8s ease-out 0.4s both;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease;
       }
 
       .container:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 32px 0 rgba(0,0,0,0.15);
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
       }
 
       .contract-title {
@@ -171,7 +180,9 @@
         color: var(--accent);
         margin-bottom: 0.5rem;
         animation: fadeInUp 0.6s ease-out 0.6s both;
-        transition: color 0.3s ease, text-shadow 0.3s ease;
+        transition:
+          color 0.3s ease,
+          text-shadow 0.3s ease;
       }
 
       .contract-title:hover {
@@ -192,9 +203,15 @@
         transition: transform 0.3s ease;
       }
 
-      .contract-section:nth-child(3) { animation-delay: 0.8s; }
-      .contract-section:nth-child(4) { animation-delay: 0.9s; }
-      .contract-section:nth-child(5) { animation-delay: 1.0s; }
+      .contract-section:nth-child(3) {
+        animation-delay: 0.8s;
+      }
+      .contract-section:nth-child(4) {
+        animation-delay: 0.9s;
+      }
+      .contract-section:nth-child(5) {
+        animation-delay: 1s;
+      }
 
       .contract-section:hover {
         transform: translateX(5px);
@@ -280,7 +297,12 @@
         left: -100%;
         width: 100%;
         height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
         transition: left 0.5s;
       }
 
@@ -400,7 +422,7 @@
         height: 36px;
         border-radius: 50%;
         background: linear-gradient(90deg, #bfa14a 0%, #ffe082 100%);
-        box-shadow: 0 2px 12px rgba(191,161,74,0.18);
+        box-shadow: 0 2px 12px rgba(191, 161, 74, 0.18);
         border: none;
         display: flex;
         flex-direction: column;
@@ -415,7 +437,7 @@
 
       .menu-btn:hover {
         transform: scale(1.1);
-        box-shadow: 0 4px 20px rgba(191,161,74,0.3);
+        box-shadow: 0 4px 20px rgba(191, 161, 74, 0.3);
       }
 
       .menu-btn span {
@@ -430,7 +452,8 @@
         transform: scale(1.2);
       }
 
-      .menu-btn:active, .menu-btn:focus {
+      .menu-btn:active,
+      .menu-btn:focus {
         outline: 2px solid #bfa14a;
       }
 
@@ -441,7 +464,7 @@
         left: auto;
         background: linear-gradient(90deg, #232526 0%, #111 100%);
         border-radius: 1.1em;
-        box-shadow: 0 4px 24px rgba(30,42,120,0.13);
+        box-shadow: 0 4px 24px rgba(30, 42, 120, 0.13);
         padding: 0.2rem 0.1rem 0.2rem 0.1rem;
         display: flex;
         flex-direction: column;
@@ -449,17 +472,17 @@
         z-index: 1200;
         min-width: 260px;
         align-items: stretch;
-        animation: fadeInMenu 0.3s cubic-bezier(0.4,0,0.2,1);
+        animation: fadeInMenu 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       }
 
       @keyframes fadeInMenu {
-        from { 
-          opacity: 0; 
-          transform: translateY(20px) scale(0.95); 
+        from {
+          opacity: 0;
+          transform: translateY(20px) scale(0.95);
         }
-        to { 
-          opacity: 1; 
-          transform: translateY(0) scale(1); 
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
         }
       }
 
@@ -478,7 +501,7 @@
         width: 100%;
         display: flex;
         align-items: center;
-        border-bottom: 1px solid rgba(255,255,255,0.08);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         position: relative;
         overflow: hidden;
       }
@@ -490,7 +513,12 @@
         left: -100%;
         width: 100%;
         height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(191, 161, 74, 0.1), transparent);
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(191, 161, 74, 0.1),
+          transparent
+        );
         transition: left 0.3s ease;
       }
 
@@ -498,8 +526,9 @@
         border-bottom: none;
       }
 
-      .menu-option:hover, .menu-option:focus {
-        background: rgba(255,255,255,0.08);
+      .menu-option:hover,
+      .menu-option:focus {
+        background: rgba(255, 255, 255, 0.08);
         transform: translateX(5px);
       }
 
@@ -519,7 +548,9 @@
       }
 
       @keyframes spin {
-        to { transform: rotate(360deg); }
+        to {
+          transform: rotate(360deg);
+        }
       }
 
       @media (max-width: 700px) {
@@ -572,7 +603,9 @@
         white-space: nowrap;
         opacity: 0;
         visibility: hidden;
-        transition: opacity 0.2s ease, visibility 0.2s ease;
+        transition:
+          opacity 0.2s ease,
+          visibility 0.2s ease;
         z-index: 1000;
         pointer-events: none;
       }
@@ -586,7 +619,9 @@
         border-bottom-color: rgba(0, 0, 0, 0.9);
         opacity: 0;
         visibility: hidden;
-        transition: opacity 0.2s ease, visibility 0.2s ease;
+        transition:
+          opacity 0.2s ease,
+          visibility 0.2s ease;
         z-index: 1000;
         pointer-events: none;
       }
@@ -632,7 +667,9 @@
         color: #111;
         background: #fff;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease;
         animation: scaleIn 0.6s ease-out 0.4s both;
       }
       .avatar:hover {
@@ -651,7 +688,7 @@
         padding: 1rem 1.2rem;
         display: none;
         z-index: 1001;
-        animation: fadeInMenu 0.3s cubic-bezier(0.4,0,0.2,1);
+        animation: fadeInMenu 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       }
       .profile.open .dropdown {
         display: block !important;
@@ -661,7 +698,8 @@
         .profile {
           gap: 0.5rem;
         }
-        .cred-score, .avatar {
+        .cred-score,
+        .avatar {
           width: 36px;
           height: 36px;
         }
@@ -690,7 +728,7 @@
         color: #fff;
         margin-top: 1.5em;
         margin-bottom: 1rem;
-        animation: fadeInUp 0.6s ease-out 1.0s both;
+        animation: fadeInUp 0.6s ease-out 1s both;
       }
       .status-dot {
         display: inline-block;
@@ -701,7 +739,7 @@
         background: #fff;
         opacity: 0;
         transform: scale(0.5);
-        animation: dot-pop-in 0.5s cubic-bezier(0.4,0,0.2,1) 0.2s forwards;
+        animation: dot-pop-in 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.2s forwards;
       }
       @keyframes dot-pop-in {
         to {
@@ -744,7 +782,8 @@
         .profile {
           gap: 0.5rem;
         }
-        .cred-score, .avatar {
+        .cred-score,
+        .avatar {
           width: 36px;
           height: 36px;
         }
@@ -769,7 +808,9 @@
         margin-left: 0;
         margin-right: 0.8rem;
         letter-spacing: 0.5px;
-        transition: color 0.2s, text-decoration 0.2s;
+        transition:
+          color 0.2s,
+          text-decoration 0.2s;
         padding: 0;
         border-radius: 0;
         background: none;
@@ -805,26 +846,43 @@
         }
       }
       @keyframes glow {
-        0% { box-shadow: 0 0 0px #bfa14a44; }
-        50% { box-shadow: 0 0 16px 4px #bfa14a88; }
-        100% { box-shadow: 0 0 0px #bfa14a44; }
+        0% {
+          box-shadow: 0 0 0px #bfa14a44;
+        }
+        50% {
+          box-shadow: 0 0 16px 4px #bfa14a88;
+        }
+        100% {
+          box-shadow: 0 0 0px #bfa14a44;
+        }
       }
       @keyframes shimmer {
-        0% { background-position: -40px 0; }
-        100% { background-position: 40px 0; }
+        0% {
+          background-position: -40px 0;
+        }
+        100% {
+          background-position: 40px 0;
+        }
       }
       .glow {
         animation: glow 1.6s ease-in-out 1.2s 2;
       }
       .status-dot.glow {
-        animation: dot-pop-in 0.5s 0.2s forwards, glow 1.6s 1.2s 2;
+        animation:
+          dot-pop-in 0.5s 0.2s forwards,
+          glow 1.6s 1.2s 2;
       }
       .animate-in {
         opacity: 1 !important;
         transform: none !important;
-        transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1), transform 0.7s cubic-bezier(0.4,0,0.2,1);
+        transition:
+          opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+          transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
       }
-      .contract-section, .contract-title, .contract-meta, .contract-status {
+      .contract-section,
+      .contract-title,
+      .contract-meta,
+      .contract-status {
         opacity: 0;
         transform: translateY(30px);
       }
@@ -836,11 +894,18 @@
         border-radius: 50%;
         border-top-color: var(--accent);
         animation: spin 1s ease-in-out infinite;
-        background: linear-gradient(90deg, #bfa14a22 25%, #fff0 50%, #bfa14a22 75%);
+        background: linear-gradient(
+          90deg,
+          #bfa14a22 25%,
+          #fff0 50%,
+          #bfa14a22 75%
+        );
         background-size: 40px 20px;
         background-repeat: no-repeat;
         background-position: -40px 0;
-        animation: spin 1s linear infinite, shimmer 1.2s linear infinite;
+        animation:
+          spin 1s linear infinite,
+          shimmer 1.2s linear infinite;
       }
     </style>
   </head>
@@ -848,131 +913,186 @@
     <!-- ===== Header ===== -->
     <header>
       <button class="btn-ico" id="sidebarToggle" aria-label="Open sidebar">
-        <svg width="20" height="20" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block">
-          <rect y="6" width="28" height="3.2" rx="1.6" fill="#fff"/>
-          <rect y="12.4" width="28" height="3.2" rx="1.6" fill="#fff"/>
-          <rect y="18.8" width="28" height="3.2" rx="1.6" fill="#fff"/>
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 28 28"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          style="display: block"
+        >
+          <rect y="6" width="28" height="3.2" rx="1.6" fill="#fff" />
+          <rect y="12.4" width="28" height="3.2" rx="1.6" fill="#fff" />
+          <rect y="18.8" width="28" height="3.2" rx="1.6" fill="#fff" />
         </svg>
       </button>
       <div class="brand">Handshex</div>
       <a href="dashboard.html" class="home-link">Home</a>
-      <span style="position:relative;display:inline-block;">
-        <a href="notifications.html" class="home-link" id="notificationsLink">Notifications</a>
-        <span id="notificationDot" style="display:none;position:absolute;top:-8px;right:10px;width:12px;height:12px;background:#bfa14a;border-radius:50%;box-shadow:0 0 6px #bfa14a;"></span>
+      <span style="position: relative; display: inline-block">
+        <a href="notifications.html" class="home-link" id="notificationsLink"
+          >Notifications</a
+        >
+        <span
+          id="notificationDot"
+          style="
+            display: none;
+            position: absolute;
+            top: -8px;
+            right: 10px;
+            width: 12px;
+            height: 12px;
+            background: #bfa14a;
+            border-radius: 50%;
+            box-shadow: 0 0 6px #bfa14a;
+          "
+        ></span>
       </span>
       <div class="profile" id="profile">
         <a href="#" class="upgrade-link">Upgrade to Max</a>
         <div class="cred-score" id="headerCredScore">
           <svg class="cred-svg">
             <circle class="cred-bg" cx="22" cy="22" r="18" />
-            <circle class="cred-fg" cx="22" cy="22" r="18" stroke-dasharray="0 113.1" />
+            <circle
+              class="cred-fg"
+              cx="22"
+              cy="22"
+              r="18"
+              stroke-dasharray="0 113.1"
+            />
           </svg>
           <span class="cred-text" id="headerCredText">0</span>
         </div>
         <div class="avatar" id="profileAvatar">U</div>
       </div>
     </header>
-    <div class="container" style="position:relative;">
-      <button class="back-btn" style="position:absolute; bottom:18px; right:18px; z-index:1100;" onclick="setReloadFlagAndBack()">← Back</button>
+    <div class="container" style="position: relative">
+      <button
+        class="back-btn"
+        style="position: absolute; bottom: 18px; right: 18px; z-index: 1100"
+        onclick="setReloadFlagAndBack()"
+      >
+        ← Back
+      </button>
       <div id="contractDetails">
-        <div style="color:var(--muted);text-align:center;display:flex;align-items:center;justify-content:center;gap:10px;">
+        <div
+          style="
+            color: var(--muted);
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+          "
+        >
           <div class="loading"></div>
           Loading contract details...
         </div>
       </div>
     </div>
-    <div id="contractActions" style="display:none;"></div>
-    <div id="actionMenu" class="action-menu" style="display:none;">
-    </div>
+    <div id="contractActions" style="display: none"></div>
+    <div id="actionMenu" class="action-menu" style="display: none"></div>
     <script>
-      const token = localStorage.getItem("token");
-      if (!token) location.replace("signIn.html");
-      
+      const token = localStorage.getItem('token');
+      if (!token) location.replace('signIn.html');
+
       // Profile functionality
       async function loadProfile() {
         try {
-          const response = await fetch("/myProfile", {
-            headers: { Authorization: "Bearer " + token },
+          const response = await fetch('/myProfile', {
+            headers: { Authorization: 'Bearer ' + token },
           });
           if (!response.ok) throw new Error();
-          
+
           const { foundProfile: user } = await response.json();
-          
+
           // Update avatar with user's first letter
           const avatar = document.getElementById('profileAvatar');
           if (avatar && user.username) {
             avatar.textContent = user.username[0].toUpperCase();
           }
-          
+
           // Update credibility score
-          const score = typeof user.credibilityScore === 'number' ? user.credibilityScore : 0;
+          const score =
+            typeof user.credibilityScore === 'number'
+              ? user.credibilityScore
+              : 0;
           const percent = Math.max(0, Math.min(100, score));
           const credText = document.querySelector('.cred-text');
           const credCircle = document.querySelector('.cred-fg');
-          
+
           if (credText) {
             credText.textContent = percent;
           }
-          
+
           // Animate credibility circle
           if (credCircle) {
             const radius = 20;
             const circumference = 2 * Math.PI * radius;
             credCircle.setAttribute('stroke-dasharray', circumference);
             credCircle.setAttribute('stroke-dashoffset', circumference);
-            
+
             setTimeout(() => {
-              credCircle.style.transition = 'stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1)';
-              credCircle.setAttribute('stroke-dashoffset', circumference * (1 - percent / 100));
+              credCircle.style.transition =
+                'stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1)';
+              credCircle.setAttribute(
+                'stroke-dashoffset',
+                circumference * (1 - percent / 100)
+              );
             }, 500);
           }
         } catch (error) {
           console.error('Error loading profile:', error);
         }
       }
-      
+
       // Load profile on page load
       loadProfile();
-      
+
       function getQueryParam(name) {
         const url = new URL(window.location.href);
         return url.searchParams.get(name);
       }
-      
-      const contractId = getQueryParam("id");
-      
+
+      const contractId = getQueryParam('id');
+
       async function fetchContract() {
         if (!contractId) {
-          document.getElementById("contractDetails").innerHTML = '<div style="color:var(--muted);text-align:center;">No contract ID provided.</div>';
+          document.getElementById('contractDetails').innerHTML =
+            '<div style="color:var(--muted);text-align:center;">No contract ID provided.</div>';
           return;
         }
-        
+
         try {
-          const res = await fetch(`/showSingleContract?id=${encodeURIComponent(contractId)}`, {
-            headers: { Authorization: "Bearer " + token }
-          });
-          
+          const res = await fetch(
+            `/showSingleContract?id=${encodeURIComponent(contractId)}`,
+            {
+              headers: { Authorization: 'Bearer ' + token },
+            }
+          );
+
           if (!res.ok) throw new Error();
-          
+
           const { foundContract } = await res.json();
           renderContract(foundContract);
         } catch {
-          document.getElementById("contractDetails").innerHTML = '<div style="color:var(--muted);text-align:center;">Failed to load contract details.</div>';
+          document.getElementById('contractDetails').innerHTML =
+            '<div style="color:var(--muted);text-align:center;">Failed to load contract details.</div>';
         }
       }
-      
+
       function renderContract(contract) {
         if (!contract) {
-          document.getElementById("contractDetails").innerHTML = '<div style="color:var(--muted);text-align:center;">Contract not found.</div>';
+          document.getElementById('contractDetails').innerHTML =
+            '<div style="color:var(--muted);text-align:center;">Contract not found.</div>';
           return;
         }
         // Add staggered animation to each section
         const sections = [
           `<div class="contract-title" id="contractTitle">${contract.contractName || 'Untitled Contract'}</div>`,
           `<div class="contract-meta" id="contractMeta">Created: ${contract.createdAt ? new Date(contract.createdAt).toLocaleDateString() : 'N/A'}${contract.expiryDate ? ' • Expires: ' + new Date(contract.expiryDate).toLocaleDateString() : ''}</div>`,
-          `<div class="contract-status ${(contract.contractStatus || contract.status || "active").toLowerCase().replace(/\s/g, '-')}" id="contractStatus">
-            <span class="status-dot ${(contract.contractStatus || contract.status || "active").toLowerCase().replace(/\s/g, '-')}" id="statusDot"></span>
-            ${contract.contractStatus || contract.status || "Active"}
+          `<div class="contract-status ${(contract.contractStatus || contract.status || 'active').toLowerCase().replace(/\s/g, '-')}" id="contractStatus">
+            <span class="status-dot ${(contract.contractStatus || contract.status || 'active').toLowerCase().replace(/\s/g, '-')}" id="statusDot"></span>
+            ${contract.contractStatus || contract.status || 'Active'}
           </div>`,
           `<div class="contract-section" id="sectionBody">
             <span class="contract-label">Contract Body</span>
@@ -991,10 +1111,14 @@
               <strong>Username:</strong> ${contract.contractRecieverUsername || 'N/A'}<br>
               <strong>Email:</strong> ${contract.contractRecieverEmail || 'N/A'}
             </div>
-          </div>`
+          </div>`,
         ];
         let verifyBtnHtml = '';
-        const status = (contract.contractStatus || contract.status || '').toLowerCase();
+        const status = (
+          contract.contractStatus ||
+          contract.status ||
+          ''
+        ).toLowerCase();
         if (status === 'not verified') {
           verifyBtnHtml = `
             <div style="text-align:center;margin-top:2.5rem;">
@@ -1002,18 +1126,29 @@
             </div>
           `;
         }
-        document.getElementById("contractDetails").innerHTML = sections.join('') + verifyBtnHtml;
+        document.getElementById('contractDetails').innerHTML =
+          sections.join('') + verifyBtnHtml;
         // Animate in each section
-        const ids = ["contractTitle", "contractMeta", "contractStatus", "sectionBody", "sectionMaker", "sectionReceiver"];
+        const ids = [
+          'contractTitle',
+          'contractMeta',
+          'contractStatus',
+          'sectionBody',
+          'sectionMaker',
+          'sectionReceiver',
+        ];
         ids.forEach((id, i) => {
-          setTimeout(() => {
-            const el = document.getElementById(id);
-            if (el) el.classList.add('animate-in');
-            if (id === "contractStatus") {
-              const dot = document.getElementById('statusDot');
-              if (dot) dot.classList.add('glow');
-            }
-          }, 200 + i * 120);
+          setTimeout(
+            () => {
+              const el = document.getElementById(id);
+              if (el) el.classList.add('animate-in');
+              if (id === 'contractStatus') {
+                const dot = document.getElementById('statusDot');
+                if (dot) dot.classList.add('glow');
+              }
+            },
+            200 + i * 120
+          );
         });
         const verifyBtn = document.getElementById('verifyBtn');
         if (verifyBtn) {
@@ -1022,30 +1157,31 @@
           });
         }
         // Set button labels and handlers
-        const userId = localStorage.getItem("userId");
-        let otherUser = "the other user";
+        const userId = localStorage.getItem('userId');
+        let otherUser = 'the other user';
         if (userId && contract) {
           if (contract.contractMaker === userId) {
-            otherUser = contract.contractRecieverUsername || "the other user";
+            otherUser = contract.contractRecieverUsername || 'the other user';
           } else if (contract.contractReciever === userId) {
-            otherUser = contract.contractMakerUsername || "the other user";
+            otherUser = contract.contractMakerUsername || 'the other user';
           }
         }
       }
-      
+
       fetchContract();
-      
+
       // Menu button logic
-      const menuBtn = document.getElementById("menuBtn");
-      const actionMenu = document.getElementById("actionMenu");
-      
-      menuBtn.addEventListener("click", () => {
-        actionMenu.style.display = actionMenu.style.display === "none" ? "flex" : "none";
+      const menuBtn = document.getElementById('menuBtn');
+      const actionMenu = document.getElementById('actionMenu');
+
+      menuBtn.addEventListener('click', () => {
+        actionMenu.style.display =
+          actionMenu.style.display === 'none' ? 'flex' : 'none';
       });
-      
-      document.addEventListener("click", (e) => {
+
+      document.addEventListener('click', (e) => {
         if (!menuBtn.contains(e.target) && !actionMenu.contains(e.target)) {
-          actionMenu.style.display = "none";
+          actionMenu.style.display = 'none';
         }
       });
 
@@ -1053,7 +1189,7 @@
       async function updateNotificationDot() {
         try {
           const res = await fetch('/unverifiedContracts', {
-            headers: { Authorization: 'Bearer ' + token }
+            headers: { Authorization: 'Bearer ' + token },
           });
           if (!res.ok) throw new Error();
           const { foundContracts = [] } = await res.json();
@@ -1076,4 +1212,4 @@
       }
     </script>
   </body>
-</html> 
+</html>

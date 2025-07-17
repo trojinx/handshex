@@ -1,4 +1,4 @@
-import { Contract } from "../schema/contract.schema.js";
+import { Contract } from '../schema/contract.schema.js';
 
 async function verifyContract(req, res) {
   try {
@@ -14,13 +14,13 @@ async function verifyContract(req, res) {
         { _id: contractId },
         { contractStatus: statusUpdate }
       );
-      return res.status(200).send("contract updated successfully");
+      return res.status(200).send('contract updated successfully');
     } else {
-      return res.status(200).send("Contract maker cannot verify the contract");
+      return res.status(200).send('Contract maker cannot verify the contract');
     }
   } catch (error) {
     console.log(`Error occoured: ${error}`);
-    return res.status(500).send("Internal server error");
+    return res.status(500).send('Internal server error');
   }
 }
 

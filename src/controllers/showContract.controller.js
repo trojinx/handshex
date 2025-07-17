@@ -1,4 +1,4 @@
-import { Contract } from "../schema/contract.schema.js";
+import { Contract } from '../schema/contract.schema.js';
 async function showContract(req, res) {
   try {
     const id = req.user.id;
@@ -8,10 +8,10 @@ async function showContract(req, res) {
     if (foundContracts) {
       return res.status(200).json({
         foundContracts,
-        message: "contracts found successfully",
+        message: 'contracts found successfully',
       });
     } else {
-      return res.status(400).send("No contracts found");
+      return res.status(400).send('No contracts found');
     }
   } catch (error) {
     console.log(`Error occoured: ${error}`);

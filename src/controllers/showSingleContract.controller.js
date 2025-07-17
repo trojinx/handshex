@@ -1,6 +1,6 @@
 // this will be used when view button is pressed over a contract
 
-import { Contract } from "../schema/contract.schema.js";
+import { Contract } from '../schema/contract.schema.js';
 
 async function showSingleContract(req, res) {
   const user = req.user.id;
@@ -15,11 +15,11 @@ async function showSingleContract(req, res) {
         foundContract: foundContract,
       });
     } else {
-      return res.status(400).send("No such contract found");
+      return res.status(400).send('No such contract found');
     }
   } catch (error) {
     console.log(`Error occoured: ${error}`);
-    return res.status(500).send("Internal server error");
+    return res.status(500).send('Internal server error');
   }
 }
 

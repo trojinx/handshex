@@ -1,10 +1,16 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <title>Handshex | Create Contract (Step 1)</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
       :root {
         --bg-from: #181818;
@@ -72,7 +78,7 @@
         background: var(--glass);
         border: 1px solid var(--glass-border);
         border-radius: var(--radius);
-        box-shadow: 0 2px 24px 0 rgba(0,0,0,0.10);
+        box-shadow: 0 2px 24px 0 rgba(0, 0, 0, 0.1);
         padding: 2.5rem 2rem 2rem 2rem;
         backdrop-filter: blur(8px);
         display: flex;
@@ -133,7 +139,10 @@
         background: linear-gradient(90deg, #232526 0%, #414345 40%, #111 100%);
         color: #fff;
         box-shadow: 0 2px 8px 0 rgba(191, 161, 74, 0.12);
-        transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+        transition:
+          background 0.2s,
+          color 0.2s,
+          box-shadow 0.2s;
         opacity: 0.7;
       }
       .btn-next.enabled {
@@ -180,8 +189,10 @@
         border-radius: 50%;
         background: linear-gradient(90deg, #bfa14a 0%, #ffe082 100%);
         opacity: 0.35;
-        transition: opacity 0.2s, box-shadow 0.2s;
-        box-shadow: 0 1px 4px 0 rgba(191, 161, 74, 0.10);
+        transition:
+          opacity 0.2s,
+          box-shadow 0.2s;
+        box-shadow: 0 1px 4px 0 rgba(191, 161, 74, 0.1);
       }
       .dot.active {
         opacity: 1;
@@ -194,13 +205,22 @@
       <div class="brand">Handshex</div>
     </header>
     <div class="center-wrap">
-      <div class="container" style="position:relative; margin: 0 auto;">
+      <div class="container" style="position: relative; margin: 0 auto">
         <h1>Name your contract</h1>
         <form id="step1Form" autocomplete="off">
           <div>
-            <input type="text" id="contractName" name="contractName" required maxlength="100" placeholder="Enter a unique contract name" />
+            <input
+              type="text"
+              id="contractName"
+              name="contractName"
+              required
+              maxlength="100"
+              placeholder="Enter a unique contract name"
+            />
           </div>
-          <button type="submit" class="btn-next" id="nextBtn" disabled>Next</button>
+          <button type="submit" class="btn-next" id="nextBtn" disabled>
+            Next
+          </button>
           <div class="message" id="formMessage"></div>
         </form>
         <div class="progress-dots">
@@ -216,7 +236,7 @@
       const contractNameInput = document.getElementById('contractName');
       const nextBtn = document.getElementById('nextBtn');
       const messageEl = document.getElementById('formMessage');
-      contractNameInput.addEventListener('input', function() {
+      contractNameInput.addEventListener('input', function () {
         if (contractNameInput.value.trim().length > 0) {
           nextBtn.disabled = false;
           nextBtn.classList.add('enabled');
@@ -225,7 +245,7 @@
           nextBtn.classList.remove('enabled');
         }
       });
-      form.addEventListener('submit', function(e) {
+      form.addEventListener('submit', function (e) {
         e.preventDefault();
         const name = contractNameInput.value.trim();
         if (!name) {
@@ -237,4 +257,4 @@
       });
     </script>
   </body>
-</html> 
+</html>

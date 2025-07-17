@@ -1,272 +1,320 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Notifications</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --bg-from: #181818;
-      --bg-to: #232526;
-      --glass: rgba(255, 255, 255, 0.1);
-      --glass-border: rgba(255, 255, 255, 0.18);
-      --txt: #fff;
-      --muted: #e0e0e0;
-      --accent: #bfa14a;
-      --radius: 1.2rem;
-      --tr: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-      --header-h: 72px;
-    }
-    *, *::before, *::after { box-sizing: border-box; }
-    body {
-      min-height: 100vh;
-      margin: 0;
-      background: linear-gradient(90deg, #111 0%, #181818 40%, #000 100%);
-      color: var(--txt);
-      font-family: Inter, system-ui, sans-serif;
-      -webkit-font-smoothing: antialiased;
-      zoom: reset;
-      transform: scale(1);
-      overflow-x: hidden;
-      max-width: 100vw;
-      min-width: 0;
-    }
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      height: var(--header-h);
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 0 1rem 0 1.5rem;
-      background: rgba(0, 0, 0, 0.35);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--glass-border);
-      width: 100vw;
-    }
-    .brand {
-      font-size: 2rem;
-      font-weight: 900;
-      color: #fff;
-      letter-spacing: -1.5px;
-      margin-right: 1.7rem;
-      line-height: 1;
-      user-select: none;
-      display: flex;
-      align-items: center;
-      height: 40px;
-    }
-    .brand span {
-      color: #fff;
-      background: transparent;
-      font-family: inherit;
-    }
-    .home-link {
-      color: #fff;
-      font-size: 1.1rem;
-      font-weight: 600;
-      text-decoration: none;
-      margin-right: 1.5rem;
-      letter-spacing: 0.5px;
-      transition: color 0.2s;
-      padding: 0.2rem 0.7rem;
-      border-radius: 0.5rem;
-      position: relative;
-      top: 1px;
-    }
-    .home-link:hover {
-      color: var(--accent);
-      background: rgba(255,255,255,0.07);
-    }
-    .upgrade-link {
-      color: var(--accent);
-      font-size: 1.1rem;
-      font-weight: 700;
-      text-decoration: none;
-      margin-left: 1.2rem;
-      margin-right: 0.5rem;
-      letter-spacing: 0.5px;
-      transition: color 0.2s, text-decoration 0.2s;
-      padding: 0;
-      border-radius: 0;
-      background: none;
-      box-shadow: none;
-      position: relative;
-      top: 1px;
-    }
-    .upgrade-link:hover {
-      color: #ffe082;
-      text-decoration: underline;
-      background: none;
-    }
-    .profile {
-      position: relative;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-left: auto;
-    }
-    .cred-score {
-      position: relative;
-      width: 44px;
-      height: 44px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-    }
-    .cred-svg {
-      width: 44px;
-      height: 44px;
-      transform: rotate(-90deg);
-    }
-    .cred-bg {
-      stroke: #444;
-      stroke-width: 4;
-      fill: none;
-    }
-    .cred-fg {
-      stroke: var(--accent);
-      stroke-width: 4;
-      fill: none;
-      transition: stroke-dasharray 0.5s;
-    }
-    .cred-text {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: var(--accent);
-      pointer-events: none;
-      user-select: none;
-    }
-    .avatar {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      font-weight: 700;
-      display: grid;
-      place-items: center;
-      color: #111;
-      background: #fff;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-    }
-    .dropdown {
-      position: fixed;
-      right: 40px;
-      top: 0;
-      min-width: 220px;
-      max-width: 320px;
-      width: auto;
-      background: #fff;
-      color: #111;
-      border-radius: var(--radius);
-      box-shadow: 0 2px 14px rgba(0, 0, 0, 0.25);
-      padding: 1rem 1.2rem;
-      display: none;
-      z-index: 9999;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <div class="brand">Handshex</div>
-    <a href="dashboard.html" class="home-link">Home</a>
-    <span style="position:relative;display:inline-block;">
-      <a href="notifications.html" class="home-link" id="notificationsLink">Notifications</a>
-      <span id="notificationDot" style="display:none;position:absolute;top:-8px;right:10px;width:12px;height:12px;background:#bfa14a;border-radius:50%;box-shadow:0 0 6px #bfa14a;"></span>
-    </span>
-    <div class="profile" id="profile">
-      <a href="#" class="upgrade-link">Upgrade to Max</a>
-      <div class="cred-score" id="headerCredScore">
-        <svg class="cred-svg">
-          <circle class="cred-bg" cx="22" cy="22" r="18" />
-          <circle class="cred-fg" cx="22" cy="22" r="18" stroke-dasharray="0 113.1" />
-        </svg>
-        <span class="cred-text" id="headerCredText">0</span>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notifications</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg-from: #181818;
+        --bg-to: #232526;
+        --glass: rgba(255, 255, 255, 0.1);
+        --glass-border: rgba(255, 255, 255, 0.18);
+        --txt: #fff;
+        --muted: #e0e0e0;
+        --accent: #bfa14a;
+        --radius: 1.2rem;
+        --tr: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        --header-h: 72px;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+      body {
+        min-height: 100vh;
+        margin: 0;
+        background: linear-gradient(90deg, #111 0%, #181818 40%, #000 100%);
+        color: var(--txt);
+        font-family: Inter, system-ui, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        zoom: reset;
+        transform: scale(1);
+        overflow-x: hidden;
+        max-width: 100vw;
+        min-width: 0;
+      }
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        height: var(--header-h);
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0 1rem 0 1.5rem;
+        background: rgba(0, 0, 0, 0.35);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--glass-border);
+        width: 100vw;
+      }
+      .brand {
+        font-size: 2rem;
+        font-weight: 900;
+        color: #fff;
+        letter-spacing: -1.5px;
+        margin-right: 1.7rem;
+        line-height: 1;
+        user-select: none;
+        display: flex;
+        align-items: center;
+        height: 40px;
+      }
+      .brand span {
+        color: #fff;
+        background: transparent;
+        font-family: inherit;
+      }
+      .home-link {
+        color: #fff;
+        font-size: 1.1rem;
+        font-weight: 600;
+        text-decoration: none;
+        margin-right: 1.5rem;
+        letter-spacing: 0.5px;
+        transition: color 0.2s;
+        padding: 0.2rem 0.7rem;
+        border-radius: 0.5rem;
+        position: relative;
+        top: 1px;
+      }
+      .home-link:hover {
+        color: var(--accent);
+        background: rgba(255, 255, 255, 0.07);
+      }
+      .upgrade-link {
+        color: var(--accent);
+        font-size: 1.1rem;
+        font-weight: 700;
+        text-decoration: none;
+        margin-left: 1.2rem;
+        margin-right: 0.5rem;
+        letter-spacing: 0.5px;
+        transition:
+          color 0.2s,
+          text-decoration 0.2s;
+        padding: 0;
+        border-radius: 0;
+        background: none;
+        box-shadow: none;
+        position: relative;
+        top: 1px;
+      }
+      .upgrade-link:hover {
+        color: #ffe082;
+        text-decoration: underline;
+        background: none;
+      }
+      .profile {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-left: auto;
+      }
+      .cred-score {
+        position: relative;
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+      .cred-svg {
+        width: 44px;
+        height: 44px;
+        transform: rotate(-90deg);
+      }
+      .cred-bg {
+        stroke: #444;
+        stroke-width: 4;
+        fill: none;
+      }
+      .cred-fg {
+        stroke: var(--accent);
+        stroke-width: 4;
+        fill: none;
+        transition: stroke-dasharray 0.5s;
+      }
+      .cred-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--accent);
+        pointer-events: none;
+        user-select: none;
+      }
+      .avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        font-weight: 700;
+        display: grid;
+        place-items: center;
+        color: #111;
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+      }
+      .dropdown {
+        position: fixed;
+        right: 40px;
+        top: 0;
+        min-width: 220px;
+        max-width: 320px;
+        width: auto;
+        background: #fff;
+        color: #111;
+        border-radius: var(--radius);
+        box-shadow: 0 2px 14px rgba(0, 0, 0, 0.25);
+        padding: 1rem 1.2rem;
+        display: none;
+        z-index: 9999;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="brand">Handshex</div>
+      <a href="dashboard.html" class="home-link">Home</a>
+      <span style="position: relative; display: inline-block">
+        <a href="notifications.html" class="home-link" id="notificationsLink"
+          >Notifications</a
+        >
+        <span
+          id="notificationDot"
+          style="
+            display: none;
+            position: absolute;
+            top: -8px;
+            right: 10px;
+            width: 12px;
+            height: 12px;
+            background: #bfa14a;
+            border-radius: 50%;
+            box-shadow: 0 0 6px #bfa14a;
+          "
+        ></span>
+      </span>
+      <div class="profile" id="profile">
+        <a href="#" class="upgrade-link">Upgrade to Max</a>
+        <div class="cred-score" id="headerCredScore">
+          <svg class="cred-svg">
+            <circle class="cred-bg" cx="22" cy="22" r="18" />
+            <circle
+              class="cred-fg"
+              cx="22"
+              cy="22"
+              r="18"
+              stroke-dasharray="0 113.1"
+            />
+          </svg>
+          <span class="cred-text" id="headerCredText">0</span>
+        </div>
+        <div class="avatar" id="profileAvatar">U</div>
       </div>
-      <div class="avatar" id="profileAvatar">U</div>
-    </div>
-  </header>
-  <div id="notificationsContainer" style="display: flex; flex-direction: column; align-items: center; margin-top: 2rem;"></div>
-  <script>
-    const token = localStorage.getItem('token');
-    (async () => {
-      try {
-        const res = await fetch("/myProfile", {
-          headers: { Authorization: "Bearer " + token },
-        });
-        if (!res.ok) throw new Error();
-        const { foundProfile: user } = await res.json();
-        // Update avatar
-        const avatar = document.getElementById('profileAvatar');
-        if (avatar && user.username) {
-          avatar.textContent = user.username[0].toUpperCase();
-        }
-        // Update credibility score
-        const score = typeof user.credibilityScore === 'number' ? user.credibilityScore : 0;
-        const percent = Math.max(0, Math.min(100, score));
-        const credText = document.getElementById('headerCredText');
-        const credCircle = document.querySelector('.cred-fg');
-        if (credText) credText.textContent = percent;
-        if (credCircle) {
-          const radius = 18;
-          const circumference = 2 * Math.PI * radius;
-          credCircle.setAttribute('stroke-dasharray', circumference);
-          credCircle.setAttribute('stroke-dashoffset', circumference);
-          setTimeout(() => {
-            credCircle.style.transition = 'stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1)';
-            credCircle.setAttribute('stroke-dashoffset', circumference * (1 - percent / 100));
-          }, 200);
-        }
-      } catch {}
-    })();
+    </header>
+    <div
+      id="notificationsContainer"
+      style="
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 2rem;
+      "
+    ></div>
+    <script>
+      const token = localStorage.getItem('token');
+      (async () => {
+        try {
+          const res = await fetch('/myProfile', {
+            headers: { Authorization: 'Bearer ' + token },
+          });
+          if (!res.ok) throw new Error();
+          const { foundProfile: user } = await res.json();
+          // Update avatar
+          const avatar = document.getElementById('profileAvatar');
+          if (avatar && user.username) {
+            avatar.textContent = user.username[0].toUpperCase();
+          }
+          // Update credibility score
+          const score =
+            typeof user.credibilityScore === 'number'
+              ? user.credibilityScore
+              : 0;
+          const percent = Math.max(0, Math.min(100, score));
+          const credText = document.getElementById('headerCredText');
+          const credCircle = document.querySelector('.cred-fg');
+          if (credText) credText.textContent = percent;
+          if (credCircle) {
+            const radius = 18;
+            const circumference = 2 * Math.PI * radius;
+            credCircle.setAttribute('stroke-dasharray', circumference);
+            credCircle.setAttribute('stroke-dashoffset', circumference);
+            setTimeout(() => {
+              credCircle.style.transition =
+                'stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1)';
+              credCircle.setAttribute(
+                'stroke-dashoffset',
+                circumference * (1 - percent / 100)
+              );
+            }, 200);
+          }
+        } catch {}
+      })();
 
-    // Fetch and render contracts
-    async function fetchNotifications() {
-      const container = document.getElementById('notificationsContainer');
-      container.innerHTML = '';
-      try {
-        const res = await fetch('/unverifiedContracts', {
-          headers: { Authorization: 'Bearer ' + token }
-        });
-        if (!res.ok) throw new Error('Failed to fetch notifications');
-        const { foundContracts = [] } = await res.json();
-        if (!foundContracts.length) {
-          container.innerHTML = '<div style="color:var(--muted);font-size:1.2rem;margin-top:2rem;">No new notifications</div>';
-          return;
-        }
-        foundContracts.forEach((c, idx) => {
-          const d = k => {
-            if (!c[k]) return '';
-            const date = new Date(c[k]);
-            const day = date.getDate();
-            const month = date.toLocaleString('default', { month: 'long' });
-            const year = date.getFullYear();
-            return `${day} ${month}, ${year}`;
-          };
-          const status = (c.contractStatus || c.status || 'Not Verified');
-          const statusClass = status.toLowerCase().replace(/\s/g, '-');
-          let dotColor = '#fff';
-          if (statusClass === 'active') dotColor = '#4caf50';
-          if (statusClass === 'expired') dotColor = '#ff5252';
-          // NOT VERIFIED and others default to white
-          const card = document.createElement('div');
-          card.style.background = 'rgba(255,255,255,0.08)';
-          card.style.borderRadius = '1.2rem';
-          card.style.color = '';
-          card.style.padding = '0.7rem 2.5rem';
-          card.style.boxShadow = '0 2px 14px rgba(0,0,0,0.25)';
-          card.style.minWidth = '320px';
-          card.style.maxWidth = '900px';
-          card.style.width = '100%';
-          card.style.marginBottom = '1.2rem';
-          card.style.fontSize = '0.95rem';
-          card.innerHTML = `
+      // Fetch and render contracts
+      async function fetchNotifications() {
+        const container = document.getElementById('notificationsContainer');
+        container.innerHTML = '';
+        try {
+          const res = await fetch('/unverifiedContracts', {
+            headers: { Authorization: 'Bearer ' + token },
+          });
+          if (!res.ok) throw new Error('Failed to fetch notifications');
+          const { foundContracts = [] } = await res.json();
+          if (!foundContracts.length) {
+            container.innerHTML =
+              '<div style="color:var(--muted);font-size:1.2rem;margin-top:2rem;">No new notifications</div>';
+            return;
+          }
+          foundContracts.forEach((c, idx) => {
+            const d = (k) => {
+              if (!c[k]) return '';
+              const date = new Date(c[k]);
+              const day = date.getDate();
+              const month = date.toLocaleString('default', {
+                month: 'long',
+              });
+              const year = date.getFullYear();
+              return `${day} ${month}, ${year}`;
+            };
+            const status = c.contractStatus || c.status || 'Not Verified';
+            const statusClass = status.toLowerCase().replace(/\s/g, '-');
+            let dotColor = '#fff';
+            if (statusClass === 'active') dotColor = '#4caf50';
+            if (statusClass === 'expired') dotColor = '#ff5252';
+            // NOT VERIFIED and others default to white
+            const card = document.createElement('div');
+            card.style.background = 'rgba(255,255,255,0.08)';
+            card.style.borderRadius = '1.2rem';
+            card.style.color = '';
+            card.style.padding = '0.7rem 2.5rem';
+            card.style.boxShadow = '0 2px 14px rgba(0,0,0,0.25)';
+            card.style.minWidth = '320px';
+            card.style.maxWidth = '900px';
+            card.style.width = '100%';
+            card.style.marginBottom = '1.2rem';
+            card.style.fontSize = '0.95rem';
+            card.innerHTML = `
             <article class="entry" tabindex="0">
               <div style="display:flex;align-items:center;width:100%;">
                 <div style="flex:1;min-width:0;">
@@ -281,61 +329,65 @@
               </div>
             </article>
           `;
-          container.appendChild(card);
-        });
-        // Add event listeners for View buttons
-        container.querySelectorAll('.view-btn').forEach(btn => {
-          btn.addEventListener('click', function() {
-            const idx = btn.getAttribute('data-idx');
-            const contract = foundContracts[idx];
-            if (contract && contract._id) {
-              window.location.href = `notifications-detail.html?id=${encodeURIComponent(contract._id)}`;
-            }
+            container.appendChild(card);
           });
-        });
-      } catch (err) {
-        container.innerHTML = '<div style="color:var(--muted);font-size:1.2rem;margin-top:2rem;">Error loading notifications</div>';
+          // Add event listeners for View buttons
+          container.querySelectorAll('.view-btn').forEach((btn) => {
+            btn.addEventListener('click', function () {
+              const idx = btn.getAttribute('data-idx');
+              const contract = foundContracts[idx];
+              if (contract && contract._id) {
+                window.location.href = `notifications-detail.html?id=${encodeURIComponent(contract._id)}`;
+              }
+            });
+          });
+        } catch (err) {
+          container.innerHTML =
+            '<div style="color:var(--muted);font-size:1.2rem;margin-top:2rem;">Error loading notifications</div>';
+        }
       }
-    }
-    fetchNotifications();
+      fetchNotifications();
 
-    // Show contract detail in the same container style
-    function showContractDetail(contract) {
-      const container = document.getElementById('notificationsContainer');
-      container.innerHTML = '';
-      const d = k => {
-        if (!contract[k]) return '';
-        const date = new Date(contract[k]);
-        const day = date.getDate();
-        const month = date.toLocaleString('default', { month: 'long' });
-        const year = date.getFullYear();
-        return `${day} ${month}, ${year}`;
-      };
-      const status = (contract.contractStatus || contract.status || 'Not Verified');
-      const statusClass = status.toLowerCase().replace(/\s/g, '-');
-      let dotColor = '#fff';
-      if (statusClass === 'active') dotColor = '#4caf50';
-      if (statusClass === 'expired') dotColor = '#ff5252';
-      // NOT VERIFIED and others default to white
-      const card = document.createElement('div');
-      card.style.background = 'rgba(255,255,255,0.08)';
-      card.style.borderRadius = '1.2rem';
-      card.style.color = '';
-      card.style.padding = '0.7rem 2.5rem';
-      card.style.boxShadow = '0 2px 14px rgba(0,0,0,0.25)';
-      card.style.minWidth = '320px';
-      card.style.maxWidth = '900px';
-      card.style.width = '100%';
-      card.style.marginBottom = '1.2rem';
-      card.style.fontSize = '0.95rem';
-      card.innerHTML = `
+      // Show contract detail in the same container style
+      function showContractDetail(contract) {
+        const container = document.getElementById('notificationsContainer');
+        container.innerHTML = '';
+        const d = (k) => {
+          if (!contract[k]) return '';
+          const date = new Date(contract[k]);
+          const day = date.getDate();
+          const month = date.toLocaleString('default', {
+            month: 'long',
+          });
+          const year = date.getFullYear();
+          return `${day} ${month}, ${year}`;
+        };
+        const status =
+          contract.contractStatus || contract.status || 'Not Verified';
+        const statusClass = status.toLowerCase().replace(/\s/g, '-');
+        let dotColor = '#fff';
+        if (statusClass === 'active') dotColor = '#4caf50';
+        if (statusClass === 'expired') dotColor = '#ff5252';
+        // NOT VERIFIED and others default to white
+        const card = document.createElement('div');
+        card.style.background = 'rgba(255,255,255,0.08)';
+        card.style.borderRadius = '1.2rem';
+        card.style.color = '';
+        card.style.padding = '0.7rem 2.5rem';
+        card.style.boxShadow = '0 2px 14px rgba(0,0,0,0.25)';
+        card.style.minWidth = '320px';
+        card.style.maxWidth = '900px';
+        card.style.width = '100%';
+        card.style.marginBottom = '1.2rem';
+        card.style.fontSize = '0.95rem';
+        card.innerHTML = `
         <div class="container" style="max-width:1400px;margin:4rem auto 2rem auto;background:rgba(255,255,255,0.07);border:1.5px solid rgba(255,255,255,0.18);border-radius:1.3rem;box-shadow:0 4px 32px 0 rgba(0,0,0,0.18);padding:2.2rem 4.5rem 1.7rem 4.5rem;position:relative;backdrop-filter:blur(10px);">
           <div style="display:flex;flex-direction:column;align-items:flex-start;width:100%;">
             <div style="font-size:1.7rem;font-weight:900;color:#bfa14a;margin-bottom:0.5rem;line-height:1.1;">${contract.contractName || 'Untitled Contract'}</div>
             <div style="font-size:0.98rem;color:#e0e0e0;margin-bottom:1.1rem;">Created: ${contract.createdAt ? new Date(contract.createdAt).toLocaleDateString() : 'N/A'} • Expires: ${contract.expiryDate ? new Date(contract.expiryDate).toLocaleDateString() : 'N/A'}</div>
             <div style="display:flex;align-items:center;font-size:0.98rem;font-weight:700;margin-bottom:1.3rem;letter-spacing:0.5px;">
-              <span style="background:${(contract.contractStatus||contract.status||'active').toLowerCase()==='active' ? '#4caf50' : (contract.contractStatus||contract.status||'').toLowerCase()==='expired' ? '#ff5252' : '#fff'};display:inline-block;width:0.9em;height:0.9em;border-radius:50%;margin-right:0.7em;"></span>
-              <span style="color:${(contract.contractStatus||contract.status||'active').toLowerCase()==='active' ? '#4caf50' : (contract.contractStatus||contract.status||'').toLowerCase()==='expired' ? '#ff5252' : '#fff'};font-weight:800;text-transform:uppercase;letter-spacing:1.5px;">${(contract.contractStatus || contract.status || 'Active')}</span>
+              <span style="background:${(contract.contractStatus || contract.status || 'active').toLowerCase() === 'active' ? '#4caf50' : (contract.contractStatus || contract.status || '').toLowerCase() === 'expired' ? '#ff5252' : '#fff'};display:inline-block;width:0.9em;height:0.9em;border-radius:50%;margin-right:0.7em;"></span>
+              <span style="color:${(contract.contractStatus || contract.status || 'active').toLowerCase() === 'active' ? '#4caf50' : (contract.contractStatus || contract.status || '').toLowerCase() === 'expired' ? '#ff5252' : '#fff'};font-weight:800;text-transform:uppercase;letter-spacing:1.5px;">${contract.contractStatus || contract.status || 'Active'}</span>
             </div>
             <div style="margin-bottom:1.3rem;">
               <div style="color:#bfa14a;font-size:0.98rem;font-weight:700;margin-bottom:0.3rem;">Contract Body</div>
@@ -356,42 +408,45 @@
               </div>
             </div>
             <button class="view-btn" style="position:absolute;right:2.2rem;bottom:1.2rem;padding:0.6rem 1.3rem;border-radius:999px;background:linear-gradient(90deg,#232526 0%,#414345 40%,#111 100%);color:#fff;font-size:0.92rem;font-weight:700;min-width:90px;box-shadow:0 2px 10px 0 #bfa14a55;border:none;display:flex;align-items:center;gap:0.7em;transition:background 0.18s;" id="backToListBtn">&#8592; <span style="font-weight:800;">Back</span></button>
-            ${(contract.contractStatus||contract.status||'').toLowerCase()==='not verified' ? `<button id="verifyBtn" style="position:absolute;left:2.2rem;bottom:1.2rem;padding:0.55rem 1.2rem;border-radius:999px;background:linear-gradient(90deg,#bfa14a 0%,#ffe082 100%);color:#111;font-size:0.92rem;font-weight:700;min-width:80px;box-shadow:0 2px 10px 0 #bfa14a55;border:none;display:flex;align-items:center;gap:0.5em;transition:background 0.18s;z-index:2;">Verify</button>` : ''}
+            ${(contract.contractStatus || contract.status || '').toLowerCase() === 'not verified' ? `<button id="verifyBtn" style="position:absolute;left:2.2rem;bottom:1.2rem;padding:0.55rem 1.2rem;border-radius:999px;background:linear-gradient(90deg,#bfa14a 0%,#ffe082 100%);color:#111;font-size:0.92rem;font-weight:700;min-width:80px;box-shadow:0 2px 10px 0 #bfa14a55;border:none;display:flex;align-items:center;gap:0.5em;transition:background 0.18s;z-index:2;">Verify</button>` : ''}
           </div>
         </div>
       `;
-      container.appendChild(card.firstElementChild || card);
-      document.getElementById('backToListBtn').onclick = fetchNotifications;
-      const verifyBtn = document.getElementById('verifyBtn');
-      if (verifyBtn) {
-        verifyBtn.onclick = async () => {
-          verifyBtn.disabled = true;
-          verifyBtn.textContent = 'Verifying...';
-          try {
-            const res = await fetch('/verifyContract', {
-              method: 'PATCH',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + token
-              },
-              body: JSON.stringify({ contractId: contract._id, statusUpdate: 'Active' })
-            });
-            if (res.ok) {
-              alert('Contract verified!');
-              fetchNotifications();
-            } else {
+        container.appendChild(card.firstElementChild || card);
+        document.getElementById('backToListBtn').onclick = fetchNotifications;
+        const verifyBtn = document.getElementById('verifyBtn');
+        if (verifyBtn) {
+          verifyBtn.onclick = async () => {
+            verifyBtn.disabled = true;
+            verifyBtn.textContent = 'Verifying...';
+            try {
+              const res = await fetch('/verifyContract', {
+                method: 'PATCH',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: 'Bearer ' + token,
+                },
+                body: JSON.stringify({
+                  contractId: contract._id,
+                  statusUpdate: 'Active',
+                }),
+              });
+              if (res.ok) {
+                alert('Contract verified!');
+                fetchNotifications();
+              } else {
+                alert('Failed to verify contract.');
+                verifyBtn.disabled = false;
+                verifyBtn.textContent = 'Verify';
+              }
+            } catch {
               alert('Failed to verify contract.');
               verifyBtn.disabled = false;
               verifyBtn.textContent = 'Verify';
             }
-          } catch {
-            alert('Failed to verify contract.');
-            verifyBtn.disabled = false;
-            verifyBtn.textContent = 'Verify';
-          }
-        };
+          };
+        }
       }
-    }
-  </script>
-</body>
+    </script>
+  </body>
 </html>
