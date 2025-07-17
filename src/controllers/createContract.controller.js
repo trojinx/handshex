@@ -6,7 +6,8 @@ async function createContract(req, res) {
   // check if contractReciever is signed up
   // check if contract name is unique
   // check if contractBody is not empty
-  // save the contract
+  // save the contract...
+  // save the contract...
 
   try {
     const { contractName, contractRecieverEmail, expiryDate, contractBody } =
