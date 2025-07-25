@@ -1,4 +1,4 @@
-import { Contract } from '../schema/contract.schema.js';
+import { Contract } from "../schema/contract.schema.js";
 
 async function checkIfContractExpires(req, res, next) {
   const id = req.user.id;
@@ -21,13 +21,13 @@ async function checkIfContractExpires(req, res, next) {
       return res
         .status(400)
         .send(
-          'There are no expiring contracts, you can wait for a contract to naturally expire, or forcefully complete it after necessary permissions'
+          "There are no expiring contracts, you can wait for a contract to naturally expire, or forcefully complete it after necessary permissions"
         );
     }
     req.expiringContracts = expiringContracts;
     next();
   } catch (error) {
-    return res.status(500).json({ error: 'Error fetching contracts.' });
+    return res.status(500).json({ error: "Error fetching contracts." });
   }
 }
 

@@ -15,8 +15,8 @@
         min-height: 100vh;
         width: 100vw;
         box-sizing: border-box;
-        font-family: 'Inter', Arial, sans-serif;
-        background: url('./assets/handshex_background.webp') no-repeat center
+        font-family: "Inter", Arial, sans-serif;
+        background: url("./assets/handshex_background.webp") no-repeat center
           center/cover;
         display: flex;
         align-items: center;
@@ -42,7 +42,7 @@
         width: 100vw;
         height: 100vh;
         text-align: center;
-        font-family: 'Inter', Arial, sans-serif;
+        font-family: "Inter", Arial, sans-serif;
         animation: fadeIn 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.2s both;
       }
       .quote {
@@ -65,13 +65,13 @@
         margin-bottom: 1rem;
         letter-spacing: -2px;
         text-shadow: 0 2px 16px rgba(0, 0, 0, 0.4);
-        font-family: 'Inter', Arial, sans-serif;
+        font-family: "Inter", Arial, sans-serif;
         animation: slideInBrand 1.1s cubic-bezier(0.4, 0, 0.2, 1) 0.5s both;
       }
       .brand span {
         color: #111;
         background: transparent;
-        font-family: 'Inter', Arial, sans-serif;
+        font-family: "Inter", Arial, sans-serif;
       }
       .desc {
         color: #fff;
@@ -86,7 +86,7 @@
         transition:
           opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1),
           transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
-        font-family: 'Inter', Arial, sans-serif;
+        font-family: "Inter", Arial, sans-serif;
         animation: scaleSlogan 1.1s cubic-bezier(0.4, 0, 0.2, 1) 1.1s both;
       }
       .desc.animated {
@@ -114,7 +114,7 @@
         transition:
           background 0.2s,
           color 0.2s;
-        font-family: 'Inter', Arial, sans-serif;
+        font-family: "Inter", Arial, sans-serif;
       }
       .btn-corner.primary {
         right: 40px;
@@ -229,11 +229,11 @@
     </div>
     <script>
       // Typing animation for 'Handshex' with blinking cursor
-      const brandText = 'Handshex';
-      const brandEl = document.getElementById('brand-typing');
+      const brandText = "Handshex";
+      const brandEl = document.getElementById("brand-typing");
       let i = 0;
       function typeBrand() {
-        let html = '';
+        let html = "";
         if (i <= 4) {
           html = brandText.slice(0, i);
         } else {
@@ -241,7 +241,7 @@
             brandText.slice(0, 4) +
             '<span style="color:#111; background:transparent;">' +
             brandText.slice(4, i) +
-            '</span>';
+            "</span>";
         }
         // Add blinking cursor if not finished
         if (i < brandText.length) {
@@ -256,13 +256,13 @@
       typeBrand();
 
       // Typing animation for tagline
-      const quoteFull = '“Pinkies are for promises. We do handshex.”';
-      const quoteEl = document.getElementById('quote-typing');
+      const quoteFull = "“Pinkies are for promises. We do handshex.”";
+      const quoteEl = document.getElementById("quote-typing");
       let k = 0;
       function typeQuote() {
         let displayText = quoteFull.slice(0, k);
         // Only color 'shex' when fully typed
-        if (displayText.endsWith('shex')) {
+        if (displayText.endsWith("shex")) {
           displayText =
             displayText.slice(0, -4) +
             '<span style="color:#111; background:transparent;">shex</span>';

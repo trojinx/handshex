@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const tempUserSchema = mongoose.Schema(
   {
@@ -14,4 +14,4 @@ const tempUserSchema = mongoose.Schema(
   { timestaps: true }
 );
 
-export const TempUser = new mongoose.model('TempUser', tempUserSchema);
+export const TempUser = new mongoose.model("TempUser", tempUserSchema);

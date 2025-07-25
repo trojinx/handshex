@@ -232,28 +232,28 @@
       </div>
     </div>
     <script>
-      const form = document.getElementById('step1Form');
-      const contractNameInput = document.getElementById('contractName');
-      const nextBtn = document.getElementById('nextBtn');
-      const messageEl = document.getElementById('formMessage');
-      contractNameInput.addEventListener('input', function () {
+      const form = document.getElementById("step1Form");
+      const contractNameInput = document.getElementById("contractName");
+      const nextBtn = document.getElementById("nextBtn");
+      const messageEl = document.getElementById("formMessage");
+      contractNameInput.addEventListener("input", function () {
         if (contractNameInput.value.trim().length > 0) {
           nextBtn.disabled = false;
-          nextBtn.classList.add('enabled');
+          nextBtn.classList.add("enabled");
         } else {
           nextBtn.disabled = true;
-          nextBtn.classList.remove('enabled');
+          nextBtn.classList.remove("enabled");
         }
       });
-      form.addEventListener('submit', function (e) {
+      form.addEventListener("submit", function (e) {
         e.preventDefault();
         const name = contractNameInput.value.trim();
         if (!name) {
-          messageEl.textContent = 'Please enter a contract name.';
+          messageEl.textContent = "Please enter a contract name.";
           return;
         }
-        localStorage.setItem('createContractName', name);
-        window.location.href = 'createContract-step2.html';
+        localStorage.setItem("createContractName", name);
+        window.location.href = "createContract-step2.html";
       });
     </script>
   </body>

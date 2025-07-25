@@ -232,38 +232,38 @@
       "
     ></div>
     <script>
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       (async () => {
         try {
-          const res = await fetch('/myProfile', {
-            headers: { Authorization: 'Bearer ' + token },
+          const res = await fetch("/myProfile", {
+            headers: { Authorization: "Bearer " + token },
           });
           if (!res.ok) throw new Error();
           const { foundProfile: user } = await res.json();
           // Update avatar
-          const avatar = document.getElementById('profileAvatar');
+          const avatar = document.getElementById("profileAvatar");
           if (avatar && user.username) {
             avatar.textContent = user.username[0].toUpperCase();
           }
           // Update credibility score
           const score =
-            typeof user.credibilityScore === 'number'
+            typeof user.credibilityScore === "number"
               ? user.credibilityScore
               : 0;
           const percent = Math.max(0, Math.min(100, score));
-          const credText = document.getElementById('headerCredText');
-          const credCircle = document.querySelector('.cred-fg');
+          const credText = document.getElementById("headerCredText");
+          const credCircle = document.querySelector(".cred-fg");
           if (credText) credText.textContent = percent;
           if (credCircle) {
             const radius = 18;
             const circumference = 2 * Math.PI * radius;
-            credCircle.setAttribute('stroke-dasharray', circumference);
-            credCircle.setAttribute('stroke-dashoffset', circumference);
+            credCircle.setAttribute("stroke-dasharray", circumference);
+            credCircle.setAttribute("stroke-dashoffset", circumference);
             setTimeout(() => {
               credCircle.style.transition =
-                'stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1)';
+                "stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1)";
               credCircle.setAttribute(
-                'stroke-dashoffset',
+                "stroke-dashoffset",
                 circumference * (1 - percent / 100)
               );
             }, 200);
@@ -273,13 +273,13 @@
 
       // Fetch and render contracts
       async function fetchNotifications() {
-        const container = document.getElementById('notificationsContainer');
-        container.innerHTML = '';
+        const container = document.getElementById("notificationsContainer");
+        container.innerHTML = "";
         try {
-          const res = await fetch('/unverifiedContracts', {
-            headers: { Authorization: 'Bearer ' + token },
+          const res = await fetch("/unverifiedContracts", {
+            headers: { Authorization: "Bearer " + token },
           });
-          if (!res.ok) throw new Error('Failed to fetch notifications');
+          if (!res.ok) throw new Error("Failed to fetch notifications");
           const { foundContracts = [] } = await res.json();
           if (!foundContracts.length) {
             container.innerHTML =
@@ -288,38 +288,38 @@
           }
           foundContracts.forEach((c, idx) => {
             const d = (k) => {
-              if (!c[k]) return '';
+              if (!c[k]) return "";
               const date = new Date(c[k]);
               const day = date.getDate();
-              const month = date.toLocaleString('default', {
-                month: 'long',
+              const month = date.toLocaleString("default", {
+                month: "long",
               });
               const year = date.getFullYear();
               return `${day} ${month}, ${year}`;
             };
-            const status = c.contractStatus || c.status || 'Not Verified';
-            const statusClass = status.toLowerCase().replace(/\s/g, '-');
-            let dotColor = '#fff';
-            if (statusClass === 'active') dotColor = '#4caf50';
-            if (statusClass === 'expired') dotColor = '#ff5252';
+            const status = c.contractStatus || c.status || "Not Verified";
+            const statusClass = status.toLowerCase().replace(/\s/g, "-");
+            let dotColor = "#fff";
+            if (statusClass === "active") dotColor = "#4caf50";
+            if (statusClass === "expired") dotColor = "#ff5252";
             // NOT VERIFIED and others default to white
-            const card = document.createElement('div');
-            card.style.background = 'rgba(255,255,255,0.08)';
-            card.style.borderRadius = '1.2rem';
-            card.style.color = '';
-            card.style.padding = '0.7rem 2.5rem';
-            card.style.boxShadow = '0 2px 14px rgba(0,0,0,0.25)';
-            card.style.minWidth = '320px';
-            card.style.maxWidth = '900px';
-            card.style.width = '100%';
-            card.style.marginBottom = '1.2rem';
-            card.style.fontSize = '0.95rem';
+            const card = document.createElement("div");
+            card.style.background = "rgba(255,255,255,0.08)";
+            card.style.borderRadius = "1.2rem";
+            card.style.color = "";
+            card.style.padding = "0.7rem 2.5rem";
+            card.style.boxShadow = "0 2px 14px rgba(0,0,0,0.25)";
+            card.style.minWidth = "320px";
+            card.style.maxWidth = "900px";
+            card.style.width = "100%";
+            card.style.marginBottom = "1.2rem";
+            card.style.fontSize = "0.95rem";
             card.innerHTML = `
             <article class="entry" tabindex="0">
               <div style="display:flex;align-items:center;width:100%;">
                 <div style="flex:1;min-width:0;">
-                  <h2>${c.contractName || c.title || 'Untitled Contract'}</h2>
-                  <p class="meta">Created ${d('createdAt')} • Expires ${d('expiryDate')}</p>
+                  <h2>${c.contractName || c.title || "Untitled Contract"}</h2>
+                  <p class="meta">Created ${d("createdAt")} • Expires ${d("expiryDate")}</p>
                   <p class="status ${statusClass}">
                     <span class="status-dot ${statusClass}" style="background:${dotColor};display:inline-block;width:0.7em;height:0.7em;border-radius:50%;margin-right:0.4em;"></span>
                     ${status.toUpperCase()}
@@ -332,9 +332,9 @@
             container.appendChild(card);
           });
           // Add event listeners for View buttons
-          container.querySelectorAll('.view-btn').forEach((btn) => {
-            btn.addEventListener('click', function () {
-              const idx = btn.getAttribute('data-idx');
+          container.querySelectorAll(".view-btn").forEach((btn) => {
+            btn.addEventListener("click", function () {
+              const idx = btn.getAttribute("data-idx");
               const contract = foundContracts[idx];
               if (contract && contract._id) {
                 window.location.href = `notifications-detail.html?id=${encodeURIComponent(contract._id)}`;
@@ -350,99 +350,99 @@
 
       // Show contract detail in the same container style
       function showContractDetail(contract) {
-        const container = document.getElementById('notificationsContainer');
-        container.innerHTML = '';
+        const container = document.getElementById("notificationsContainer");
+        container.innerHTML = "";
         const d = (k) => {
-          if (!contract[k]) return '';
+          if (!contract[k]) return "";
           const date = new Date(contract[k]);
           const day = date.getDate();
-          const month = date.toLocaleString('default', {
-            month: 'long',
+          const month = date.toLocaleString("default", {
+            month: "long",
           });
           const year = date.getFullYear();
           return `${day} ${month}, ${year}`;
         };
         const status =
-          contract.contractStatus || contract.status || 'Not Verified';
-        const statusClass = status.toLowerCase().replace(/\s/g, '-');
-        let dotColor = '#fff';
-        if (statusClass === 'active') dotColor = '#4caf50';
-        if (statusClass === 'expired') dotColor = '#ff5252';
+          contract.contractStatus || contract.status || "Not Verified";
+        const statusClass = status.toLowerCase().replace(/\s/g, "-");
+        let dotColor = "#fff";
+        if (statusClass === "active") dotColor = "#4caf50";
+        if (statusClass === "expired") dotColor = "#ff5252";
         // NOT VERIFIED and others default to white
-        const card = document.createElement('div');
-        card.style.background = 'rgba(255,255,255,0.08)';
-        card.style.borderRadius = '1.2rem';
-        card.style.color = '';
-        card.style.padding = '0.7rem 2.5rem';
-        card.style.boxShadow = '0 2px 14px rgba(0,0,0,0.25)';
-        card.style.minWidth = '320px';
-        card.style.maxWidth = '900px';
-        card.style.width = '100%';
-        card.style.marginBottom = '1.2rem';
-        card.style.fontSize = '0.95rem';
+        const card = document.createElement("div");
+        card.style.background = "rgba(255,255,255,0.08)";
+        card.style.borderRadius = "1.2rem";
+        card.style.color = "";
+        card.style.padding = "0.7rem 2.5rem";
+        card.style.boxShadow = "0 2px 14px rgba(0,0,0,0.25)";
+        card.style.minWidth = "320px";
+        card.style.maxWidth = "900px";
+        card.style.width = "100%";
+        card.style.marginBottom = "1.2rem";
+        card.style.fontSize = "0.95rem";
         card.innerHTML = `
         <div class="container" style="max-width:1400px;margin:4rem auto 2rem auto;background:rgba(255,255,255,0.07);border:1.5px solid rgba(255,255,255,0.18);border-radius:1.3rem;box-shadow:0 4px 32px 0 rgba(0,0,0,0.18);padding:2.2rem 4.5rem 1.7rem 4.5rem;position:relative;backdrop-filter:blur(10px);">
           <div style="display:flex;flex-direction:column;align-items:flex-start;width:100%;">
-            <div style="font-size:1.7rem;font-weight:900;color:#bfa14a;margin-bottom:0.5rem;line-height:1.1;">${contract.contractName || 'Untitled Contract'}</div>
-            <div style="font-size:0.98rem;color:#e0e0e0;margin-bottom:1.1rem;">Created: ${contract.createdAt ? new Date(contract.createdAt).toLocaleDateString() : 'N/A'} • Expires: ${contract.expiryDate ? new Date(contract.expiryDate).toLocaleDateString() : 'N/A'}</div>
+            <div style="font-size:1.7rem;font-weight:900;color:#bfa14a;margin-bottom:0.5rem;line-height:1.1;">${contract.contractName || "Untitled Contract"}</div>
+            <div style="font-size:0.98rem;color:#e0e0e0;margin-bottom:1.1rem;">Created: ${contract.createdAt ? new Date(contract.createdAt).toLocaleDateString() : "N/A"} • Expires: ${contract.expiryDate ? new Date(contract.expiryDate).toLocaleDateString() : "N/A"}</div>
             <div style="display:flex;align-items:center;font-size:0.98rem;font-weight:700;margin-bottom:1.3rem;letter-spacing:0.5px;">
-              <span style="background:${(contract.contractStatus || contract.status || 'active').toLowerCase() === 'active' ? '#4caf50' : (contract.contractStatus || contract.status || '').toLowerCase() === 'expired' ? '#ff5252' : '#fff'};display:inline-block;width:0.9em;height:0.9em;border-radius:50%;margin-right:0.7em;"></span>
-              <span style="color:${(contract.contractStatus || contract.status || 'active').toLowerCase() === 'active' ? '#4caf50' : (contract.contractStatus || contract.status || '').toLowerCase() === 'expired' ? '#ff5252' : '#fff'};font-weight:800;text-transform:uppercase;letter-spacing:1.5px;">${contract.contractStatus || contract.status || 'Active'}</span>
+              <span style="background:${(contract.contractStatus || contract.status || "active").toLowerCase() === "active" ? "#4caf50" : (contract.contractStatus || contract.status || "").toLowerCase() === "expired" ? "#ff5252" : "#fff"};display:inline-block;width:0.9em;height:0.9em;border-radius:50%;margin-right:0.7em;"></span>
+              <span style="color:${(contract.contractStatus || contract.status || "active").toLowerCase() === "active" ? "#4caf50" : (contract.contractStatus || contract.status || "").toLowerCase() === "expired" ? "#ff5252" : "#fff"};font-weight:800;text-transform:uppercase;letter-spacing:1.5px;">${contract.contractStatus || contract.status || "Active"}</span>
             </div>
             <div style="margin-bottom:1.3rem;">
               <div style="color:#bfa14a;font-size:0.98rem;font-weight:700;margin-bottom:0.3rem;">Contract Body</div>
-              <div style="font-size:0.98rem;color:#fff;font-weight:500;white-space:pre-line;">${contract.contractBody || 'N/A'}</div>
+              <div style="font-size:0.98rem;color:#fff;font-weight:500;white-space:pre-line;">${contract.contractBody || "N/A"}</div>
             </div>
             <div style="margin-bottom:1.1rem;">
               <div style="color:#bfa14a;font-size:0.98rem;font-weight:700;margin-bottom:0.2rem;">Maker</div>
               <div style="margin-left:0.2rem;">
-                <span style="font-weight:700;">Username:</span> <span style="font-weight:500;">${contract.contractMakerUsername || 'N/A'}</span><br/>
-                <span style="font-weight:700;">Email:</span> <span style="font-weight:500;">${contract.contractMakerEmail || 'N/A'}</span>
+                <span style="font-weight:700;">Username:</span> <span style="font-weight:500;">${contract.contractMakerUsername || "N/A"}</span><br/>
+                <span style="font-weight:700;">Email:</span> <span style="font-weight:500;">${contract.contractMakerEmail || "N/A"}</span>
               </div>
             </div>
             <div style="margin-bottom:1.3rem;">
               <div style="color:#bfa14a;font-size:0.98rem;font-weight:700;margin-bottom:0.2rem;">Receiver</div>
               <div style="margin-left:0.2rem;">
-                <span style="font-weight:700;">Username:</span> <span style="font-weight:500;">${contract.contractRecieverUsername || 'N/A'}</span><br/>
-                <span style="font-weight:700;">Email:</span> <span style="font-weight:500;">${contract.contractRecieverEmail || 'N/A'}</span>
+                <span style="font-weight:700;">Username:</span> <span style="font-weight:500;">${contract.contractRecieverUsername || "N/A"}</span><br/>
+                <span style="font-weight:700;">Email:</span> <span style="font-weight:500;">${contract.contractRecieverEmail || "N/A"}</span>
               </div>
             </div>
             <button class="view-btn" style="position:absolute;right:2.2rem;bottom:1.2rem;padding:0.6rem 1.3rem;border-radius:999px;background:linear-gradient(90deg,#232526 0%,#414345 40%,#111 100%);color:#fff;font-size:0.92rem;font-weight:700;min-width:90px;box-shadow:0 2px 10px 0 #bfa14a55;border:none;display:flex;align-items:center;gap:0.7em;transition:background 0.18s;" id="backToListBtn">&#8592; <span style="font-weight:800;">Back</span></button>
-            ${(contract.contractStatus || contract.status || '').toLowerCase() === 'not verified' ? `<button id="verifyBtn" style="position:absolute;left:2.2rem;bottom:1.2rem;padding:0.55rem 1.2rem;border-radius:999px;background:linear-gradient(90deg,#bfa14a 0%,#ffe082 100%);color:#111;font-size:0.92rem;font-weight:700;min-width:80px;box-shadow:0 2px 10px 0 #bfa14a55;border:none;display:flex;align-items:center;gap:0.5em;transition:background 0.18s;z-index:2;">Verify</button>` : ''}
+            ${(contract.contractStatus || contract.status || "").toLowerCase() === "not verified" ? `<button id="verifyBtn" style="position:absolute;left:2.2rem;bottom:1.2rem;padding:0.55rem 1.2rem;border-radius:999px;background:linear-gradient(90deg,#bfa14a 0%,#ffe082 100%);color:#111;font-size:0.92rem;font-weight:700;min-width:80px;box-shadow:0 2px 10px 0 #bfa14a55;border:none;display:flex;align-items:center;gap:0.5em;transition:background 0.18s;z-index:2;">Verify</button>` : ""}
           </div>
         </div>
       `;
         container.appendChild(card.firstElementChild || card);
-        document.getElementById('backToListBtn').onclick = fetchNotifications;
-        const verifyBtn = document.getElementById('verifyBtn');
+        document.getElementById("backToListBtn").onclick = fetchNotifications;
+        const verifyBtn = document.getElementById("verifyBtn");
         if (verifyBtn) {
           verifyBtn.onclick = async () => {
             verifyBtn.disabled = true;
-            verifyBtn.textContent = 'Verifying...';
+            verifyBtn.textContent = "Verifying...";
             try {
-              const res = await fetch('/verifyContract', {
-                method: 'PATCH',
+              const res = await fetch("/verifyContract", {
+                method: "PATCH",
                 headers: {
-                  'Content-Type': 'application/json',
-                  Authorization: 'Bearer ' + token,
+                  "Content-Type": "application/json",
+                  Authorization: "Bearer " + token,
                 },
                 body: JSON.stringify({
                   contractId: contract._id,
-                  statusUpdate: 'Active',
+                  statusUpdate: "Active",
                 }),
               });
               if (res.ok) {
-                alert('Contract verified!');
+                alert("Contract verified!");
                 fetchNotifications();
               } else {
-                alert('Failed to verify contract.');
+                alert("Failed to verify contract.");
                 verifyBtn.disabled = false;
-                verifyBtn.textContent = 'Verify';
+                verifyBtn.textContent = "Verify";
               }
             } catch {
-              alert('Failed to verify contract.');
+              alert("Failed to verify contract.");
               verifyBtn.disabled = false;
-              verifyBtn.textContent = 'Verify';
+              verifyBtn.textContent = "Verify";
             }
           };
         }

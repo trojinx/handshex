@@ -222,7 +222,7 @@
         border: 2px solid var(--accent);
       }
       .calendar-day.has-event::after {
-        content: '';
+        content: "";
         position: absolute;
         bottom: 2px;
         left: 50%;
@@ -394,47 +394,47 @@
           const year = this.currentDate.getFullYear();
           const month = this.currentDate.getMonth();
           const monthNames = [
-            'January',
-            'February',
-            'March',
-            'April',
-            'May',
-            'June',
-            'July',
-            'August',
-            'September',
-            'October',
-            'November',
-            'December',
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December",
           ];
-          document.getElementById('calendarMonthYear').textContent =
+          document.getElementById("calendarMonthYear").textContent =
             `${monthNames[month]} ${year}`;
           const firstDay = new Date(year, month, 1);
           const lastDay = new Date(year, month + 1, 0);
           const startDate = new Date(firstDay);
           startDate.setDate(startDate.getDate() - firstDay.getDay());
-          const calendarDays = document.getElementById('calendarDays');
-          calendarDays.innerHTML = '';
+          const calendarDays = document.getElementById("calendarDays");
+          calendarDays.innerHTML = "";
           for (let i = 0; i < 42; i++) {
             const date = new Date(startDate);
             date.setDate(startDate.getDate() + i);
-            const dayElement = document.createElement('div');
-            dayElement.className = 'calendar-day';
+            const dayElement = document.createElement("div");
+            dayElement.className = "calendar-day";
             dayElement.textContent = date.getDate();
             if (date.getMonth() !== month) {
-              dayElement.classList.add('other-month');
+              dayElement.classList.add("other-month");
             }
             const today = new Date();
             if (date.toDateString() === today.toDateString()) {
-              dayElement.classList.add('today');
+              dayElement.classList.add("today");
             }
             if (
               this.selectedDate &&
               date.toDateString() === this.selectedDate.toDateString()
             ) {
-              dayElement.classList.add('selected');
+              dayElement.classList.add("selected");
             }
-            dayElement.addEventListener('click', () => {
+            dayElement.addEventListener("click", () => {
               this.selectDate(date);
             });
             calendarDays.appendChild(dayElement);
@@ -444,17 +444,17 @@
           this.selectedDate = date;
           this.renderCalendar();
           // Set hidden input value
-          document.getElementById('expiryDate').value = date
+          document.getElementById("expiryDate").value = date
             .toISOString()
-            .split('T')[0];
+            .split("T")[0];
           checkFormValidity();
         }
         bindEvents() {
-          document.getElementById('prevMonth').addEventListener('click', () => {
+          document.getElementById("prevMonth").addEventListener("click", () => {
             this.currentDate.setMonth(this.currentDate.getMonth() - 1);
             this.renderCalendar();
           });
-          document.getElementById('nextMonth').addEventListener('click', () => {
+          document.getElementById("nextMonth").addEventListener("click", () => {
             this.currentDate.setMonth(this.currentDate.getMonth() + 1);
             this.renderCalendar();
           });
@@ -462,36 +462,36 @@
       }
       const calendar = new Calendar();
       // Form logic
-      const contractBody = document.getElementById('contractBody');
-      const expiryDate = document.getElementById('expiryDate');
-      const nextBtn = document.getElementById('nextBtn');
-      const formMessage = document.getElementById('formMessage');
+      const contractBody = document.getElementById("contractBody");
+      const expiryDate = document.getElementById("expiryDate");
+      const nextBtn = document.getElementById("nextBtn");
+      const formMessage = document.getElementById("formMessage");
       function checkFormValidity() {
         if (contractBody.value.trim().length > 0 && expiryDate.value) {
           nextBtn.disabled = false;
-          nextBtn.classList.add('enabled');
+          nextBtn.classList.add("enabled");
         } else {
           nextBtn.disabled = true;
-          nextBtn.classList.remove('enabled');
+          nextBtn.classList.remove("enabled");
         }
       }
-      contractBody.addEventListener('input', checkFormValidity);
+      contractBody.addEventListener("input", checkFormValidity);
       // No need to listen to expiryDate, calendar does it
       document
-        .getElementById('step3Form')
-        .addEventListener('submit', function (e) {
+        .getElementById("step3Form")
+        .addEventListener("submit", function (e) {
           e.preventDefault();
           if (!contractBody.value.trim()) {
-            formMessage.textContent = 'Please enter a contract description.';
+            formMessage.textContent = "Please enter a contract description.";
             return;
           }
           if (!expiryDate.value) {
-            formMessage.textContent = 'Please select an expiry date.';
+            formMessage.textContent = "Please select an expiry date.";
             return;
           }
-          localStorage.setItem('createContractBody', contractBody.value.trim());
-          localStorage.setItem('createContractExpiryDate', expiryDate.value);
-          window.location.href = 'createContract-step4.html';
+          localStorage.setItem("createContractBody", contractBody.value.trim());
+          localStorage.setItem("createContractExpiryDate", expiryDate.value);
+          window.location.href = "createContract-step4.html";
         });
     </script>
   </body>

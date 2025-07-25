@@ -56,14 +56,14 @@
       </div>
     </div>
     <script>
-      const token = localStorage.getItem('token');
-      const notificationsList = document.getElementById('notificationsList');
+      const token = localStorage.getItem("token");
+      const notificationsList = document.getElementById("notificationsList");
       async function fetchNotifications() {
         try {
-          const res = await fetch('/unverifiedContracts', {
-            headers: { Authorization: 'Bearer ' + token },
+          const res = await fetch("/unverifiedContracts", {
+            headers: { Authorization: "Bearer " + token },
           });
-          if (!res.ok) throw new Error('Failed to fetch notifications');
+          if (!res.ok) throw new Error("Failed to fetch notifications");
           const { foundContracts = [] } = await res.json();
           if (!foundContracts.length) {
             notificationsList.innerHTML =
@@ -73,13 +73,13 @@
               .map(
                 (c) => `
             <div class="notification">
-              <strong>${c.contractName || c.title || 'Untitled Contract'}</strong><br/>
-              <span>Status: ${c.contractStatus || c.status || 'Not Verified'}</span><br/>
+              <strong>${c.contractName || c.title || "Untitled Contract"}</strong><br/>
+              <span>Status: ${c.contractStatus || c.status || "Not Verified"}</span><br/>
               <span>Created: ${new Date(c.createdAt).toLocaleString()}</span>
             </div>
           `
               )
-              .join('');
+              .join("");
           }
         } catch (err) {
           notificationsList.innerHTML =

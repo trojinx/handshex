@@ -302,35 +302,35 @@
       </div>
     </div>
     <script>
-      const searchBtn = document.getElementById('searchIcon');
-      const userSearch = document.getElementById('userSearch');
-      const resultsList = document.getElementById('resultsList');
-      const nextBtn = document.getElementById('nextBtn');
-      const formMessage = document.getElementById('formMessage');
+      const searchBtn = document.getElementById("searchIcon");
+      const userSearch = document.getElementById("userSearch");
+      const resultsList = document.getElementById("resultsList");
+      const nextBtn = document.getElementById("nextBtn");
+      const formMessage = document.getElementById("formMessage");
       let selectedUser = null;
 
-      searchBtn.addEventListener('click', async function () {
+      searchBtn.addEventListener("click", async function () {
         const query = userSearch.value.trim();
-        resultsList.innerHTML = '';
-        formMessage.textContent = '';
+        resultsList.innerHTML = "";
+        formMessage.textContent = "";
         nextBtn.disabled = true;
-        nextBtn.classList.remove('enabled');
+        nextBtn.classList.remove("enabled");
         selectedUser = null;
         if (!query) {
           formMessage.textContent =
-            'Please enter a username or email to search.';
+            "Please enter a username or email to search.";
           return;
         }
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem("token");
         if (!token) {
-          formMessage.textContent = 'You must be signed in.';
+          formMessage.textContent = "You must be signed in.";
           return;
         }
         try {
           const res = await fetch(
             `/searchUser?query=${encodeURIComponent(query)}`,
             {
-              headers: { Authorization: 'Bearer ' + token },
+              headers: { Authorization: "Bearer " + token },
             }
           );
           if (!res.ok) {
@@ -340,48 +340,48 @@
           }
           const { foundUsers } = await res.json();
           if (!foundUsers.length) {
-            formMessage.textContent = 'No users found.';
+            formMessage.textContent = "No users found.";
             return;
           }
-          resultsList.innerHTML = '';
+          resultsList.innerHTML = "";
           foundUsers.forEach((user) => {
-            const card = document.createElement('div');
-            card.className = 'user-card';
+            const card = document.createElement("div");
+            card.className = "user-card";
             card.innerHTML = `<span class="username">${user.username}</span><span class="email">${user.email}</span>`;
-            card.addEventListener('click', () => {
+            card.addEventListener("click", () => {
               document
-                .querySelectorAll('.user-card')
-                .forEach((c) => c.classList.remove('selected'));
-              card.classList.add('selected');
+                .querySelectorAll(".user-card")
+                .forEach((c) => c.classList.remove("selected"));
+              card.classList.add("selected");
               selectedUser = user;
               nextBtn.disabled = false;
-              nextBtn.classList.add('enabled');
+              nextBtn.classList.add("enabled");
             });
             resultsList.appendChild(card);
           });
         } catch (err) {
-          formMessage.textContent = 'Network error. Please try again.';
+          formMessage.textContent = "Network error. Please try again.";
         }
       });
 
       document
-        .getElementById('step2Form')
-        .addEventListener('submit', function (e) {
+        .getElementById("step2Form")
+        .addEventListener("submit", function (e) {
           e.preventDefault();
           if (!selectedUser) {
-            formMessage.textContent = 'Please select a user.';
+            formMessage.textContent = "Please select a user.";
             return;
           }
           localStorage.setItem(
-            'createContractRecieverUsername',
+            "createContractRecieverUsername",
             selectedUser.username
           );
           localStorage.setItem(
-            'createContractRecieverEmail',
+            "createContractRecieverEmail",
             selectedUser.email
           );
-          localStorage.setItem('createContractUser', selectedUser.email);
-          window.location.href = 'createContract-step3.html';
+          localStorage.setItem("createContractUser", selectedUser.email);
+          window.location.href = "createContract-step3.html";
         });
     </script>
   </body>

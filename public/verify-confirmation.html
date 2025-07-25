@@ -69,41 +69,41 @@
       <div id="statusMsg" class="status-msg"></div>
     </div>
     <script>
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       function getQueryParam(name) {
         const url = new URL(window.location.href);
         return url.searchParams.get(name);
       }
-      const contractId = getQueryParam('id');
-      const proceedBtn = document.getElementById('proceedBtn');
-      const statusMsg = document.getElementById('statusMsg');
-      proceedBtn.addEventListener('click', async () => {
+      const contractId = getQueryParam("id");
+      const proceedBtn = document.getElementById("proceedBtn");
+      const statusMsg = document.getElementById("statusMsg");
+      proceedBtn.addEventListener("click", async () => {
         if (!contractId) {
-          statusMsg.textContent = 'No contract ID provided.';
+          statusMsg.textContent = "No contract ID provided.";
           return;
         }
         proceedBtn.disabled = true;
-        statusMsg.textContent = 'Verifying...';
+        statusMsg.textContent = "Verifying...";
         try {
-          const response = await fetch('/verifyContract', {
-            method: 'PATCH',
+          const response = await fetch("/verifyContract", {
+            method: "PATCH",
             headers: {
-              'Content-Type': 'application/json',
-              Authorization: 'Bearer ' + token,
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + token,
             },
             body: JSON.stringify({
               contractId,
-              statusUpdate: 'Active',
+              statusUpdate: "Active",
             }),
           });
-          if (!response.ok) throw new Error('Failed to verify contract');
+          if (!response.ok) throw new Error("Failed to verify contract");
           statusMsg.textContent =
-            'Contract verified! Redirecting to dashboard...';
+            "Contract verified! Redirecting to dashboard...";
           setTimeout(() => {
-            window.location.href = 'dashboard.html';
+            window.location.href = "dashboard.html";
           }, 1200);
         } catch (err) {
-          statusMsg.textContent = 'Error verifying contract: ' + err.message;
+          statusMsg.textContent = "Error verifying contract: " + err.message;
           proceedBtn.disabled = false;
         }
       });

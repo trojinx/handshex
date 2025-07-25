@@ -318,7 +318,7 @@
         padding-left: 44px;
       }
       .timeline::before {
-        content: '';
+        content: "";
         position: absolute;
         left: 18px;
         top: 0;
@@ -444,7 +444,7 @@
         position: relative;
       }
       .skeleton::before {
-        content: '';
+        content: "";
         position: absolute;
         left: -30px;
         top: 1.2rem;
@@ -811,7 +811,7 @@
         border: 2px solid var(--accent);
       }
       .calendar-day.has-event::after {
-        content: '';
+        content: "";
         position: absolute;
         bottom: 2px;
         left: 50%;
@@ -1149,73 +1149,73 @@
     <!-- ===== JS ===== -->
     <script type="module">
       const $ = (s) => document.querySelector(s);
-      const token = localStorage.getItem('token');
-      if (!token) location.replace('signIn.html');
+      const token = localStorage.getItem("token");
+      if (!token) location.replace("signIn.html");
 
       /* ---------- profile ---------- */
       (async () => {
         try {
-          const r = await fetch('/myProfile', {
-            headers: { Authorization: 'Bearer ' + token },
+          const r = await fetch("/myProfile", {
+            headers: { Authorization: "Bearer " + token },
           });
           if (!r.ok) throw new Error();
           const { foundProfile: u } = await r.json();
-          $('#profileUsername').textContent = u.username;
-          $('#profileEmail').textContent = u.email;
-          $('#profileAvatar').textContent = u.username[0].toUpperCase();
+          $("#profileUsername").textContent = u.username;
+          $("#profileEmail").textContent = u.email;
+          $("#profileAvatar").textContent = u.username[0].toUpperCase();
 
           // Store current user ID for filtering
           currentUserId = u._id;
 
           // Update main heading with username
-          const mainHeading = document.querySelector('main h1');
+          const mainHeading = document.querySelector("main h1");
           if (mainHeading && u.username) {
             mainHeading.textContent = `${u.username}'s Contracts`;
           }
 
           // Credibility Score (header only)
           const score =
-            typeof u.credibilityScore === 'number' ? u.credibilityScore : 0;
+            typeof u.credibilityScore === "number" ? u.credibilityScore : 0;
           const percent = Math.max(0, Math.min(100, score));
           const headerCircle = document.querySelector(
-            '#headerCredScore .cred-fg'
+            "#headerCredScore .cred-fg"
           );
-          const headerText = document.getElementById('headerCredText');
+          const headerText = document.getElementById("headerCredText");
           headerText.textContent = percent;
           // Animate SVG circle fill
           const radius = 18;
           const circumference = 2 * Math.PI * radius;
-          headerCircle.setAttribute('stroke-dasharray', circumference);
-          headerCircle.setAttribute('stroke-dashoffset', circumference);
+          headerCircle.setAttribute("stroke-dasharray", circumference);
+          headerCircle.setAttribute("stroke-dashoffset", circumference);
           setTimeout(() => {
             headerCircle.style.transition =
-              'stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1)';
+              "stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1)";
             headerCircle.setAttribute(
-              'stroke-dashoffset',
+              "stroke-dashoffset",
               circumference * (1 - percent / 100)
             );
           }, 200);
         } catch {
-          location.replace('signIn.html');
+          location.replace("signIn.html");
         }
       })();
 
       /* ---------- sidebar ---------- */
-      const sidebar = $('#sidebar');
-      $('#sidebarToggle').addEventListener('click', (e) => {
+      const sidebar = $("#sidebar");
+      $("#sidebarToggle").addEventListener("click", (e) => {
         e.stopPropagation();
-        sidebar.classList.add('open');
+        sidebar.classList.add("open");
       });
-      $('#closeSidebar').addEventListener('click', () =>
-        sidebar.classList.remove('open')
+      $("#closeSidebar").addEventListener("click", () =>
+        sidebar.classList.remove("open")
       );
-      addEventListener('mousedown', (e) => {
+      addEventListener("mousedown", (e) => {
         if (
-          sidebar.classList.contains('open') &&
+          sidebar.classList.contains("open") &&
           !sidebar.contains(e.target) &&
-          !e.target.closest('#sidebarToggle')
+          !e.target.closest("#sidebarToggle")
         ) {
-          sidebar.classList.remove('open');
+          sidebar.classList.remove("open");
         }
       });
 
@@ -1225,14 +1225,14 @@
       let currentUserId = null;
 
       const renderContracts = (list, showVerifyButton = false) => {
-        const wrap = $('#contractsList');
-        wrap.innerHTML = '';
+        const wrap = $("#contractsList");
+        wrap.innerHTML = "";
         // Get the most recently created contract ID from localStorage
-        const newContractId = localStorage.getItem('newlyCreatedContractId');
+        const newContractId = localStorage.getItem("newlyCreatedContractId");
         // Restore order from localStorage if available
         let order = [];
         try {
-          order = JSON.parse(localStorage.getItem('contractsOrder')) || [];
+          order = JSON.parse(localStorage.getItem("contractsOrder")) || [];
         } catch {}
         if (order.length) {
           // Sort list by order, fallback to original order for new contracts
@@ -1254,19 +1254,19 @@
               </button>
             </div>`;
           // Add event listener to the new button
-          $('#createContractBtnEmpty').addEventListener('click', (e) => {
+          $("#createContractBtnEmpty").addEventListener("click", (e) => {
             e.preventDefault();
-            window.location.href = 'createContract-step1.html';
+            window.location.href = "createContract-step1.html";
           });
           return;
         }
         list.forEach((c, i) => {
           const d = (k) => {
-            if (!c[k]) return '';
+            if (!c[k]) return "";
             const date = new Date(c[k]);
             const day = date.getDate();
-            const month = date.toLocaleString('default', {
-              month: 'long',
+            const month = date.toLocaleString("default", {
+              month: "long",
             });
             const year = date.getFullYear();
             return `${day} ${month}, ${year}`;
@@ -1274,26 +1274,26 @@
           // Add NEW badge if this is the most recently created contract
           const isNew = newContractId && c._id === newContractId;
           wrap.insertAdjacentHTML(
-            'beforeend',
+            "beforeend",
             `
-          <div class="timeline-row" data-id="${c._id || ''}" style="display:flex;align-items:center;position:relative;">
+          <div class="timeline-row" data-id="${c._id || ""}" style="display:flex;align-items:center;position:relative;">
             <span class="drag-handle" title="Drag to reorder"></span>
             <article class="entry" tabindex="0" style="position:relative;animation-delay:${i * 0.08}s;width:100%;">
-              <h2>${c.contractName || c.title} ${isNew ? '<span style="background:var(--accent);color:#111;font-size:0.85rem;font-weight:800;padding:0.2em 0.8em;border-radius:1em;margin-left:0.7em;vertical-align:middle;letter-spacing:1px;">NEW</span>' : ''}</h2>
-              <p class="meta">Created ${d('createdAt')} • Expires ${d('expiryDate')}</p>
-              <p class="status ${(c.contractStatus || c.status || 'active').toLowerCase().replace(/\s/g, '-')}">
-                <span class="status-dot ${(c.contractStatus || c.status || 'active').toLowerCase().replace(/\s/g, '-')}"></span>
-                ${c.contractStatus || c.status || 'Active'}
+              <h2>${c.contractName || c.title} ${isNew ? '<span style="background:var(--accent);color:#111;font-size:0.85rem;font-weight:800;padding:0.2em 0.8em;border-radius:1em;margin-left:0.7em;vertical-align:middle;letter-spacing:1px;">NEW</span>' : ""}</h2>
+              <p class="meta">Created ${d("createdAt")} • Expires ${d("expiryDate")}</p>
+              <p class="status ${(c.contractStatus || c.status || "active").toLowerCase().replace(/\s/g, "-")}">
+                <span class="status-dot ${(c.contractStatus || c.status || "active").toLowerCase().replace(/\s/g, "-")}"></span>
+                ${c.contractStatus || c.status || "Active"}
               </p>
-              <button class="view-btn" data-id="${c._id || ''}" style="position:absolute;right:1.5rem;top:1.5rem;">View</button>
+              <button class="view-btn" data-id="${c._id || ""}" style="position:absolute;right:1.5rem;top:1.5rem;">View</button>
             </article>
           </div>`
           );
         });
         // Add event listeners to all view buttons
-        wrap.querySelectorAll('.view-btn').forEach((btn) => {
-          btn.addEventListener('click', (e) => {
-            const id = btn.getAttribute('data-id');
+        wrap.querySelectorAll(".view-btn").forEach((btn) => {
+          btn.addEventListener("click", (e) => {
+            const id = btn.getAttribute("data-id");
             if (id) {
               window.location.href = `showContract.html?id=${encodeURIComponent(id)}`;
             }
@@ -1303,16 +1303,16 @@
         if (window.Sortable) {
           if (window.contractsSortable) window.contractsSortable.destroy();
           window.contractsSortable = Sortable.create(wrap, {
-            handle: '.drag-handle',
+            handle: ".drag-handle",
             animation: 200,
-            ghostClass: 'dragging',
-            draggable: '.timeline-row',
+            ghostClass: "dragging",
+            draggable: ".timeline-row",
             onEnd: function (evt) {
               // Save new order to localStorage
               const ids = Array.from(
-                wrap.querySelectorAll('.timeline-row')
-              ).map((el) => el.getAttribute('data-id'));
-              localStorage.setItem('contractsOrder', JSON.stringify(ids));
+                wrap.querySelectorAll(".timeline-row")
+              ).map((el) => el.getAttribute("data-id"));
+              localStorage.setItem("contractsOrder", JSON.stringify(ids));
               // Reorder the global contracts array to match the new order
               contracts = ids
                 .map((id) => contracts.find((c) => c._id === id))
@@ -1321,11 +1321,11 @@
           });
         }
         // In renderContracts, after rendering all .timeline-row and .drag-handle elements:
-        const rows = Array.from(wrap.querySelectorAll('.timeline-row'));
+        const rows = Array.from(wrap.querySelectorAll(".timeline-row"));
         rows.forEach((row) => {
-          const dot = row.querySelector('.drag-handle');
-          dot.style.cursor = 'grab';
-          dot.addEventListener('mousedown', function (e) {
+          const dot = row.querySelector(".drag-handle");
+          dot.style.cursor = "grab";
+          dot.addEventListener("mousedown", function (e) {
             e.preventDefault();
             const timeline = wrap;
             const timelineRect = timeline.getBoundingClientRect();
@@ -1334,15 +1334,15 @@
             const fixedX = dotRect.left + dotRect.width / 2;
             // Create ghost dot
             const ghost = dot.cloneNode(true);
-            ghost.classList.add('ghost-dot');
-            ghost.style.position = 'fixed';
+            ghost.classList.add("ghost-dot");
+            ghost.style.position = "fixed";
             ghost.style.left = `${fixedX - dotRect.width / 2}px`;
             ghost.style.top = `${e.clientY - offsetY - dotRect.height / 2}px`;
-            ghost.style.pointerEvents = 'none';
+            ghost.style.pointerEvents = "none";
             ghost.style.zIndex = 10000;
             document.body.appendChild(ghost);
-            dot.style.setProperty('opacity', '0', 'important');
-            dot.style.setProperty('pointer-events', 'none', 'important');
+            dot.style.setProperty("opacity", "0", "important");
+            dot.style.setProperty("pointer-events", "none", "important");
             let draggingRow = row;
             let lastOverIdx = rows.indexOf(row);
             function onMouseMove(ev) {
@@ -1360,7 +1360,7 @@
               let overIdx = lastOverIdx;
               for (let i = 0; i < rows.length; i++) {
                 if (rows[i] === draggingRow) continue;
-                const otherDot = rows[i].querySelector('.drag-handle');
+                const otherDot = rows[i].querySelector(".drag-handle");
                 const otherDotRect = otherDot.getBoundingClientRect();
                 const otherCenterY = otherDotRect.top + otherDotRect.height / 2;
                 // If dragging down and ghost crosses below another dot's center
@@ -1385,22 +1385,22 @@
               }
             }
             function onMouseUp() {
-              document.removeEventListener('mousemove', onMouseMove);
-              document.removeEventListener('mouseup', onMouseUp);
+              document.removeEventListener("mousemove", onMouseMove);
+              document.removeEventListener("mouseup", onMouseUp);
               ghost.remove();
-              dot.style.setProperty('opacity', '', 'important');
-              dot.style.setProperty('pointer-events', '', 'important');
+              dot.style.setProperty("opacity", "", "important");
+              dot.style.setProperty("pointer-events", "", "important");
               // Update contracts array and localStorage to match DOM order
               const ids = Array.from(
-                wrap.querySelectorAll('.timeline-row')
-              ).map((el) => el.getAttribute('data-id'));
+                wrap.querySelectorAll(".timeline-row")
+              ).map((el) => el.getAttribute("data-id"));
               contracts = ids
                 .map((id) => contracts.find((c) => c._id === id))
                 .filter(Boolean);
-              localStorage.setItem('contractsOrder', JSON.stringify(ids));
+              localStorage.setItem("contractsOrder", JSON.stringify(ids));
             }
-            document.addEventListener('mousemove', onMouseMove);
-            document.addEventListener('mouseup', onMouseUp);
+            document.addEventListener("mousemove", onMouseMove);
+            document.addEventListener("mouseup", onMouseUp);
           });
         });
       };
@@ -1410,37 +1410,37 @@
         currentFilter = filterType;
 
         try {
-          let endpoint = '/showActiveContracts'; // default endpoint (since dashboard shows active by default)
+          let endpoint = "/showActiveContracts"; // default endpoint (since dashboard shows active by default)
 
           switch (filterType) {
-            case 'unverified':
-              endpoint = '/showNotVerifiedContracts';
+            case "unverified":
+              endpoint = "/showNotVerifiedContracts";
               break;
-            case 'active':
-              endpoint = '/showActiveContracts';
+            case "active":
+              endpoint = "/showActiveContracts";
               break;
-            case 'expired':
-              endpoint = '/showExpiredContracts';
+            case "expired":
+              endpoint = "/showExpiredContracts";
               break;
-            case 'created-by-me':
-            case 'received-by-me':
-              endpoint = '/myContracts';
+            case "created-by-me":
+            case "received-by-me":
+              endpoint = "/myContracts";
               break;
             default:
-              endpoint = '/showActiveContracts';
+              endpoint = "/showActiveContracts";
           }
 
           const response = await fetch(endpoint, {
-            headers: { Authorization: 'Bearer ' + token },
+            headers: { Authorization: "Bearer " + token },
           });
 
           if (!response.ok) {
-            if (response.status === 400 && filterType === 'expired') {
-              showNoNotificationsMessage('No expired contracts found');
+            if (response.status === 400 && filterType === "expired") {
+              showNoNotificationsMessage("No expired contracts found");
               return;
             }
-            if (response.status === 400 && filterType === 'unverified') {
-              showNoNotificationsMessage('No unverified contracts found');
+            if (response.status === 400 && filterType === "unverified") {
+              showNoNotificationsMessage("No unverified contracts found");
               return;
             }
             throw new Error();
@@ -1450,11 +1450,11 @@
 
           // Additional filtering for created-by-me and received-by-me
           let filteredContracts = foundContracts;
-          if (filterType === 'created-by-me' && currentUserId) {
+          if (filterType === "created-by-me" && currentUserId) {
             filteredContracts = foundContracts.filter(
               (contract) => contract.contractMaker === currentUserId
             );
-          } else if (filterType === 'received-by-me' && currentUserId) {
+          } else if (filterType === "received-by-me" && currentUserId) {
             filteredContracts = foundContracts.filter(
               (contract) => contract.contractReciever === currentUserId
             );
@@ -1469,37 +1469,37 @@
           }
 
           // Update active filter button
-          document.querySelectorAll('.filter-option').forEach((btn) => {
-            btn.classList.remove('active');
+          document.querySelectorAll(".filter-option").forEach((btn) => {
+            btn.classList.remove("active");
           });
           if (filterType) {
             document
               .querySelector(`[data-filter="${filterType}"]`)
-              .classList.add('active');
+              .classList.add("active");
           }
         } catch (error) {
-          console.error('Error filtering contracts:', error);
+          console.error("Error filtering contracts:", error);
           // Fallback to showing all contracts
           renderContracts(contracts, false);
         }
       };
 
       // Filter button toggle
-      $('#filterContractsBtn').addEventListener('click', () => {
-        const filterOptions = $('#filterOptions');
+      $("#filterContractsBtn").addEventListener("click", () => {
+        const filterOptions = $("#filterOptions");
         filterOptions.style.display =
-          filterOptions.style.display === 'none' ? 'flex' : 'none';
+          filterOptions.style.display === "none" ? "flex" : "none";
       });
 
       // Filter option clicks
-      document.addEventListener('DOMContentLoaded', () => {
-        document.querySelectorAll('.filter-option').forEach((btn) => {
-          btn.addEventListener('click', async (e) => {
+      document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll(".filter-option").forEach((btn) => {
+          btn.addEventListener("click", async (e) => {
             document
-              .querySelectorAll('.filter-option')
-              .forEach((btn2) => btn2.classList.remove('active'));
-            e.target.classList.add('active');
-            const filterType = e.target.getAttribute('data-filter');
+              .querySelectorAll(".filter-option")
+              .forEach((btn2) => btn2.classList.remove("active"));
+            e.target.classList.add("active");
+            const filterType = e.target.getAttribute("data-filter");
             await filterContracts(filterType);
           });
         });
@@ -1510,58 +1510,58 @@
           // Debug: Show the decoded JWT payload in the console
           try {
             const tokenPayload = token
-              ? JSON.parse(atob(token.split('.')[1]))
+              ? JSON.parse(atob(token.split(".")[1]))
               : null;
-            console.log('Decoded JWT payload:', tokenPayload);
+            console.log("Decoded JWT payload:", tokenPayload);
           } catch (e) {
-            console.warn('Could not decode JWT:', e);
+            console.warn("Could not decode JWT:", e);
           }
 
-          const r = await fetch('/showActiveContracts', {
-            headers: { Authorization: 'Bearer ' + token },
+          const r = await fetch("/showActiveContracts", {
+            headers: { Authorization: "Bearer " + token },
           });
           if (!r.ok) throw new Error();
           const { foundContracts = [] } = await r.json();
           contracts = foundContracts;
           // Debug: Log contracts received from API
           console.log(
-            'Contracts received from /showActiveContracts:',
+            "Contracts received from /showActiveContracts:",
             contracts
           );
           renderContracts(contracts, false);
         } catch (err) {
-          console.error('Error fetching contracts:', err);
+          console.error("Error fetching contracts:", err);
           renderContracts([]);
         }
       })();
 
       /* ---------- search ---------- */
-      $('#searchInput').addEventListener('input', (e) => {
+      $("#searchInput").addEventListener("input", (e) => {
         const q = e.target.value.trim().toLowerCase();
         renderContracts(
           contracts.filter(
             (c) =>
-              (c.contractName ?? '').toLowerCase().includes(q) ||
-              (c.title ?? '').toLowerCase().includes(q)
+              (c.contractName ?? "").toLowerCase().includes(q) ||
+              (c.title ?? "").toLowerCase().includes(q)
           )
         );
       });
 
       /* ---------- notes ---------- */
-      const notesTextarea = $('#notesTextarea');
-      const notesSaveBtn = $('#notesSaveBtn');
-      const notesStatus = $('#notesStatus');
+      const notesTextarea = $("#notesTextarea");
+      const notesSaveBtn = $("#notesSaveBtn");
+      const notesStatus = $("#notesStatus");
 
       // Load saved notes from localStorage
-      const savedNotes = localStorage.getItem('handshex_notes') || '';
+      const savedNotes = localStorage.getItem("handshex_notes") || "";
       notesTextarea.value = savedNotes;
 
       // Auto-save functionality
       let autoSaveTimeout;
-      notesTextarea.addEventListener('input', () => {
+      notesTextarea.addEventListener("input", () => {
         clearTimeout(autoSaveTimeout);
         notesSaveBtn.disabled = false;
-        notesStatus.textContent = 'Unsaved changes';
+        notesStatus.textContent = "Unsaved changes";
 
         // Auto-save after 2 seconds of no typing
         autoSaveTimeout = setTimeout(() => {
@@ -1570,17 +1570,17 @@
       });
 
       // Manual save
-      notesSaveBtn.addEventListener('click', saveNotes);
+      notesSaveBtn.addEventListener("click", saveNotes);
 
       function saveNotes() {
         const notes = notesTextarea.value;
-        localStorage.setItem('handshex_notes', notes);
+        localStorage.setItem("handshex_notes", notes);
         notesSaveBtn.disabled = true;
-        notesStatus.textContent = 'Saved';
+        notesStatus.textContent = "Saved";
 
         // Clear status after 2 seconds
         setTimeout(() => {
-          notesStatus.textContent = '';
+          notesStatus.textContent = "";
         }, 2000);
       }
 
@@ -1590,7 +1590,7 @@
           this.currentDate = new Date();
           this.selectedDate = new Date();
           this.events = JSON.parse(
-            localStorage.getItem('handshex_calendar_events') || '{}'
+            localStorage.getItem("handshex_calendar_events") || "{}"
           );
           this.init();
         }
@@ -1605,20 +1605,20 @@
 
           // Update header
           const monthNames = [
-            'January',
-            'February',
-            'March',
-            'April',
-            'May',
-            'June',
-            'July',
-            'August',
-            'September',
-            'October',
-            'November',
-            'December',
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December",
           ];
-          document.getElementById('calendarMonthYear').textContent =
+          document.getElementById("calendarMonthYear").textContent =
             `${monthNames[month]} ${year}`;
 
           // Get first day of month and number of days
@@ -1627,43 +1627,43 @@
           const startDate = new Date(firstDay);
           startDate.setDate(startDate.getDate() - firstDay.getDay());
 
-          const calendarDays = document.getElementById('calendarDays');
-          calendarDays.innerHTML = '';
+          const calendarDays = document.getElementById("calendarDays");
+          calendarDays.innerHTML = "";
 
           // Generate calendar days
           for (let i = 0; i < 42; i++) {
             const date = new Date(startDate);
             date.setDate(startDate.getDate() + i);
 
-            const dayElement = document.createElement('div');
-            dayElement.className = 'calendar-day';
+            const dayElement = document.createElement("div");
+            dayElement.className = "calendar-day";
             dayElement.textContent = date.getDate();
             dayElement.style.animationDelay = `${i * 0.015}s`;
 
             // Check if it's current month
             if (date.getMonth() !== month) {
-              dayElement.classList.add('other-month');
+              dayElement.classList.add("other-month");
             }
 
             // Check if it's today
             const today = new Date();
             if (date.toDateString() === today.toDateString()) {
-              dayElement.classList.add('today');
+              dayElement.classList.add("today");
             }
 
             // Check if it's selected
             if (date.toDateString() === this.selectedDate.toDateString()) {
-              dayElement.classList.add('selected');
+              dayElement.classList.add("selected");
             }
 
             // Check if it has events
-            const dateKey = date.toISOString().split('T')[0];
+            const dateKey = date.toISOString().split("T")[0];
             if (this.events[dateKey]) {
-              dayElement.classList.add('has-event');
+              dayElement.classList.add("has-event");
             }
 
             // Add click event
-            dayElement.addEventListener('click', () => {
+            dayElement.addEventListener("click", () => {
               this.selectDate(date);
             });
 
@@ -1676,7 +1676,7 @@
           this.renderCalendar();
 
           // Show events for selected date
-          const dateKey = date.toISOString().split('T')[0];
+          const dateKey = date.toISOString().split("T")[0];
           const events = this.events[dateKey] || [];
 
           if (events.length > 0) {
@@ -1687,72 +1687,72 @@
       new Calendar();
 
       // Upgrade to Max click handler
-      window.addEventListener('DOMContentLoaded', function () {
-        var upgradeLink = document.querySelector('.upgrade-link');
+      window.addEventListener("DOMContentLoaded", function () {
+        var upgradeLink = document.querySelector(".upgrade-link");
         if (upgradeLink) {
-          upgradeLink.addEventListener('click', function (e) {
+          upgradeLink.addEventListener("click", function (e) {
             e.preventDefault();
-            alert('Coming soon');
+            alert("Coming soon");
           });
         }
       });
 
       // Helper to show empty state in contracts area
-      function showNoNotificationsMessage(message = 'No notifications') {
-        const wrap = document.getElementById('contractsList');
+      function showNoNotificationsMessage(message = "No notifications") {
+        const wrap = document.getElementById("contractsList");
         wrap.innerHTML = `<div style='text-align:center;padding:3rem 1rem;'><p style='color:var(--muted);font-size:1.1rem;'>${message}</p></div>`;
       }
 
       // Profile dropdown toggle
-      const profileDiv = document.getElementById('profile');
-      const avatar = document.getElementById('profileAvatar');
-      const dropdown = document.getElementById('profileDropdown');
-      avatar.addEventListener('click', (e) => {
+      const profileDiv = document.getElementById("profile");
+      const avatar = document.getElementById("profileAvatar");
+      const dropdown = document.getElementById("profileDropdown");
+      avatar.addEventListener("click", (e) => {
         e.stopPropagation();
-        if (dropdown.style.display === 'block') {
-          dropdown.style.display = 'none';
+        if (dropdown.style.display === "block") {
+          dropdown.style.display = "none";
         } else {
           // Position the dropdown below the avatar
           const rect = avatar.getBoundingClientRect();
-          dropdown.style.left = '';
-          dropdown.style.right = '40px';
-          dropdown.style.top = rect.bottom + window.scrollY + 10 + 'px';
-          dropdown.style.display = 'block';
+          dropdown.style.left = "";
+          dropdown.style.right = "40px";
+          dropdown.style.top = rect.bottom + window.scrollY + 10 + "px";
+          dropdown.style.display = "block";
         }
       });
       // Close dropdown when clicking outside
-      document.addEventListener('mousedown', (e) => {
+      document.addEventListener("mousedown", (e) => {
         if (
-          dropdown.style.display === 'block' &&
+          dropdown.style.display === "block" &&
           !dropdown.contains(e.target) &&
           e.target !== avatar
         ) {
-          dropdown.style.display = 'none';
+          dropdown.style.display = "none";
         }
       });
 
       // Show notification dot if there are notifications
       async function updateNotificationDot() {
         try {
-          const res = await fetch('/unverifiedContracts', {
-            headers: { Authorization: 'Bearer ' + token },
+          const res = await fetch("/unverifiedContracts", {
+            headers: { Authorization: "Bearer " + token },
           });
           if (!res.ok) throw new Error();
           const { foundContracts = [] } = await res.json();
-          const dot = document.getElementById('notificationDot');
+          const dot = document.getElementById("notificationDot");
           if (Array.isArray(foundContracts) && foundContracts.length > 0) {
-            dot.style.display = 'block';
+            dot.style.display = "block";
           } else {
-            dot.style.display = 'none';
+            dot.style.display = "none";
           }
         } catch {
-          document.getElementById('notificationDot').style.display = 'none';
+          document.getElementById("notificationDot").style.display = "none";
         }
       }
       updateNotificationDot();
 
-      if (sessionStorage.getItem('reloadDashboardOnBack')) {
-        sessionStorage.removeItem('reloadDashboardOnBack');
+      if (sessionStorage.getItem("reloadDashboardOnBack")) {
+        sessionStorage.removeItem("reloadDashboardOnBack");
         window.location.reload();
       }
     </script>

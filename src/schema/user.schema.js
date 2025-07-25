@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 const userSchema = new mongoose.Schema(
   {
     username: {
@@ -22,10 +22,10 @@ const userSchema = new mongoose.Schema(
     },
     contracts: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Contract',
+      ref: "Contract",
     },
   },
   { timestamps: true }
 );
 
-export const User = new mongoose.model('User', userSchema);
+export const User = new mongoose.model("User", userSchema);
