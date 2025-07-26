@@ -21,12 +21,14 @@ import findUnVerifiedContractsOnRecieverSide from "./src/controllers/unverifiedC
 import showNotVerifiedContractsOnMakerSide from "./src/controllers/showNotVerifiedContractsMakerSide.controller.js";
 import verifyContract from "./src/controllers/verifyContract.controller.js";
 import completeContract from "./src/controllers/completeContract.controller.js";
-import connectRedis from "./src/middlewares/redisCache.middleware.js";
+// import connectRedis from "./src/config/connectRedis.config.js";
+import connectRedisCache from "./src/config/redis.config.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 dotenv.config();
 connectDB();
+connectRedisCache();
 
 //____________________________________________________________________________
 //auth routes:
@@ -75,7 +77,7 @@ app.get("/", (req, res) => {
 app.get("/welcome", (req, res) => {
   res.sendFile(__dirname + "/public/index.html");
 });
-app.get("/redisTesting", connectRedis)
+// app.get("/redisTesting", connectRedis);
 //____________________________________________________________________________
 
 app.listen(process.env.PORT, "0.0.0.0", () => {

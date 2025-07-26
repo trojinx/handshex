@@ -1,4 +1,12 @@
-import { error } from "console";
 import { createClient } from "redis";
+
 const client = createClient();
-export default client;
+async function connectRedisCache() {
+  try {
+    await client.connect();
+    console.log("connected to redis cache server successfully");
+  } catch (e) {
+    console.log(e);
+  }
+}
+export default connectRedisCache;
