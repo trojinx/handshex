@@ -9,4 +9,4 @@ async function connectRedisCache() {
     console.log(e);
   }
 }
-export default connectRedisCache;
+export { connectRedisCache, client };

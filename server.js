@@ -21,8 +21,9 @@ import findUnVerifiedContractsOnRecieverSide from "./src/controllers/unverifiedC
 import showNotVerifiedContractsOnMakerSide from "./src/controllers/showNotVerifiedContractsMakerSide.controller.js";
 import verifyContract from "./src/controllers/verifyContract.controller.js";
 import completeContract from "./src/controllers/completeContract.controller.js";
-// import connectRedis from "./src/config/connectRedis.config.js";
-import connectRedisCache from "./src/config/redis.config.js";
+import { connectRedisCache } from "./src/config/redis.config.js";
+import saveTocache from "./src/middlewares/redisCache.middleware.js";
+import fetchUsernameFromRedis from "./src/controllers/redisFetch.controller.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -45,7 +46,7 @@ app.get("/myProfile", verifyJWT, showProfile);
 //____________________________________________________________________________
 
 //contract routes
-app.post("/createContract", verifyJWT, createContract);
+app.post("/createContract", verifyJWT, saveTocache, createContract);
 app.get("/showSingleContract", verifyJWT, showSingleContract);
 app.get("/showContract", verifyJWT, showContract);
 app.get("/searchContract", verifyJWT, searchContract);
@@ -77,7 +78,7 @@ app.get("/", (req, res) => {
 app.get("/welcome", (req, res) => {
   res.sendFile(__dirname + "/public/index.html");
 });
-// app.get("/redisTesting", connectRedis);
+app.get("/redisTesting", verifyJWT, fetchUsernameFromRedis);
 //____________________________________________________________________________
 
 app.listen(process.env.PORT, "0.0.0.0", () => {
