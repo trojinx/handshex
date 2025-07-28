@@ -54,3 +54,4 @@ Press `Ctrl+C` in the terminal running the container, or stop it via Docker Desk
 - For production, consider using Docker Compose to manage MongoDB and the app together.
 
 ## License
+MIT License
