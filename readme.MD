@@ -12,7 +12,7 @@ Handshex is a web application for creating, verifying, and tracking informal agr
 ### 1. Clone the Repository
 
 ```sh
-git clone https://github.com/yourusername/handshex.git
+git clone https://github.com/trojinx/handshex.git
 cd handshex
 ```
 
